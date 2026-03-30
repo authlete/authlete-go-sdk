@@ -1,0 +1,9 @@
+# UpdateAuthorizationTicketRequest
+
+
+## Fields
+
+| Field                                                                                                      | Type                                                                                                       | Required                                                                                                   | Description                                                                                                |
+| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `ServiceID`                                                                                                | `string`                                                                                                   | :heavy_check_mark:                                                                                         | A service ID.                                                                                              |
+| `Body`                                                                                                     | [components.AuthorizationTicketUpdateRequest](../../models/components/authorizationticketupdaterequest.md) | :heavy_check_mark:                                                                                         | N/A                                                                                                        |

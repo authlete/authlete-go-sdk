@@ -1,0 +1,10 @@
+# DeviceCompleteResponse
+
+
+## Fields
+
+| Field                                                                                               | Type                                                                                                | Required                                                                                            | Description                                                                                         |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `ResultCode`                                                                                        | `*string`                                                                                           | :heavy_minus_sign:                                                                                  | The code which represents the result of the API call.                                               |
+| `ResultMessage`                                                                                     | `*string`                                                                                           | :heavy_minus_sign:                                                                                  | A short message which explains the result of the API call.                                          |
+| `Action`                                                                                            | [*components.DeviceCompleteResponseAction](../../models/components/devicecompleteresponseaction.md) | :heavy_minus_sign:                                                                                  | The next action that the authorization server implementation should take.<br/>                      |

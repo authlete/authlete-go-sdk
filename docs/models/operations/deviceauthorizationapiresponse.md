@@ -1,0 +1,9 @@
+# DeviceAuthorizationAPIResponse
+
+
+## Fields
+
+| Field                                                                                             | Type                                                                                              | Required                                                                                          | Description                                                                                       |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                        | [components.HTTPMetadata](../../models/components/httpmetadata.md)                                | :heavy_check_mark:                                                                                | N/A                                                                                               |
+| `DeviceAuthorizationResponse`                                                                     | [*components.DeviceAuthorizationResponse](../../models/components/deviceauthorizationresponse.md) | :heavy_minus_sign:                                                                                | N/A                                                                                               |

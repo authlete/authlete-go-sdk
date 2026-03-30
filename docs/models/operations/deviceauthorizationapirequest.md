@@ -1,0 +1,9 @@
+# DeviceAuthorizationAPIRequest
+
+
+## Fields
+
+| Field                                                                                          | Type                                                                                           | Required                                                                                       | Description                                                                                    |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `ServiceID`                                                                                    | `string`                                                                                       | :heavy_check_mark:                                                                             | A service ID.                                                                                  |
+| `Body`                                                                                         | [components.DeviceAuthorizationRequest](../../models/components/deviceauthorizationrequest.md) | :heavy_check_mark:                                                                             | N/A                                                                                            |

@@ -1,0 +1,9 @@
+# FederationConfigurationAPIResponse
+
+
+## Fields
+
+| Field                                                                                                     | Type                                                                                                      | Required                                                                                                  | Description                                                                                               |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                                | [components.HTTPMetadata](../../models/components/httpmetadata.md)                                        | :heavy_check_mark:                                                                                        | N/A                                                                                                       |
+| `FederationConfigurationResponse`                                                                         | [*components.FederationConfigurationResponse](../../models/components/federationconfigurationresponse.md) | :heavy_minus_sign:                                                                                        | Federation configuration retrieved successfully                                                           |

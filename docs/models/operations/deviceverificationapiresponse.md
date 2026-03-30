@@ -1,0 +1,9 @@
+# DeviceVerificationAPIResponse
+
+
+## Fields
+
+| Field                                                                                           | Type                                                                                            | Required                                                                                        | Description                                                                                     |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                      | [components.HTTPMetadata](../../models/components/httpmetadata.md)                              | :heavy_check_mark:                                                                              | N/A                                                                                             |
+| `DeviceVerificationResponse`                                                                    | [*components.DeviceVerificationResponse](../../models/components/deviceverificationresponse.md) | :heavy_minus_sign:                                                                              | Device verification completed successfully                                                      |

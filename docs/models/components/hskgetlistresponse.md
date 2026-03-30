@@ -1,0 +1,11 @@
+# HskGetListResponse
+
+
+## Fields
+
+| Field                                                                                       | Type                                                                                        | Required                                                                                    | Description                                                                                 |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `ResultCode`                                                                                | `*string`                                                                                   | :heavy_minus_sign:                                                                          | The code which represents the result of the API call.                                       |
+| `ResultMessage`                                                                             | `*string`                                                                                   | :heavy_minus_sign:                                                                          | A short message which explains the result of the API call.                                  |
+| `Action`                                                                                    | [*components.HskGetListResponseAction](../../models/components/hskgetlistresponseaction.md) | :heavy_minus_sign:                                                                          | Result of the API call                                                                      |
+| `Hsks`                                                                                      | [][components.Hsk](../../models/components/hsk.md)                                          | :heavy_minus_sign:                                                                          | List of HSK                                                                                 |

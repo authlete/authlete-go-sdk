@@ -1,0 +1,13 @@
+# ClientAuthorizationGetListResponse
+
+
+## Fields
+
+| Field                                                                  | Type                                                                   | Required                                                               | Description                                                            |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `Start`                                                                | `*int`                                                                 | :heavy_minus_sign:                                                     | Start index of search results (inclusive).<br/>                        |
+| `End`                                                                  | `*int`                                                                 | :heavy_minus_sign:                                                     | End index of search results (exclusive).<br/>                          |
+| `Developer`                                                            | `*string`                                                              | :heavy_minus_sign:                                                     | Unique ID of a client developer.<br/>                                  |
+| `Subject`                                                              | `*string`                                                              | :heavy_minus_sign:                                                     | Unique user ID of an end-user.<br/>                                    |
+| `TotalCount`                                                           | `*int`                                                                 | :heavy_minus_sign:                                                     | Unique ID of a client developer.<br/>                                  |
+| `Clients`                                                              | [][components.ClientLimited](../../models/components/clientlimited.md) | :heavy_minus_sign:                                                     | An array of clients.<br/>                                              |

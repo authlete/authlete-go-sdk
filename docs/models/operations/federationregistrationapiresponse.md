@@ -1,0 +1,9 @@
+# FederationRegistrationAPIResponse
+
+
+## Fields
+
+| Field                                                                                                   | Type                                                                                                    | Required                                                                                                | Description                                                                                             |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                              | [components.HTTPMetadata](../../models/components/httpmetadata.md)                                      | :heavy_check_mark:                                                                                      | N/A                                                                                                     |
+| `FederationRegistrationResponse`                                                                        | [*components.FederationRegistrationResponse](../../models/components/federationregistrationresponse.md) | :heavy_minus_sign:                                                                                      | N/A                                                                                                     |

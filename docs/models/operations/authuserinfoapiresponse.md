@@ -1,0 +1,9 @@
+# AuthUserinfoAPIResponse
+
+
+## Fields
+
+| Field                                                                       | Type                                                                        | Required                                                                    | Description                                                                 |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                  | [components.HTTPMetadata](../../models/components/httpmetadata.md)          | :heavy_check_mark:                                                          | N/A                                                                         |
+| `UserinfoResponse`                                                          | [*components.UserinfoResponse](../../models/components/userinforesponse.md) | :heavy_minus_sign:                                                          | User info retrieved successfully                                            |

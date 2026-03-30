@@ -1,0 +1,9 @@
+# ClientSecretUpdateAPIResponse
+
+
+## Fields
+
+| Field                                                                                           | Type                                                                                            | Required                                                                                        | Description                                                                                     |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `HTTPMeta`                                                                                      | [components.HTTPMetadata](../../models/components/httpmetadata.md)                              | :heavy_check_mark:                                                                              | N/A                                                                                             |
+| `ClientSecretUpdateResponse`                                                                    | [*components.ClientSecretUpdateResponse](../../models/components/clientsecretupdateresponse.md) | :heavy_minus_sign:                                                                              | N/A                                                                                             |

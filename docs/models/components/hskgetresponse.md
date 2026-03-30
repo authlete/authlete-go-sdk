@@ -1,0 +1,11 @@
+# HskGetResponse
+
+
+## Fields
+
+| Field                                                                               | Type                                                                                | Required                                                                            | Description                                                                         |
+| ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `ResultCode`                                                                        | `*string`                                                                           | :heavy_minus_sign:                                                                  | The code which represents the result of the API call.                               |
+| `ResultMessage`                                                                     | `*string`                                                                           | :heavy_minus_sign:                                                                  | A short message which explains the result of the API call.                          |
+| `Action`                                                                            | [*components.HskGetResponseAction](../../models/components/hskgetresponseaction.md) | :heavy_minus_sign:                                                                  | Result of the API call                                                              |
+| `Hsk`                                                                               | [*components.Hsk](../../models/components/hsk.md)                                   | :heavy_minus_sign:                                                                  | Holds information about a key managed in an HSM (Hardware Security Module)<br/>     |

@@ -1,0 +1,39 @@
+speakeasyVersion: 1.759.3
+sources:
+    Authlete-OAS:
+        sourceNamespace: authlete-oas
+        sourceRevisionDigest: sha256:12ff24f2f3a36ad371da28ad79114d1e12fb350fbe771b2fe35f62b3a6ba00d4
+        sourceBlobDigest: sha256:5bb2614a03f995684a18f33557457d6e6e50e91d3d1c00858ed26de09e823e84
+        tags:
+            - latest
+            - 3.0.16
+targets:
+    authlete:
+        source: Authlete-OAS
+        sourceNamespace: authlete-oas
+        sourceRevisionDigest: sha256:12ff24f2f3a36ad371da28ad79114d1e12fb350fbe771b2fe35f62b3a6ba00d4
+        sourceBlobDigest: sha256:5bb2614a03f995684a18f33557457d6e6e50e91d3d1c00858ed26de09e823e84
+        codeSamplesNamespace: authlete-oas-go-code-samples
+        codeSamplesRevisionDigest: sha256:df87460ef23d1e077f0aa0ec6b7fce09a5fbed1c457b1c2a56f20596eecd7324
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        Authlete-OAS:
+            inputs:
+                - location: https://raw.githubusercontent.com/authlete/openapi/refs/heads/main/spec_next.yaml
+            overlays:
+                - location: /Users/shariq/Documents/Authlete/Prod/Go SDK/.speakeasy/speakeasy-modifications-overlay.yaml
+            output: .speakeasy/out.openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/authlete/sdk-workspace/authlete-oas
+    targets:
+        authlete:
+            target: go
+            source: Authlete-OAS
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/authlete/sdk-workspace/authlete-oas-go-code-samples
+                labelOverride:
+                    fixedValue: Go (SDK)
+                blocking: false
