@@ -796,3 +796,83 @@ actions:
       created_at: 1761811000000
       reviewed_at: 1761811000000
       type: user-edit
+  - target: $["paths"]["/api/{serviceId}/client/authorization/get/list"]["get"]
+    update:
+      x-speakeasy-group: client.management
+      x-speakeasy-name-override: listAuthorizedApplications
+    x-speakeasy-metadata:
+      after: sdk.client.management.listAuthorizedApplications()
+      before: sdk.clientManagement.clientAuthorizationGetListAPI()
+      created_at: 1774860000000
+      reviewed_at: 1774860000000
+      type: method-name
+  - target: $["paths"]["/api/{serviceId}/client/authorization/get/list"]["post"]
+    update:
+      x-speakeasy-group: client.management
+      x-speakeasy-name-override: listAuthorizedApplicationsWithBody
+    x-speakeasy-metadata:
+      after: sdk.client.management.listAuthorizedApplicationsWithBody()
+      before: sdk.clientManagement.clientAuthorizationGetListAPIPost()
+      created_at: 1774860000000
+      reviewed_at: 1774860000000
+      type: method-name
+  - target: $["paths"]["/api/{serviceId}/client/authorization/delete/{clientId}"]["delete"]
+    update:
+      x-speakeasy-group: client.management
+      x-speakeasy-name-override: deleteClientTokens
+    x-speakeasy-metadata:
+      after: sdk.client.management.deleteClientTokens()
+      before: sdk.clientManagement.clientAuthorizationDeleteAPI()
+      created_at: 1774860000000
+      reviewed_at: 1774860000000
+      type: method-name
+  - target: $["paths"]["/api/{serviceId}/client/authorization/delete/{clientId}"]["post"]
+    update:
+      x-speakeasy-group: client.management
+      x-speakeasy-name-override: revokeClientTokens
+    x-speakeasy-metadata:
+      after: sdk.client.management.revokeClientTokens()
+      before: sdk.clientManagement.clientAuthorizationDeleteAPIPost()
+      created_at: 1774860000000
+      reviewed_at: 1774860000000
+      type: method-name
+  - target: $["paths"]["/api/{serviceId}/client/granted_scopes/get/{clientId}"]["get"]
+    update:
+      x-speakeasy-group: client.management
+      x-speakeasy-name-override: getGrantedScopesForClient
+    x-speakeasy-metadata:
+      after: sdk.client.management.getGrantedScopes()
+      before: sdk.clientManagement.clientGrantedScopesGetAPI()
+      created_at: 1774860000000
+      reviewed_at: 1774860000000
+      type: method-name
+  - target: $["paths"]["/api/{serviceId}/client/granted_scopes/get/{clientId}"]["post"]
+    update:
+      x-speakeasy-group: client.management
+      x-speakeasy-name-override: createGrantedScopes
+    x-speakeasy-metadata:
+      after: sdk.client.management.createGrantedScopes()
+      before: sdk.clientManagement.clientGrantedScopesGetAPIPost()
+      created_at: 1774860000000
+      reviewed_at: 1774860000000
+      type: method-name
+  - target: $["paths"]["/api/{serviceId}/client/granted_scopes/delete/{clientId}"]["delete"]
+    update:
+      x-speakeasy-group: client.management
+      x-speakeasy-name-override: deleteGrantedScopesForClient
+    x-speakeasy-metadata:
+      after: sdk.client.management.deleteGrantedScopes()
+      before: sdk.clientManagement.clientGrantedScopesDeleteAPI()
+      created_at: 1774860000000
+      reviewed_at: 1774860000000
+      type: method-name
+  - target: $["paths"]["/api/{serviceId}/client/extension/requestable_scopes/update/{clientId}"]["post"]
+    update:
+      x-speakeasy-group: client.management
+      x-speakeasy-name-override: updateRequestableScopesWithBody
+    x-speakeasy-metadata:
+      after: sdk.client.management.updateRequestableScopesWithBody()
+      before: sdk.clientManagement.clientExtensionRequestablesScopesUpdateAPIPost()
+      created_at: 1774860000000
+      reviewed_at: 1774860000000
+      type: method-name
