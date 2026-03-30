@@ -5,7 +5,7 @@ sources:
         inputs:
             - location: https://raw.githubusercontent.com/authlete/openapi/refs/heads/main/spec_next.yaml
         overlays:
-            - location: /Users/shariq/Documents/Authlete/Prod/Go SDK/.speakeasy/speakeasy-modifications-overlay.yaml
+            - location: .speakeasy/speakeasy-modifications-overlay.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/authlete/sdk-workspace/authlete-oas
