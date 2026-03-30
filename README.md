@@ -231,42 +231,27 @@ func main() {
 * [UpdateForm](docs/sdks/client/README.md#updateform) - Update Client
 * [Delete](docs/sdks/client/README.md#delete) - Delete Client ⚡
 
-#### [Client.Management](docs/sdks/clientmanagement1/README.md)
+#### [Client.Management](docs/sdks/clientmanagement/README.md)
 
-* [UpdateLockFlag](docs/sdks/clientmanagement1/README.md#updatelockflag) - Update Client Lock
-* [RefreshSecret](docs/sdks/clientmanagement1/README.md#refreshsecret) - Rotate Client Secret
-* [UpdateSecret](docs/sdks/clientmanagement1/README.md#updatesecret) - Update Client Secret
-* [ListAuthorizations](docs/sdks/clientmanagement1/README.md#listauthorizations) - Get Authorized Applications (by Subject)
-* [UpdateAuthorizations](docs/sdks/clientmanagement1/README.md#updateauthorizations) - Update Client Tokens
-* [DeleteAuthorizations](docs/sdks/clientmanagement1/README.md#deleteauthorizations) - Delete Client Tokens (by Subject)
-* [GetGrantedScopes](docs/sdks/clientmanagement1/README.md#getgrantedscopes) - Get Granted Scopes (by Subject)
-* [DeleteGrantedScopes](docs/sdks/clientmanagement1/README.md#deletegrantedscopes) - Delete Granted Scopes (by Subject)
-* [GetRequestableScopes](docs/sdks/clientmanagement1/README.md#getrequestablescopes) - Get Requestable Scopes
-* [UpdateRequestableScopes](docs/sdks/clientmanagement1/README.md#updaterequestablescopes) - Update Requestable Scopes
-* [DeleteRequestableScopes](docs/sdks/clientmanagement1/README.md#deleterequestablescopes) - Delete Requestable Scopes
-
-### [ClientAuthorizations](docs/sdks/clientauthorizations/README.md)
-
-* [List](docs/sdks/clientauthorizations/README.md#list) - Get Authorized Applications
-
-### [ClientManagement](docs/sdks/clientmanagement2/README.md)
-
-* [ListAuthorizedApplications](docs/sdks/clientmanagement2/README.md#listauthorizedapplications) - Get Authorized Applications
-* [RevokeClientTokens](docs/sdks/clientmanagement2/README.md#revokeclienttokens) - Delete Client Tokens
-* [RevokeGrantedScopes](docs/sdks/clientmanagement2/README.md#revokegrantedscopes) - Delete Granted Scopes
-
-### [Clients.GrantedScopes](docs/sdks/grantedscopes/README.md)
-
-* [Get](docs/sdks/grantedscopes/README.md#get) - Get Granted Scopes
-* [Create](docs/sdks/grantedscopes/README.md#create) - Get Granted Scopes
-
-### [Clients.RequestableScopes](docs/sdks/requestablescopes/README.md)
-
-* [Update](docs/sdks/requestablescopes/README.md#update) - Update Requestable Scopes
-
-### [Clients.Tokens](docs/sdks/tokens/README.md)
-
-* [Delete](docs/sdks/tokens/README.md#delete) - Delete Client Tokens
+* [UpdateLockFlag](docs/sdks/clientmanagement/README.md#updatelockflag) - Update Client Lock
+* [RefreshSecret](docs/sdks/clientmanagement/README.md#refreshsecret) - Rotate Client Secret
+* [UpdateSecret](docs/sdks/clientmanagement/README.md#updatesecret) - Update Client Secret
+* [ListAuthorizedApplications](docs/sdks/clientmanagement/README.md#listauthorizedapplications) - Get Authorized Applications
+* [ListAuthorizedApplicationsWithBody](docs/sdks/clientmanagement/README.md#listauthorizedapplicationswithbody) - Get Authorized Applications
+* [ListAuthorizations](docs/sdks/clientmanagement/README.md#listauthorizations) - Get Authorized Applications (by Subject)
+* [UpdateAuthorizations](docs/sdks/clientmanagement/README.md#updateauthorizations) - Update Client Tokens
+* [DeleteClientTokens](docs/sdks/clientmanagement/README.md#deleteclienttokens) - Delete Client Tokens
+* [RevokeClientTokens](docs/sdks/clientmanagement/README.md#revokeclienttokens) - Delete Client Tokens
+* [DeleteAuthorizations](docs/sdks/clientmanagement/README.md#deleteauthorizations) - Delete Client Tokens (by Subject)
+* [GetGrantedScopesForClient](docs/sdks/clientmanagement/README.md#getgrantedscopesforclient) - Get Granted Scopes
+* [CreateGrantedScopes](docs/sdks/clientmanagement/README.md#creategrantedscopes) - Get Granted Scopes
+* [GetGrantedScopes](docs/sdks/clientmanagement/README.md#getgrantedscopes) - Get Granted Scopes (by Subject)
+* [DeleteGrantedScopesForClient](docs/sdks/clientmanagement/README.md#deletegrantedscopesforclient) - Delete Granted Scopes
+* [DeleteGrantedScopes](docs/sdks/clientmanagement/README.md#deletegrantedscopes) - Delete Granted Scopes (by Subject)
+* [GetRequestableScopes](docs/sdks/clientmanagement/README.md#getrequestablescopes) - Get Requestable Scopes
+* [UpdateRequestableScopesWithBody](docs/sdks/clientmanagement/README.md#updaterequestablescopeswithbody) - Update Requestable Scopes
+* [UpdateRequestableScopes](docs/sdks/clientmanagement/README.md#updaterequestablescopes) - Update Requestable Scopes
+* [DeleteRequestableScopes](docs/sdks/clientmanagement/README.md#deleterequestablescopes) - Delete Requestable Scopes
 
 ### [DeviceFlow](docs/sdks/deviceflow/README.md)
 
@@ -302,17 +287,9 @@ func main() {
 * [Process](docs/sdks/introspection/README.md#process) - Process Introspection Request
 * [StandardProcess](docs/sdks/introspection/README.md#standardprocess) - Process OAuth 2.0 Introspection Request
 
-### [Jose](docs/sdks/jose/README.md)
-
-* [Verify](docs/sdks/jose/README.md#verify) - Verify JOSE
-
-### [Jwks](docs/sdks/jwks/README.md)
-
-* [Get](docs/sdks/jwks/README.md#get) - Get JWK Set
-
 ### [Lifecycle](docs/sdks/lifecycle/README.md)
 
-* [Healthcheck](docs/sdks/lifecycle/README.md#healthcheck) - Health Check
+* [GetAPILifecycleHealthcheck](docs/sdks/lifecycle/README.md#getapilifecyclehealthcheck) - Health Check
 
 ### [NativeSso](docs/sdks/nativesso/README.md)
 
