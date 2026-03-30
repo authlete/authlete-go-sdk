@@ -17,7 +17,7 @@ import (
 )
 
 type Client struct {
-	Management *ClientManagement1
+	Management *ClientManagement
 
 	rootSDK          *Authlete
 	sdkConfiguration config.SDKConfiguration
@@ -29,7 +29,7 @@ func newClient(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *hook
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
-		Management:       newClientManagement1(rootSDK, sdkConfig, hooks),
+		Management:       newClientManagement(rootSDK, sdkConfig, hooks),
 	}
 }
 

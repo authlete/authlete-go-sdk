@@ -4,9 +4,9 @@
 
 ### Available Operations
 
-* [Healthcheck](#healthcheck) - Health Check
+* [GetAPILifecycleHealthcheck](#getapilifecyclehealthcheck) - Health Check
 
-## Healthcheck
+## GetAPILifecycleHealthcheck
 
 Perform a health check of the server.
 
@@ -28,7 +28,7 @@ func main() {
 
     s := authlete.New()
 
-    res, err := s.Lifecycle.Healthcheck(ctx, nil)
+    res, err := s.Lifecycle.GetAPILifecycleHealthcheck(ctx, nil)
     if err != nil {
         log.Fatal(err)
     }
