@@ -134,12 +134,17 @@ func Pointer[T any](v T) *T { return &v }
 //
 // - [Contact Page](https://www.authlete.com/contact/)
 type Authlete struct {
-	SDKVersion                string
-	Service                   *Service
-	Client                    *Client
-	ClientManagement          *ClientManagement2
-	ClientAuthorizations      *ClientAuthorizations
-	Clients                   *Clients
+	SDKVersion           string
+	Service              *Service
+	Client               *Client
+	ClientManagement     *ClientManagement2
+	ClientAuthorizations *ClientAuthorizations
+	Clients              *Clients
+	// Process Device Authorization Request
+	// This API parses request parameters of a [device authorization request](https://datatracker.ietf.org/doc/html/rfc8628#section-3.1)
+	// and returns necessary data for the authorization server implementation to process the device authorization
+	// request further.
+	//
 	Authorization             *Authorization
 	PushedAuthorization       *PushedAuthorization
 	Token                     *Token
@@ -233,9 +238,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Authlete {
 	sdk := &Authlete{
-		SDKVersion: "0.0.13",
+		SDKVersion: "0.0.14",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/go 0.0.13 2.869.25 3.0.16 github.com/authlete/authlete-go-sdk",
+			UserAgent:  "speakeasy-sdk/go 0.0.14 2.869.25 3.0.16 github.com/authlete/authlete-go-sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
