@@ -34,7 +34,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 go:
-  version: 0.0.13
+  version: 0.0.14
   additionalDependencies: {}
   baseErrorName: AuthleteError
   clientServerStatusCodesAsErrors: true

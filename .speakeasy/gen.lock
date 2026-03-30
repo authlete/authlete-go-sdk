@@ -5,12 +5,14 @@ management:
   docVersion: 3.0.16
   speakeasyVersion: 1.759.3
   generationVersion: 2.869.25
-  releaseVersion: 0.0.13
-  configChecksum: a78cb0eebbd028c8a81b938f1acb5802
+  releaseVersion: 0.0.14
+  configChecksum: 1de47d459c9381e6607b87c366dd3f39
+  repoURL: https://github.com/authlete/authlete-go-sdk.git
+  installationURL: https://github.com/authlete/authlete-go-sdk
 persistentEdits:
-  generation_id: 0fab6a9c-dc5b-46cc-9231-34c52ac9f0d3
-  pristine_commit_hash: e2fe5cbcc130c0885ff45bcd92a637765ed775d3
-  pristine_tree_hash: ab7ab7d17961f7c75aa19b7a4991d5f12a25d9f4
+  generation_id: 1ecf76ac-9355-427d-9647-bcc3515aea57
+  pristine_commit_hash: 896972fab6cd1ae36878288c726956e5927cf579
+  pristine_tree_hash: 538f5347f87a5e77f0c771971edd39aa2bca6642
 features:
   go:
     additionalDependencies: 0.1.0
@@ -35,8 +37,8 @@ features:
 trackedFiles:
   .devcontainer/README.md:
     id: b170c0f184ac
-    last_write_checksum: sha1:be2627d96bcc7a331cdb1b53ab5136930ae7febc
-    pristine_git_object: 4e23f7c445b045c4ea707e94e73fbd906f0c2b62
+    last_write_checksum: sha1:e9476d092bf9077a3459829a20aa90973b4a16c5
+    pristine_git_object: a6b81725660308325eb652cfe12e068041d09f7b
   .devcontainer/devcontainer.json:
     id: b34062a34eb1
     last_write_checksum: sha1:a518b2fc2f92e998593a1dcb935db4ca1eb2e2f1
@@ -55,8 +57,8 @@ trackedFiles:
     pristine_git_object: ffae6ac7612ba9f61aeb98a3b1a7780d6e8a7553
   authlete.go:
     id: 52962fe756b1
-    last_write_checksum: sha1:4b363d845024389c1288631e8854087de343869a
-    pristine_git_object: 61f10fb3e450fceba1e0329f001d3ad5c97296ec
+    last_write_checksum: sha1:55b8f6af8a385357d76a3b4681dc0d19a41c4064
+    pristine_git_object: 04e21c222ac5baa90dcdc552df02c2651d85458c
   authorization.go:
     id: d201c3f05471
     last_write_checksum: sha1:4ae2259b375b3aefc24788d2b44245d171134015
@@ -1771,8 +1773,8 @@ trackedFiles:
     pristine_git_object: add8e31fb9c237c60033430d9d688fb297bdd7ae
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:2225ad2e00125ffec5e07bad9e2795cbdff1f647
-    pristine_git_object: a3239b9b9d113ba43166d156a2b32274a3567b42
+    last_write_checksum: sha1:61b368b6921a5b0e37fb5b5e93bc9620ea9d3b64
+    pristine_git_object: bc24fe8097f6b2a6bd272a98520d29140c501df1
   grantedscopes.go:
     id: 4814fa5c0335
     last_write_checksum: sha1:a2b8dc53f4a94882b8e7831231d438967044b531
@@ -4117,3 +4119,27 @@ examples:
         "500":
           application/json: {}
 examplesVersion: 1.0.2
+releaseNotes: |
+  ## Go SDK Changes:
+  * `Authlete.ClientManagement.ListAuthorizedApplications()`: **Added**
+  * `Authlete.ClientManagement.RevokeClientTokens()`: **Added**
+  * `Authlete.ClientManagement.RevokeGrantedScopes()`: **Added**
+  * `Authlete.ClientAuthorizations.List()`: **Added**
+  * `Authlete.Clients.Tokens.Delete()`: **Added**
+  * `Authlete.Clients.GrantedScopes.Get()`: **Added**
+  * `Authlete.Clients.GrantedScopes.Create()`: **Added**
+  * `Authlete.Clients.RequestableScopes.Update()`: **Added**
+  * `Authlete.Jwks.Get()`: **Added**
+  * `Authlete.Jose.Verify()`: **Added**
+  * `Authlete.Lifecycle.Healthcheck()`: **Added**
+  * `Authlete.ClientManagement.ClientAuthorizationGetListApi()`: **Removed** (Breaking ⚠️)
+  * `Authlete.ClientManagement.ClientAuthorizationGetListApiPost()`: **Removed** (Breaking ⚠️)
+  * `Authlete.ClientManagement.ClientAuthorizationDeleteApi()`: **Removed** (Breaking ⚠️)
+  * `Authlete.ClientManagement.ClientAuthorizationDeleteApiPost()`: **Removed** (Breaking ⚠️)
+  * `Authlete.ClientManagement.ClientGrantedScopesGetApi()`: **Removed** (Breaking ⚠️)
+  * `Authlete.ClientManagement.ClientGrantedScopesGetApiPost()`: **Removed** (Breaking ⚠️)
+  * `Authlete.ClientManagement.ClientGrantedScopesDeleteApi()`: **Removed** (Breaking ⚠️)
+  * `Authlete.ClientManagement.ClientExtensionRequestablesScopesUpdateApiPost()`: **Removed** (Breaking ⚠️)
+  * `Authlete.JwkSetEndpoint.ServiceJwksGetApi()`: **Removed** (Breaking ⚠️)
+  * `Authlete.JoseObject.JoseVerifyApi()`: **Removed** (Breaking ⚠️)
+  * `Authlete.Lifecycle.Get/api/lifecycle/healthcheck()`: **Removed** (Breaking ⚠️)
