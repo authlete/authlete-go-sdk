@@ -8,8 +8,7 @@ Developer-friendly & type-safe Go SDK specifically catered to leverage *authlete
 
 <br /><br />
 > [!IMPORTANT]
-> This SDK is not yet ready for production use. To complete setup please follow the steps outlined in your [workspace](https://app.speakeasy.com/org/authlete/sdk-workspace). Delete this section before > publishing to a package manager.
-
+> This SDK is in Beta. 
 <!-- Start Summary [summary] -->
 ## Summary
 
