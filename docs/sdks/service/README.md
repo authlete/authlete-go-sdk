@@ -237,6 +237,7 @@ func main() {
         PkceRequired: authlete.Pointer(true),
         PkceS256Required: authlete.Pointer(false),
         AuthorizationResponseDuration: authlete.Pointer[int64](0),
+        AuthorizationCodeDuration: authlete.Pointer[int64](0),
         TokenEndpoint: authlete.Pointer("https://my-service.example.com/token"),
         DirectTokenEndpointEnabled: authlete.Pointer(false),
         SupportedTokenAuthMethods: []components.ClientAuthMethod{

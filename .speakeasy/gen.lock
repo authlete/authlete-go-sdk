@@ -1,28 +1,28 @@
 lockVersion: 2.0.0
 id: 9aa897a0-dcd3-414f-9305-368e6b5046f9
 management:
-  docChecksum: 02881179131fa28334d08f3683c7a1c2
+  docChecksum: 2fb8f48e0bff0ac1fccb37fb30a10d72
   docVersion: 3.0.16
-  speakeasyVersion: 1.759.3
-  generationVersion: 2.869.25
-  releaseVersion: 0.0.15
-  configChecksum: d7a08c0e5fb35a088a431137154065f3
+  speakeasyVersion: 1.769.2
+  generationVersion: 2.892.5
+  releaseVersion: 0.0.16
+  configChecksum: f3f092774a25fc6f4bd5939789c3c796
   repoURL: https://github.com/authlete/authlete-go-sdk.git
   installationURL: https://github.com/authlete/authlete-go-sdk
 persistentEdits:
-  generation_id: 33476c67-7e22-4f18-8658-3c1c17f9e610
-  pristine_commit_hash: fbc9e5d3d525028e36d3bccb8e085aaf75996deb
-  pristine_tree_hash: 2e1d90cdd2ce7cf37db57c15aef671a4a6741063
+  generation_id: 8d205dd1-105f-4152-8643-d8ea40f87710
+  pristine_commit_hash: 7be4a347d62948041ab6a2ee506c7d2175521a8c
+  pristine_tree_hash: 71eaac4cfaa4245f0f1f114565e62e2bc1bf8be3
 features:
   go:
     additionalDependencies: 0.1.0
     additionalProperties: 0.1.2
-    core: 3.13.40
+    core: 3.13.46
     defaultEnabledRetries: 0.2.0
     devContainers: 2.90.0
     envVarSecurityUsage: 0.3.2
     flattening: 2.81.2
-    globalSecurity: 2.82.13
+    globalSecurity: 2.82.15
     globalSecurityCallbacks: 0.1.0
     globalSecurityFlattening: 0.1.0
     globalServerURLs: 2.83.1
@@ -41,8 +41,8 @@ trackedFiles:
     pristine_git_object: a6b81725660308325eb652cfe12e068041d09f7b
   .devcontainer/devcontainer.json:
     id: b34062a34eb1
-    last_write_checksum: sha1:a518b2fc2f92e998593a1dcb935db4ca1eb2e2f1
-    pristine_git_object: 92f5ba5b54156225322fb4b09d2acf4abde9abc9
+    last_write_checksum: sha1:00c39389eee01217e51057762bde7339d9e56114
+    pristine_git_object: 8f01e56e2f8476fb2a7c79ec6326b3b0d5be8123
   .devcontainer/setup.sh:
     id: 5f1dfbfeb8eb
     last_write_checksum: sha1:0443cc8beac352499afd25be90adf28d3736dbe0
@@ -57,32 +57,32 @@ trackedFiles:
     pristine_git_object: ffae6ac7612ba9f61aeb98a3b1a7780d6e8a7553
   authlete.go:
     id: 52962fe756b1
-    last_write_checksum: sha1:cf3cf83181bcfa7c1fa852accf9478fad6b1cca0
-    pristine_git_object: 7b1f407ba8bb811d534d74d760930893c07cf8e5
+    last_write_checksum: sha1:4c764186be0282fe0dbb0ffd21c522bc47b11f26
+    pristine_git_object: a2557833440a007518b6691816bbde1788570382
   authorization.go:
     id: d201c3f05471
-    last_write_checksum: sha1:4ae2259b375b3aefc24788d2b44245d171134015
-    pristine_git_object: 912e12ff8accc6ff6960fa427a141668e07a8497
+    last_write_checksum: sha1:d43c1365c1db1208f8a5cf22ae71c0e1b866e3a2
+    pristine_git_object: f5e9aef5abb5fb1f5e220da12b5b23a5d9c7b3ba
   authorizationmanagement.go:
     id: 7a158fbb7c17
-    last_write_checksum: sha1:076a6e5825ef9b0543a4aa38c84657622e3d3cbe
-    pristine_git_object: 7a7659da5fb2d7b90f332707177a5c6bb37d7709
+    last_write_checksum: sha1:abf97d818518907db93ab1410d7072d7d152c604
+    pristine_git_object: 87a8cfa25450493d9aab0f09571b1e4630afd5e1
   ciba.go:
     id: f70c5589f3fa
-    last_write_checksum: sha1:274b8b0a3e96c628fc21753480b1aebfb43e67d9
-    pristine_git_object: 6130cd1d53f2d02102964f621f5c968fd5a26170
+    last_write_checksum: sha1:e6855ecd450babba5cec60c44e9cdcb9e7d934a7
+    pristine_git_object: 7a76215ef5e86724a91e400a9c3f9ff47e7dbd64
   client.go:
     id: d633516feaf9
-    last_write_checksum: sha1:cdb9a5b82489c34102d78a22c828e0924a8d9724
-    pristine_git_object: 65a7d2d58d809d22038a67cf83efd75a81e64188
+    last_write_checksum: sha1:8d3b8f72fb8fbcb08c2258e5132333ee5209d552
+    pristine_git_object: 374e22ad5ea4cbefab62278fd53d062df5977639
   clientmanagement.go:
     id: eea4b54d8402
-    last_write_checksum: sha1:5f640fd3236cbdf731b6d6b0e7111abee6444cbc
-    pristine_git_object: a1ce5082709a08af0c50b5a805fbfe8aea1b428b
+    last_write_checksum: sha1:7a88763b894289a73b6a0b0732bae9652a46629b
+    pristine_git_object: 816d8e306fe003a29af8fb1fa7de9b6bf8aacb9c
   deviceflow.go:
     id: f793dcf34688
-    last_write_checksum: sha1:74a94f0ae10a66ebe7e6bb9706d8a048337a48e1
-    pristine_git_object: b34dd249431923f867c03793d5fb0662c34f9ed2
+    last_write_checksum: sha1:2a7f77d298faf2d242f310aadf4e12c3fd6b4e20
+    pristine_git_object: 23903ebb3dcab1f3da311fed5999b9b43dd7806f
   docs/models/apierrors/resulterror.md:
     id: "509879566531"
     last_write_checksum: sha1:90e420da3daff4ebec9fc00906ccb7a9bb181e5b
@@ -633,16 +633,16 @@ trackedFiles:
     pristine_git_object: 41d2c1e2b9b3b4e980d756bae4c7c379022070d2
   docs/models/components/service.md:
     id: 4385ff500f60
-    last_write_checksum: sha1:4148fa7208af2c851329eef4bae00b9172e9274f
-    pristine_git_object: ba856a58487b77c57d63147315964d312595af1b
+    last_write_checksum: sha1:8be2a79d41d159533f5b4a855987e3744f593e19
+    pristine_git_object: bea5b846ece395b8077907cf25873d7882b407b0
   docs/models/components/servicegetlistresponse.md:
     id: bca50759f1e5
     last_write_checksum: sha1:7d92d9c05fd3758565f39b620f9255c4548b7759
     pristine_git_object: 7531ec0554d669f04c17794fc4a657277ee9aa8b
   docs/models/components/serviceinput.md:
     id: 75371ad54a11
-    last_write_checksum: sha1:f36e1952f4ec6ccba83fc045be7ef6bad7290707
-    pristine_git_object: d8bc9528d1895fa233f87f94d2c747966d6a4a5f
+    last_write_checksum: sha1:a78c737f7f779c3c0b831c043177de031cae3b1f
+    pristine_git_object: c1148a064b9932bbf23b172b023ff7d11fc4b52c
   docs/models/components/serviceprofile.md:
     id: f0c53ca6398e
     last_write_checksum: sha1:7d248209c7f3ca14a6d410da1433ed662cd95106
@@ -1677,8 +1677,8 @@ trackedFiles:
     pristine_git_object: 0799a0ab94297f0658be29e11abdc093b7f704db
   docs/sdks/service/README.md:
     id: d161cb00129d
-    last_write_checksum: sha1:b7b69df2dfec8eb73857464743c6e90c82f7065b
-    pristine_git_object: 8fa372a085acb53cf341d4ce712291e941857825
+    last_write_checksum: sha1:1c229401d838ca74e14e823d265b904850248c14
+    pristine_git_object: 28852a99df999309bf88087d33535ddbaa3659f4
   docs/sdks/token/README.md:
     id: 627ae416a06f
     last_write_checksum: sha1:2d6505011f4d83919bc30b15902795619727bdfb
@@ -1697,24 +1697,24 @@ trackedFiles:
     pristine_git_object: bbcc470928b7fbc156a4245dba648caf8b1eb20f
   dynamicclientregistration.go:
     id: a4f93909b838
-    last_write_checksum: sha1:571902af4d0c69bee8a19ead6b9d132d8c6385d6
-    pristine_git_object: fd1b6a3df1c6e44dd2d2b9a0ae342ec968189d85
+    last_write_checksum: sha1:d4bbc3b625102c1d15efbd96da9dbcdbe8951bea
+    pristine_git_object: 6c5902d2ab2cfdbd2f83e3830ba362a9ea43de7d
   federation.go:
     id: 067df08e3ac3
-    last_write_checksum: sha1:d875caf7b04d481474aa70e76d028238bac1d66e
-    pristine_git_object: add8e31fb9c237c60033430d9d688fb297bdd7ae
+    last_write_checksum: sha1:a89cc3513260aa9cd49d027206e004634f9d0ea6
+    pristine_git_object: 2a7b9c3683f57f0e61d22c6f238f96dd3f31a501
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:61b368b6921a5b0e37fb5b5e93bc9620ea9d3b64
-    pristine_git_object: bc24fe8097f6b2a6bd272a98520d29140c501df1
+    last_write_checksum: sha1:9705103aee956e9c177591e48a2130285fee590d
+    pristine_git_object: c8eab97a4a196a7b76d2864ab350f04c108cb67c
   grantmanagement.go:
     id: 728f07455c9b
-    last_write_checksum: sha1:5d70bf1c0cd7d50c21607310149ddb9b43417a46
-    pristine_git_object: e2890bc06318a719719014703b408e03828ec994
+    last_write_checksum: sha1:c22c6baf8e7edc53e52431ada4d900d9fcbf01a8
+    pristine_git_object: d432e695fb88f95ab675a3306d131d89f89baea7
   hardwaresecuritykeys.go:
     id: 21f4a0d84f7e
-    last_write_checksum: sha1:6b6fb6336205a26c334fd99adaecb71bd273123f
-    pristine_git_object: 0e38c8d227a2ff3f7e696568c245699fdf9ab16c
+    last_write_checksum: sha1:ec00a7f009b2a140ff78368f7e0955576b37cb43
+    pristine_git_object: 9f808ed91797bdb4cead6460447d9e104a6b0c3a
   internal/config/sdkconfiguration.go:
     id: 33b8bfac5265
     last_write_checksum: sha1:d49dd26f77685db18ff53541a63251c6c2e14457
@@ -1741,8 +1741,8 @@ trackedFiles:
     pristine_git_object: 35b652541d28a31272327a1b85a338656487fc3d
   internal/utils/json.go:
     id: ad03e3c502d8
-    last_write_checksum: sha1:694070b87b53a99dc8dbc4960837acabb2986e94
-    pristine_git_object: 380998e55d8660826976ffcc1c31042843143f26
+    last_write_checksum: sha1:6174c9c56f4caba1d6858ef87dd8c7ebddb6c1b2
+    pristine_git_object: 6449bb132297c4884dd76e41921b84ed9f74b9cd
   internal/utils/pathparams.go:
     id: 1f3e0c30fd90
     last_write_checksum: sha1:e3ef12fcb361213c317fb28976e30ed46772defb
@@ -1761,28 +1761,28 @@ trackedFiles:
     pristine_git_object: 6195b6a450fa1fa01b13dd49caecfada3a9349e6
   internal/utils/security.go:
     id: eeb54c55241b
-    last_write_checksum: sha1:52cefded5223c60fcac5bd56574370e27a4bc3d5
-    pristine_git_object: ce2e1c0cffe3bbd3f111eace502f895175daad22
+    last_write_checksum: sha1:1c0b332b3cf0fa405df0c5bf4e03f335139566b6
+    pristine_git_object: 7c1a372ae314a9d82ab82c3db610e7ffe67ecfab
   internal/utils/union.go:
     id: db86c85746b6
-    last_write_checksum: sha1:c882df27f55e2436d645dd0fa44f6b0366ed354e
-    pristine_git_object: 575828fbf96ba3295bb0a93e1d5179caa5ababc7
+    last_write_checksum: sha1:1747ff22cd4e357c7129aa50618d2d8275a7c5ec
+    pristine_git_object: f75dd400b0075427fe60a7727dae14b355b15f1d
   internal/utils/union_test.go:
     id: 4b56247171bd
-    last_write_checksum: sha1:83ac73c1901de4c6db90f65cf5879163f3d47a00
-    pristine_git_object: f66814c73ace94d8e71d785fd6161fb405745754
+    last_write_checksum: sha1:bd5c7506e1d6238117c1ac4e340314a5a41401b5
+    pristine_git_object: 138f7e2a066b10dffd0a9957ecfcab9e00dd26fe
   internal/utils/utils.go:
     id: 1133b2a27019
     last_write_checksum: sha1:36a3e6fb95d71868d1755dbb3b924a37340c7ea7
     pristine_git_object: b32a14db51857aafab25498ba32fa2905c92b5d8
   introspection.go:
     id: d91cb9adb6a8
-    last_write_checksum: sha1:9a592abcc2d0801a4f53d9589393f1937bd2a9a6
-    pristine_git_object: 18f4dc47a91d6242fa56ead3fb1ddb489f6083dd
+    last_write_checksum: sha1:aa8663172875fec6925699ea85e29d49b8840501
+    pristine_git_object: b08b3abc8a6034832cad147db8b579f9e5b9eab1
   lifecycle.go:
     id: 4db50498af0e
-    last_write_checksum: sha1:ba16d7429eb652b36ba7c5da81ae4b35e4c3174b
-    pristine_git_object: eab2ea6228d38397ad47b522f8cb1728f2909f87
+    last_write_checksum: sha1:fa3a49da8365d77ba2eea2511ec71ca35e97837a
+    pristine_git_object: cc8899024941ba59a0726d5133968e711a5fe43d
   models/apierrors/apierror.go:
     id: 4cecf27a5a54
     last_write_checksum: sha1:e699d3325ea82ea2b0d29656396210f0513c3391
@@ -2197,8 +2197,8 @@ trackedFiles:
     pristine_git_object: b74af2f403283874861bcbf9be03b7f76017c35f
   models/components/service.go:
     id: 5cac453f281c
-    last_write_checksum: sha1:9e2c0c89c9e8ad35bd4a99789b33fa8fd59069c3
-    pristine_git_object: e70ffab089c15d50b65f94f9e18357afe34df3e9
+    last_write_checksum: sha1:d548894afcc5ea9e4e5496c492a92062d0690441
+    pristine_git_object: e3f210c465252f11de78793734321797e2fadcc2
   models/components/servicegetlistresponse.go:
     id: f352b5220dbf
     last_write_checksum: sha1:764d04cc5109b61faa4248bd75e96fba8ff31c7d
@@ -2737,8 +2737,8 @@ trackedFiles:
     pristine_git_object: 93a03ec1d131fd18218c78a297d12733bd7ee75d
   nativesso.go:
     id: 647420501c2d
-    last_write_checksum: sha1:e6dceb52787367ca5dbf9b1616095ca72c0d79f4
-    pristine_git_object: c8797da6f888a39bd8f8de68fe74abe0f94e0628
+    last_write_checksum: sha1:a7f3335dc29ea1ff66c33f506f1dbe7d4fbf7e93
+    pristine_git_object: deaec87a59bba6f1aeabd68375c2cab165cec0a7
   optionalnullable/optionalnullable.go:
     id: ce60f259ead3
     last_write_checksum: sha1:d6aff1a420c31e025ea21d46cf056e305ae76fe8
@@ -2749,28 +2749,28 @@ trackedFiles:
     pristine_git_object: e6e5a01c6e721e879e24a38a1f97e3e27d4686d4
   pushedauthorization.go:
     id: 1102dd70f119
-    last_write_checksum: sha1:94c1f8f8cabce6604595d4d2d944d5234905e2db
-    pristine_git_object: 896f82474f2969c4330935578cb9fb901b9bae1d
+    last_write_checksum: sha1:940673df89cbe2d7c8081105fe2d73fd96f34f04
+    pristine_git_object: 3c696d7a77aa9e43d60928fcfac6382fb36214b6
   retry/config.go:
     id: 82d673cb0389
     last_write_checksum: sha1:7f7d96b59a18e95bac847ae09c63bbd911ee8432
     pristine_git_object: 5b3dc7c122d8ab08905485342d7474f8f163888d
   revocation.go:
     id: c7eedd00927c
-    last_write_checksum: sha1:7187bb12102755b582be0f7be25237b6eff32967
-    pristine_git_object: cf86b468535e956e165934a0ac9698f862e83181
+    last_write_checksum: sha1:9e4771d98da081253742e0f67d157e67b28d7b53
+    pristine_git_object: 98451c4b6841c4498e06358419d09ade6e67b671
   service.go:
     id: e28f3724a9dc
-    last_write_checksum: sha1:e62c4712ed7ade2755e4bf4d6f551b69e4f4b1f3
-    pristine_git_object: 1ffb33ec204598a215c3459d555c1870ba25f769
+    last_write_checksum: sha1:aeee13be6de60a0834bec1bf52312325fc4d8ef8
+    pristine_git_object: 0d8ae4410b8e3adbe264d53ad1e8fd83e9483935
   token.go:
     id: fdbcf0bb8bc3
-    last_write_checksum: sha1:1eedf8d3942135ae066480ef569f90092015b5c6
-    pristine_git_object: e95871da58afddc3c9295d052284f900dba6f15a
+    last_write_checksum: sha1:dd31e9168cff109509d63dae0c00e14d08a93a72
+    pristine_git_object: 9257c682541cdfc27a8b788c00ba6d5b2eb88d09
   tokenmanagement.go:
     id: 458659f4bc8d
-    last_write_checksum: sha1:2e999f56824ee2b7c59f566de695bc05d2469aa2
-    pristine_git_object: 96d92d8d7dfc4e4bc5fd2720b4104058355ae124
+    last_write_checksum: sha1:1c7e7b1c06e8c05ce41ef531ff895012f8908498
+    pristine_git_object: 4eca008cd1a7b6deb6c2bac233c3ffc44390d2cd
   types/bigint.go:
     id: 6f911e1a03c3
     last_write_checksum: sha1:49b004005d0461fb04b846eca062b070b0360b31
@@ -2789,12 +2789,12 @@ trackedFiles:
     pristine_git_object: 35c439d2661e08fcb6a854096fd7b9a8561b3938
   userinfo.go:
     id: 281ed19093dd
-    last_write_checksum: sha1:c02c0e19e359142b71c662a4870d9e7a1ba73216
-    pristine_git_object: 3272c392592ac8146f54f50f3b2a4560d6b44475
+    last_write_checksum: sha1:3308ba1cb7c1ada649f49606dbcc3eb5db987101
+    pristine_git_object: b33691efea8437670f8d535466ac934a0d2076eb
   verifiablecredentials.go:
     id: 82c934972ca9
-    last_write_checksum: sha1:bee1ddc6f4c261fcb5f253c36b9e030ed6c82c0b
-    pristine_git_object: 9a758773a696845acd3641acca176293afe4b517
+    last_write_checksum: sha1:1ad8e5da8f8566efb27f838f229764d731861e41
+    pristine_git_object: f2df46a84179da823151ceafc5dd39bab9549865
 examples:
   service_get_api:
     full:
@@ -2803,7 +2803,7 @@ examples:
           serviceId: "<id>"
       responses:
         "200":
-          application/json: {"number": 5041, "serviceName": "My service", "issuer": "https://my-service.example.com", "apiKey": 21653835348762, "serviceOwnerNumber": 2, "clientsPerDeveloper": 0, "clientIdAliasEnabled": true, "metadata": [{"key": "clientCount", "value": "1"}], "createdAt": 1639373421000, "modifiedAt": 1639373421000, "supportedGrantTypes": ["AUTHORIZATION_CODE", "REFRESH_TOKEN"], "supportedResponseTypes": ["CODE"], "errorDescriptionOmitted": false, "errorUriOmitted": false, "authorizationEndpoint": "https://my-service.example.com/authz", "directAuthorizationEndpointEnabled": false, "supportedDisplays": ["PAGE"], "pkceRequired": true, "pkceS256Required": false, "authorizationResponseDuration": 0, "tokenEndpoint": "https://my-service.example.com/token", "directTokenEndpointEnabled": false, "supportedTokenAuthMethods": ["CLIENT_SECRET_BASIC"], "missingClientIdAllowed": false, "revocationEndpoint": "https://my-service.example.com/revocation", "directRevocationEndpointEnabled": false, "supportedRevocationAuthMethods": ["CLIENT_SECRET_BASIC"], "introspectionEndpoint": "https://my-service.example.com/introspection", "directIntrospectionEndpointEnabled": false, "supportedIntrospectionAuthMethods": ["CLIENT_SECRET_BASIC"], "pushedAuthReqDuration": 0, "parRequired": false, "requestObjectRequired": false, "traditionalRequestObjectProcessingApplied": false, "mutualTlsValidatePkiCertChain": false, "accessTokenType": "Bearer", "tlsClientCertificateBoundAccessTokens": false, "accessTokenDuration": 3600, "singleAccessTokenPerSubject": false, "refreshTokenDuration": 3600, "refreshTokenDurationKept": false, "refreshTokenDurationReset": false, "refreshTokenKept": false, "supportedScopes": [{"name": "history.read", "defaultEntry": false, "description": "A permission to read your history."}, {"name": "timeline.read", "defaultEntry": false, "description": "A permission to read your timeline."}], "scopeRequired": false, "idTokenDuration": 0, "allowableClockSkew": 0, "supportedClaimTypes": ["NORMAL"], "claimShortcutRestrictive": false, "directJwksEndpointEnabled": false, "directUserInfoEndpointEnabled": false, "dynamicRegistrationSupported": false, "backchannelAuthReqIdDuration": 0, "backchannelPollingInterval": 0, "backchannelUserCodeParameterSupported": false, "backchannelBindingMessageRequiredInFapi": false, "deviceFlowCodeDuration": 0, "deviceFlowPollingInterval": 0, "userCodeLength": 0, "attributes": [{"key": "attribute1-key", "value": "attribute1-value"}, {"key": "attribute2-key", "value": "attribute2-value"}], "nbfOptional": false, "issSuppressed": false, "tokenExpirationLinked": false, "frontChannelRequestObjectEncryptionRequired": false, "requestObjectEncryptionAlgMatchRequired": false, "requestObjectEncryptionEncMatchRequired": false, "hsmEnabled": false, "grantManagementActionRequired": false, "unauthorizedOnClientConfigSupported": false, "dcrScopeUsedAsRequestable": false}
+          application/json: {"number": 5041, "serviceName": "My service", "issuer": "https://my-service.example.com", "apiKey": 21653835348762, "serviceOwnerNumber": 2, "clientsPerDeveloper": 0, "clientIdAliasEnabled": true, "metadata": [{"key": "clientCount", "value": "1"}], "createdAt": 1639373421000, "modifiedAt": 1639373421000, "supportedGrantTypes": ["AUTHORIZATION_CODE", "REFRESH_TOKEN"], "supportedResponseTypes": ["CODE"], "errorDescriptionOmitted": false, "errorUriOmitted": false, "authorizationEndpoint": "https://my-service.example.com/authz", "directAuthorizationEndpointEnabled": false, "supportedDisplays": ["PAGE"], "pkceRequired": true, "pkceS256Required": false, "authorizationResponseDuration": 0, "authorizationCodeDuration": 0, "tokenEndpoint": "https://my-service.example.com/token", "directTokenEndpointEnabled": false, "supportedTokenAuthMethods": ["CLIENT_SECRET_BASIC"], "missingClientIdAllowed": false, "revocationEndpoint": "https://my-service.example.com/revocation", "directRevocationEndpointEnabled": false, "supportedRevocationAuthMethods": ["CLIENT_SECRET_BASIC"], "introspectionEndpoint": "https://my-service.example.com/introspection", "directIntrospectionEndpointEnabled": false, "supportedIntrospectionAuthMethods": ["CLIENT_SECRET_BASIC"], "pushedAuthReqDuration": 0, "parRequired": false, "requestObjectRequired": false, "traditionalRequestObjectProcessingApplied": false, "mutualTlsValidatePkiCertChain": false, "accessTokenType": "Bearer", "tlsClientCertificateBoundAccessTokens": false, "accessTokenDuration": 3600, "singleAccessTokenPerSubject": false, "refreshTokenDuration": 3600, "refreshTokenDurationKept": false, "refreshTokenDurationReset": false, "refreshTokenKept": false, "supportedScopes": [{"name": "history.read", "defaultEntry": false, "description": "A permission to read your history."}, {"name": "timeline.read", "defaultEntry": false, "description": "A permission to read your timeline."}], "scopeRequired": false, "idTokenDuration": 0, "allowableClockSkew": 0, "supportedClaimTypes": ["NORMAL"], "claimShortcutRestrictive": false, "directJwksEndpointEnabled": false, "directUserInfoEndpointEnabled": false, "dynamicRegistrationSupported": false, "backchannelAuthReqIdDuration": 0, "backchannelPollingInterval": 0, "backchannelUserCodeParameterSupported": false, "backchannelBindingMessageRequiredInFapi": false, "deviceFlowCodeDuration": 0, "deviceFlowPollingInterval": 0, "userCodeLength": 0, "attributes": [{"key": "attribute1-key", "value": "attribute1-value"}, {"key": "attribute2-key", "value": "attribute2-value"}], "nbfOptional": false, "issSuppressed": false, "tokenExpirationLinked": false, "frontChannelRequestObjectEncryptionRequired": false, "requestObjectEncryptionAlgMatchRequired": false, "requestObjectEncryptionEncMatchRequired": false, "hsmEnabled": false, "grantManagementActionRequired": false, "unauthorizedOnClientConfigSupported": false, "dcrScopeUsedAsRequestable": false}
     limited:
       parameters:
         path:
@@ -2826,7 +2826,7 @@ examples:
     full:
       responses:
         "200":
-          application/json: {"start": 0, "end": 5, "totalCount": 1, "services": [{"number": 5041, "serviceName": "My service", "issuer": "https://my-service.example.com", "apiKey": 21653835348762, "apiSecret": "uE4NgqeIpuSV_XejQ7Ds3jsgA1yXhjR1MXJ1LbPuyls", "serviceOwnerNumber": 2, "clientIdAliasEnabled": true, "metadata": [{"key": "clientCount", "value": "1"}], "createdAt": 1639373421000, "modifiedAt": 1639373421000, "supportedGrantTypes": ["AUTHORIZATION_CODE", "REFRESH_TOKEN"], "supportedResponseTypes": ["CODE"], "errorDescriptionOmitted": false, "errorUriOmitted": false, "authorizationEndpoint": "https://as.example.com/authz", "directAuthorizationEndpointEnabled": false, "supportedDisplays": ["PAGE"], "pkceRequired": true, "pkceS256Required": false, "authorizationResponseDuration": 0, "tokenEndpoint": "https://my-service.example.com/token", "directTokenEndpointEnabled": false, "supportedTokenAuthMethods": ["CLIENT_SECRET_BASIC"], "missingClientIdAllowed": false, "revocationEndpoint": "https://my-service.example.com/revocation", "directRevocationEndpointEnabled": false, "supportedRevocationAuthMethods": ["CLIENT_SECRET_BASIC"], "introspectionEndpoint": "https://my-service.example.com/introspection", "directIntrospectionEndpointEnabled": false, "supportedIntrospectionAuthMethods": ["CLIENT_SECRET_BASIC"], "pushedAuthReqDuration": 0, "parRequired": false, "requestObjectRequired": false, "traditionalRequestObjectProcessingApplied": false, "mutualTlsValidatePkiCertChain": false, "accessTokenType": "Bearer", "tlsClientCertificateBoundAccessTokens": false, "accessTokenDuration": 3600, "singleAccessTokenPerSubject": false, "refreshTokenDuration": 3600, "refreshTokenDurationKept": false, "refreshTokenDurationReset": false, "refreshTokenKept": false, "supportedScopes": [{"name": "history.read", "defaultEntry": false, "description": "A permission to read your history."}, {"name": "timeline.read", "defaultEntry": false, "description": "A permission to read your timeline."}], "scopeRequired": false, "idTokenDuration": 0, "allowableClockSkew": 0, "supportedClaimTypes": ["NORMAL"], "claimShortcutRestrictive": false, "directJwksEndpointEnabled": false, "directUserInfoEndpointEnabled": false, "dynamicRegistrationSupported": false, "backchannelAuthReqIdDuration": 0, "backchannelPollingInterval": 0, "backchannelUserCodeParameterSupported": false, "backchannelBindingMessageRequiredInFapi": false, "deviceFlowCodeDuration": 0, "deviceFlowPollingInterval": 0, "userCodeLength": 0, "attributes": [{"key": "attribute1-key", "value": "attribute1-value"}, {"key": "attribute2-key", "value": "attribute2-value"}], "nbfOptional": false, "issSuppressed": false, "tokenExpirationLinked": false, "frontChannelRequestObjectEncryptionRequired": false, "requestObjectEncryptionAlgMatchRequired": false, "requestObjectEncryptionEncMatchRequired": false, "hsmEnabled": false, "grantManagementActionRequired": false, "unauthorizedOnClientConfigSupported": false, "dcrScopeUsedAsRequestable": false}]}
+          application/json: {"start": 0, "end": 5, "totalCount": 1, "services": [{"number": 5041, "serviceName": "My service", "issuer": "https://my-service.example.com", "apiKey": 21653835348762, "apiSecret": "uE4NgqeIpuSV_XejQ7Ds3jsgA1yXhjR1MXJ1LbPuyls", "serviceOwnerNumber": 2, "clientIdAliasEnabled": true, "metadata": [{"key": "clientCount", "value": "1"}], "createdAt": 1639373421000, "modifiedAt": 1639373421000, "supportedGrantTypes": ["AUTHORIZATION_CODE", "REFRESH_TOKEN"], "supportedResponseTypes": ["CODE"], "errorDescriptionOmitted": false, "errorUriOmitted": false, "authorizationEndpoint": "https://as.example.com/authz", "directAuthorizationEndpointEnabled": false, "supportedDisplays": ["PAGE"], "pkceRequired": true, "pkceS256Required": false, "authorizationResponseDuration": 0, "authorizationCodeDuration": 0, "tokenEndpoint": "https://my-service.example.com/token", "directTokenEndpointEnabled": false, "supportedTokenAuthMethods": ["CLIENT_SECRET_BASIC"], "missingClientIdAllowed": false, "revocationEndpoint": "https://my-service.example.com/revocation", "directRevocationEndpointEnabled": false, "supportedRevocationAuthMethods": ["CLIENT_SECRET_BASIC"], "introspectionEndpoint": "https://my-service.example.com/introspection", "directIntrospectionEndpointEnabled": false, "supportedIntrospectionAuthMethods": ["CLIENT_SECRET_BASIC"], "pushedAuthReqDuration": 0, "parRequired": false, "requestObjectRequired": false, "traditionalRequestObjectProcessingApplied": false, "mutualTlsValidatePkiCertChain": false, "accessTokenType": "Bearer", "tlsClientCertificateBoundAccessTokens": false, "accessTokenDuration": 3600, "singleAccessTokenPerSubject": false, "refreshTokenDuration": 3600, "refreshTokenDurationKept": false, "refreshTokenDurationReset": false, "refreshTokenKept": false, "supportedScopes": [{"name": "history.read", "defaultEntry": false, "description": "A permission to read your history."}, {"name": "timeline.read", "defaultEntry": false, "description": "A permission to read your timeline."}], "scopeRequired": false, "idTokenDuration": 0, "allowableClockSkew": 0, "supportedClaimTypes": ["NORMAL"], "claimShortcutRestrictive": false, "directJwksEndpointEnabled": false, "directUserInfoEndpointEnabled": false, "dynamicRegistrationSupported": false, "backchannelAuthReqIdDuration": 0, "backchannelPollingInterval": 0, "backchannelUserCodeParameterSupported": false, "backchannelBindingMessageRequiredInFapi": false, "deviceFlowCodeDuration": 0, "deviceFlowPollingInterval": 0, "userCodeLength": 0, "attributes": [{"key": "attribute1-key", "value": "attribute1-value"}, {"key": "attribute2-key", "value": "attribute2-value"}], "nbfOptional": false, "issSuppressed": false, "tokenExpirationLinked": false, "frontChannelRequestObjectEncryptionRequired": false, "requestObjectEncryptionAlgMatchRequired": false, "requestObjectEncryptionEncMatchRequired": false, "hsmEnabled": false, "grantManagementActionRequired": false, "unauthorizedOnClientConfigSupported": false, "dcrScopeUsedAsRequestable": false}]}
     limited:
       responses:
         "200":
@@ -4011,25 +4011,4 @@ examples:
         "500":
           application/json: {}
 examplesVersion: 1.0.2
-releaseNotes: |
-  ## Go SDK Changes:
-  * `Authlete.Client.Management.ListAuthorizedApplications()`: **Added**
-  * `Authlete.Client.Management.ListAuthorizedApplicationsWithBody()`: **Added**
-  * `Authlete.Client.Management.DeleteClientTokens()`: **Added**
-  * `Authlete.Client.Management.RevokeClientTokens()`: **Added**
-  * `Authlete.Client.Management.GetGrantedScopesForClient()`: **Added**
-  * `Authlete.Client.Management.CreateGrantedScopes()`: **Added**
-  * `Authlete.Client.Management.DeleteGrantedScopesForClient()`: **Added**
-  * `Authlete.Client.Management.UpdateRequestableScopesWithBody()`: **Added**
-  * `Authlete.Lifecycle.Get/api/lifecycle/healthcheck()`: **Added**
-  * `Authlete.ClientManagement.ListAuthorizedApplications()`: **Removed** (Breaking ⚠️)
-  * `Authlete.ClientManagement.RevokeClientTokens()`: **Removed** (Breaking ⚠️)
-  * `Authlete.ClientManagement.RevokeGrantedScopes()`: **Removed** (Breaking ⚠️)
-  * `Authlete.ClientAuthorizations.List()`: **Removed** (Breaking ⚠️)
-  * `Authlete.Clients.Tokens.Delete()`: **Removed** (Breaking ⚠️)
-  * `Authlete.Clients.GrantedScopes.Get()`: **Removed** (Breaking ⚠️)
-  * `Authlete.Clients.GrantedScopes.Create()`: **Removed** (Breaking ⚠️)
-  * `Authlete.Clients.RequestableScopes.Update()`: **Removed** (Breaking ⚠️)
-  * `Authlete.Jwks.Get()`: **Removed** (Breaking ⚠️)
-  * `Authlete.Jose.Verify()`: **Removed** (Breaking ⚠️)
-  * `Authlete.Lifecycle.Healthcheck()`: **Removed** (Breaking ⚠️)
+releaseNotes: "## Go SDK Changes:\n* `Authlete.Service.Get()`:  `response` **Changed**\n* `Authlete.Service.List()`:  `response.Services[]` **Changed**\n* `Authlete.Service.Update()`: \n  *  `request.Body` **Changed**\n  *  `response` **Changed**\n* `Authlete.Authorization.ProcessRequest()`:  `response.Service` **Changed**\n"

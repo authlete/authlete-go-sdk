@@ -215,6 +215,9 @@ type Service struct {
 	// value of the `exp` claim of the JWT.
 	//
 	AuthorizationResponseDuration *int64 `json:"authorizationResponseDuration,omitzero"`
+	// The duration of authorization codes in seconds.
+	//
+	AuthorizationCodeDuration *int64 `json:"authorizationCodeDuration,omitzero"`
 	// The [token endpoint](https://tools.ietf.org/html/rfc6749#section-3.2) of the service.
 	//
 	// A URL that starts with `https://` and has not fragment component. For example, `https://example.com/auth/token`.
@@ -919,6 +922,10 @@ type Service struct {
 	// prohibited.
 	//
 	HTTPAliasProhibited *bool `json:"httpAliasProhibited,omitzero"`
+	// The time window of attestation challenges in seconds. This is used for
+	// OAuth 2.0 Attestation-Based Client Authentication.
+	//
+	AttestationChallengeTimeWindow *int64 `json:"attestationChallengeTimeWindow,omitzero"`
 }
 
 func (s Service) MarshalJSON() ([]byte, error) {
@@ -1182,6 +1189,13 @@ func (s *Service) GetAuthorizationResponseDuration() *int64 {
 		return nil
 	}
 	return s.AuthorizationResponseDuration
+}
+
+func (s *Service) GetAuthorizationCodeDuration() *int64 {
+	if s == nil {
+		return nil
+	}
+	return s.AuthorizationCodeDuration
 }
 
 func (s *Service) GetTokenEndpoint() *string {
@@ -2213,6 +2227,13 @@ func (s *Service) GetHTTPAliasProhibited() *bool {
 	return s.HTTPAliasProhibited
 }
 
+func (s *Service) GetAttestationChallengeTimeWindow() *int64 {
+	if s == nil {
+		return nil
+	}
+	return s.AttestationChallengeTimeWindow
+}
+
 type ServiceInput struct {
 	// The name of this service.
 	ServiceName *string `json:"serviceName,omitzero" form:"name=serviceName"`
@@ -2370,6 +2391,9 @@ type ServiceInput struct {
 	// value of the `exp` claim of the JWT.
 	//
 	AuthorizationResponseDuration *int64 `json:"authorizationResponseDuration,omitzero" form:"name=authorizationResponseDuration"`
+	// The duration of authorization codes in seconds.
+	//
+	AuthorizationCodeDuration *int64 `json:"authorizationCodeDuration,omitzero" form:"name=authorizationCodeDuration"`
 	// The [token endpoint](https://tools.ietf.org/html/rfc6749#section-3.2) of the service.
 	//
 	// A URL that starts with `https://` and has not fragment component. For example, `https://example.com/auth/token`.
@@ -3074,6 +3098,10 @@ type ServiceInput struct {
 	// prohibited.
 	//
 	HTTPAliasProhibited *bool `json:"httpAliasProhibited,omitzero" form:"name=httpAliasProhibited"`
+	// The time window of attestation challenges in seconds. This is used for
+	// OAuth 2.0 Attestation-Based Client Authentication.
+	//
+	AttestationChallengeTimeWindow *int64 `json:"attestationChallengeTimeWindow,omitzero" form:"name=attestationChallengeTimeWindow"`
 }
 
 func (s ServiceInput) MarshalJSON() ([]byte, error) {
@@ -3288,6 +3316,13 @@ func (s *ServiceInput) GetAuthorizationResponseDuration() *int64 {
 		return nil
 	}
 	return s.AuthorizationResponseDuration
+}
+
+func (s *ServiceInput) GetAuthorizationCodeDuration() *int64 {
+	if s == nil {
+		return nil
+	}
+	return s.AuthorizationCodeDuration
 }
 
 func (s *ServiceInput) GetTokenEndpoint() *string {
@@ -4317,4 +4352,11 @@ func (s *ServiceInput) GetHTTPAliasProhibited() *bool {
 		return nil
 	}
 	return s.HTTPAliasProhibited
+}
+
+func (s *ServiceInput) GetAttestationChallengeTimeWindow() *int64 {
+	if s == nil {
+		return nil
+	}
+	return s.AttestationChallengeTimeWindow
 }
