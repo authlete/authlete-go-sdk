@@ -13,11 +13,7 @@
 
 ## ReissueIDToken
 
-The API is expected to be called only when the value of the `action`
-parameter in a response from the `/auth/token` API is [ID_TOKEN_REISSUABLE](https://authlete.github.io/authlete-java-common/com/authlete/common/dto/TokenResponse.Action.html#ID_TOKEN_REISSUABLE). The purpose
-of the `/idtoken/reissue` API is to generate a token response that
-includes a new ID token together with a new access token and a refresh
-token.
+The API is expected to be called only when the value of the `action` parameter in a response from the `/auth/token` API is [ID_TOKEN_REISSUABLE](https://authlete.github.io/authlete-java-common/com/authlete/common/dto/TokenResponse.Action.html#ID_TOKEN_REISSUABLE). The purpose of the `/idtoken/reissue` API is to generate a token response that includes a new ID token together with a new access token and a refresh token.
 
 
 ### Example Usage
@@ -68,6 +64,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -126,6 +123,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -191,6 +189,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -253,6 +252,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -297,7 +297,7 @@ func main() {
 | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `ctx`                                                                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                                                                      | :heavy_check_mark:                                                                                                                         | The context to use for the request.                                                                                                        |
 | `serviceID`                                                                                                                                | `string`                                                                                                                                   | :heavy_check_mark:                                                                                                                         | A service ID.                                                                                                                              |
-| `accessTokenIdentifier`                                                                                                                    | `string`                                                                                                                                   | :heavy_check_mark:                                                                                                                         | The identifier of an existing access token. The identifier is the value of the access token<br/>or the value of the hash of the access token.<br/> |
+| `accessTokenIdentifier`                                                                                                                    | `string`                                                                                                                                   | :heavy_check_mark:                                                                                                                         | The identifier of an existing access token. The identifier is the value of the access token or the value of the hash of the access token.<br/> |
 | `opts`                                                                                                                                     | [][operations.Option](../../models/operations/option.md)                                                                                   | :heavy_minus_sign:                                                                                                                         | The options for this request.                                                                                                              |
 
 ### Response
@@ -309,6 +309,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -368,5 +369,6 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403, 404    | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |

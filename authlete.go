@@ -2,7 +2,7 @@
 
 package authlete
 
-// Generated from OpenAPI doc version 3.0.16 and generator version 2.869.25
+// Generated from OpenAPI doc version 3.0.16 and generator version 2.948.4
 
 import (
 	"context"
@@ -54,9 +54,7 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// Authlete API: Welcome to the **Authlete API documentation**. Authlete is an **API-first service** where every aspect of the
-// platform is configurable via API. This documentation will help you authenticate and integrate with Authlete to
-// build powerful OAuth 2.0 and OpenID Connect servers.
+// Authlete API: Welcome to the **Authlete API documentation**. Authlete is an **API-first service** where every aspect of the platform is configurable via API. This documentation will help you authenticate and integrate with Authlete to build powerful OAuth 2.0 and OpenID Connect servers.
 //
 // At a high level, the Authlete API is grouped into two categories:
 //
@@ -100,8 +98,7 @@ func Pointer[T any](v T) *T { return &v }
 // 3. Click **Create Token** and select org-level permissions
 // 4. Copy the generated token
 //
-// > ⚠️ **Important Note**: Tokens inherit the permissions of the account that creates them. Service tokens can only
-// > access their specific service, while organization tokens can access all services within your org.
+// > ⚠️ **Important Note**: Tokens inherit the permissions of the account that creates them. Service tokens can only access their specific service, while organization tokens can access all services within your org.
 //
 // ### Token Security Best Practices
 //
@@ -136,12 +133,10 @@ func Pointer[T any](v T) *T { return &v }
 type Authlete struct {
 	SDKVersion string
 	Service    *Service
+	Audit      *Audit
 	Client     *Client
-	// Process Device Authorization Request
-	// This API parses request parameters of a [device authorization request](https://datatracker.ietf.org/doc/html/rfc8628#section-3.1)
-	// and returns necessary data for the authorization server implementation to process the device authorization
-	// request further.
-	//
+	// API endpoints for managing OAuth clients, including creation, update, and deletion of clients.
+	ClientManagement          *ClientManagement2
 	Authorization             *Authorization
 	PushedAuthorization       *PushedAuthorization
 	Token                     *Token
@@ -151,6 +146,7 @@ type Authlete struct {
 	GrantManagement           *GrantManagement
 	DynamicClientRegistration *DynamicClientRegistration
 	Ciba                      *Ciba
+	BackChannelLogout         *BackChannelLogout
 	DeviceFlow                *DeviceFlow
 	Federation                *Federation
 	HardwareSecurityKeys      *HardwareSecurityKeys
@@ -233,10 +229,13 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Authlete {
 	sdk := &Authlete{
-		SDKVersion: "0.0.15",
+		SDKVersion: "0.1.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/go 0.0.15 2.869.25 3.0.16 github.com/authlete/authlete-go-sdk",
-			ServerList: ServerList,
+			UserAgent:         "speakeasy-sdk/go 0.1.0 2.948.4 3.0.16 github.com/authlete/authlete-go-sdk",
+			SDKVersion:        "0.1.0",
+			GenVersion:        "2.948.4",
+			OpenAPIDocVersion: "3.0.16",
+			ServerList:        ServerList,
 		},
 		hooks: hooks.New(),
 	}
@@ -259,7 +258,9 @@ func New(opts ...SDKOption) *Authlete {
 	sdk.sdkConfiguration = sdk.hooks.SDKInit(sdk.sdkConfiguration)
 
 	sdk.Service = newService(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Audit = newAudit(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Client = newClient(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.ClientManagement = newClientManagement2(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Authorization = newAuthorization(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PushedAuthorization = newPushedAuthorization(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Token = newToken(sdk, sdk.sdkConfiguration, sdk.hooks)
@@ -269,6 +270,7 @@ func New(opts ...SDKOption) *Authlete {
 	sdk.GrantManagement = newGrantManagement(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DynamicClientRegistration = newDynamicClientRegistration(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Ciba = newCiba(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.BackChannelLogout = newBackChannelLogout(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DeviceFlow = newDeviceFlow(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Federation = newFederation(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.HardwareSecurityKeys = newHardwareSecurityKeys(sdk, sdk.sdkConfiguration, sdk.hooks)

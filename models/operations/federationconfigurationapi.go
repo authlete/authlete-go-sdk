@@ -8,23 +8,33 @@ import (
 )
 
 type FederationConfigurationAPIRequestBody struct {
+	// The entity types for which the entity configuration is requested. When omitted or empty, it defaults to `OPENID_PROVIDER` only (backward compatibility). Unsupported entity types are ignored. `OPENID_CREDENTIAL_ISSUER` requires the Verifiable Credentials feature (Authlete 3.0+).
+	//
+	EntityTypes []components.EntityType `json:"entityTypes,omitzero"`
 }
 
-type FederationConfigurationAPIRequest struct {
-	// A service ID.
-	ServiceID string                                 `pathParam:"style=simple,explode=false,name=serviceId"`
-	Body      *FederationConfigurationAPIRequestBody `request:"mediaType=application/json"`
-}
-
-func (f FederationConfigurationAPIRequest) MarshalJSON() ([]byte, error) {
+func (f FederationConfigurationAPIRequestBody) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(f, "", false)
 }
 
-func (f *FederationConfigurationAPIRequest) UnmarshalJSON(data []byte) error {
+func (f *FederationConfigurationAPIRequestBody) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (f *FederationConfigurationAPIRequestBody) GetEntityTypes() []components.EntityType {
+	if f == nil {
+		return nil
+	}
+	return f.EntityTypes
+}
+
+type FederationConfigurationAPIRequest struct {
+	// A service ID.
+	ServiceID string                                `pathParam:"style=simple,explode=false,name=serviceId"`
+	Body      FederationConfigurationAPIRequestBody `request:"mediaType=application/json"`
 }
 
 func (f *FederationConfigurationAPIRequest) GetServiceID() string {
@@ -34,9 +44,9 @@ func (f *FederationConfigurationAPIRequest) GetServiceID() string {
 	return f.ServiceID
 }
 
-func (f *FederationConfigurationAPIRequest) GetBody() *FederationConfigurationAPIRequestBody {
+func (f *FederationConfigurationAPIRequest) GetBody() FederationConfigurationAPIRequestBody {
 	if f == nil {
-		return nil
+		return FederationConfigurationAPIRequestBody{}
 	}
 	return f.Body
 }
@@ -45,6 +55,7 @@ type FederationConfigurationAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Federation configuration retrieved successfully
 	FederationConfigurationResponse *components.FederationConfigurationResponse
+	Headers                         map[string][]string
 }
 
 func (f FederationConfigurationAPIResponse) MarshalJSON() ([]byte, error) {
@@ -70,4 +81,11 @@ func (f *FederationConfigurationAPIResponse) GetFederationConfigurationResponse(
 		return nil
 	}
 	return f.FederationConfigurationResponse
+}
+
+func (f *FederationConfigurationAPIResponse) GetHeaders() map[string][]string {
+	if f == nil {
+		return map[string][]string{}
+	}
+	return f.Headers
 }

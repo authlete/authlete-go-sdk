@@ -2,11 +2,26 @@
 
 package components
 
+import (
+	"github.com/authlete/authlete-go-sdk/internal/utils"
+)
+
 type Pair struct {
 	// The key part.
 	Key *string `json:"key,omitzero"`
 	// The value part.
 	Value *string `json:"value,omitzero"`
+}
+
+func (p Pair) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *Pair) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (p *Pair) GetKey() *string {

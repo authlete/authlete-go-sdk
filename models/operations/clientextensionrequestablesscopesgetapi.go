@@ -32,6 +32,7 @@ func (c *ClientExtensionRequestablesScopesGetAPIRequest) GetClientID() string {
 type ClientExtensionRequestablesScopesGetAPIResponse struct {
 	HTTPMeta                                    components.HTTPMetadata `json:"-"`
 	ClientExtensionRequestableScopesGetResponse *components.ClientExtensionRequestableScopesGetResponse
+	Headers                                     map[string][]string
 }
 
 func (c ClientExtensionRequestablesScopesGetAPIResponse) MarshalJSON() ([]byte, error) {
@@ -57,4 +58,11 @@ func (c *ClientExtensionRequestablesScopesGetAPIResponse) GetClientExtensionRequ
 		return nil
 	}
 	return c.ClientExtensionRequestableScopesGetResponse
+}
+
+func (c *ClientExtensionRequestablesScopesGetAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

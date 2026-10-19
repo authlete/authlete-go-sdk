@@ -31,6 +31,7 @@ type HskCreateAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// HSK created successfully
 	HskCreateResponse *components.HskCreateResponse
+	Headers           map[string][]string
 }
 
 func (h HskCreateAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (h *HskCreateAPIResponse) GetHskCreateResponse() *components.HskCreateRespo
 		return nil
 	}
 	return h.HskCreateResponse
+}
+
+func (h *HskCreateAPIResponse) GetHeaders() map[string][]string {
+	if h == nil {
+		return map[string][]string{}
+	}
+	return h.Headers
 }

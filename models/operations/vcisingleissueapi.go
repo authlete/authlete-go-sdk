@@ -30,6 +30,7 @@ func (v *VciSingleIssueAPIRequest) GetBody() components.VciSingleIssueRequest {
 type VciSingleIssueAPIResponse struct {
 	HTTPMeta               components.HTTPMetadata `json:"-"`
 	VciSingleIssueResponse *components.VciSingleIssueResponse
+	Headers                map[string][]string
 }
 
 func (v VciSingleIssueAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (v *VciSingleIssueAPIResponse) GetVciSingleIssueResponse() *components.VciS
 		return nil
 	}
 	return v.VciSingleIssueResponse
+}
+
+func (v *VciSingleIssueAPIResponse) GetHeaders() map[string][]string {
+	if v == nil {
+		return map[string][]string{}
+	}
+	return v.Headers
 }

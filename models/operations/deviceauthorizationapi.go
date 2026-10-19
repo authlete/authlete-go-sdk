@@ -30,6 +30,7 @@ func (d *DeviceAuthorizationAPIRequest) GetBody() components.DeviceAuthorization
 type DeviceAuthorizationAPIResponse struct {
 	HTTPMeta                    components.HTTPMetadata `json:"-"`
 	DeviceAuthorizationResponse *components.DeviceAuthorizationResponse
+	Headers                     map[string][]string
 }
 
 func (d DeviceAuthorizationAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (d *DeviceAuthorizationAPIResponse) GetDeviceAuthorizationResponse() *compo
 		return nil
 	}
 	return d.DeviceAuthorizationResponse
+}
+
+func (d *DeviceAuthorizationAPIResponse) GetHeaders() map[string][]string {
+	if d == nil {
+		return map[string][]string{}
+	}
+	return d.Headers
 }

@@ -34,7 +34,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 go:
-  version: 0.0.15
+  version: 0.1.0
   additionalDependencies: {}
   baseErrorName: AuthleteError
   clientServerStatusCodesAsErrors: true
@@ -42,9 +42,12 @@ go:
   enableCustomCodeRegions: false
   enableSkipDeserialization: false
   envVarPrefix: AUTHLETE
+  fixFlags:
+    encodePathParams: false
   flattenGlobalSecurity: true
   forwardCompatibleEnumsByDefault: true
   forwardCompatibleUnionsByDefault: tagged-and-untagged
+  idiomaticMethodCollisionNames: false
   imports:
     option: openapi
     paths:
@@ -61,9 +64,11 @@ go:
   modulePath: github.com/authlete/authlete-go-sdk
   multipartArrayFormat: standard
   nullableOptionalWrapper: true
+  optionalMethodArguments: pointers
   outputModelSuffix: output
   respectRequiredFields: false
   respectTitlesForPrimitiveUnionMembers: true
   responseFormat: envelope-http
   sdkPackageName: Authlete
+  unionGenerics: false
   unionStrategy: populated-fields

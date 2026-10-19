@@ -4,9 +4,8 @@ package components
 
 type AuthorizationTicketUpdateRequest struct {
 	// The ticket.
-	Ticket string `json:"ticket" form:"name=ticket"`
-	// The information about the ticket.
-	Info string `json:"info" form:"name=info"`
+	Ticket string                  `json:"ticket" form:"name=ticket"`
+	Info   AuthorizationTicketInfo `json:"info" form:"name=info,json"`
 }
 
 func (a *AuthorizationTicketUpdateRequest) GetTicket() string {
@@ -16,9 +15,9 @@ func (a *AuthorizationTicketUpdateRequest) GetTicket() string {
 	return a.Ticket
 }
 
-func (a *AuthorizationTicketUpdateRequest) GetInfo() string {
+func (a *AuthorizationTicketUpdateRequest) GetInfo() AuthorizationTicketInfo {
 	if a == nil {
-		return ""
+		return AuthorizationTicketInfo{}
 	}
 	return a.Info
 }

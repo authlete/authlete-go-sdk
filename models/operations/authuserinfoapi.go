@@ -31,6 +31,7 @@ type AuthUserinfoAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// User info retrieved successfully
 	UserinfoResponse *components.UserinfoResponse
+	Headers          map[string][]string
 }
 
 func (a AuthUserinfoAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (a *AuthUserinfoAPIResponse) GetUserinfoResponse() *components.UserinfoResp
 		return nil
 	}
 	return a.UserinfoResponse
+}
+
+func (a *AuthUserinfoAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

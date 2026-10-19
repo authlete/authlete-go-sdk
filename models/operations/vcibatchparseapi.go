@@ -31,6 +31,7 @@ type VciBatchParseAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Batch credential parsing completed successfully
 	VciBatchParseResponse *components.VciBatchParseResponse
+	Headers               map[string][]string
 }
 
 func (v VciBatchParseAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (v *VciBatchParseAPIResponse) GetVciBatchParseResponse() *components.VciBat
 		return nil
 	}
 	return v.VciBatchParseResponse
+}
+
+func (v *VciBatchParseAPIResponse) GetHeaders() map[string][]string {
+	if v == nil {
+		return map[string][]string{}
+	}
+	return v.Headers
 }

@@ -21,3 +21,6 @@ value := components.TokenFailRequestReasonUnknown
 | `TokenFailRequestReasonUnknown`                         | UNKNOWN                                                 |
 | `TokenFailRequestReasonInvalidResourceOwnerCredentials` | INVALID_RESOURCE_OWNER_CREDENTIALS                      |
 | `TokenFailRequestReasonInvalidTarget`                   | INVALID_TARGET                                          |
+| `TokenFailRequestReasonInvalidClient`                   | INVALID_CLIENT                                          |
+| `TokenFailRequestReasonUnauthorizedClient`              | UNAUTHORIZED_CLIENT                                     |
+| `TokenFailRequestReasonInvalidScope`                    | INVALID_SCOPE                                           |

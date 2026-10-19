@@ -22,6 +22,7 @@ func (s *ServiceGetAPIRequest) GetServiceID() string {
 type ServiceGetAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	Service  *components.Service
+	Headers  map[string][]string
 }
 
 func (s ServiceGetAPIResponse) MarshalJSON() ([]byte, error) {
@@ -47,4 +48,11 @@ func (s *ServiceGetAPIResponse) GetService() *components.Service {
 		return nil
 	}
 	return s.Service
+}
+
+func (s *ServiceGetAPIResponse) GetHeaders() map[string][]string {
+	if s == nil {
+		return map[string][]string{}
+	}
+	return s.Headers
 }

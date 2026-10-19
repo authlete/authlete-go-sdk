@@ -2,13 +2,15 @@
 
 package components
 
-// VciSingleIssueResponseAction - The next action that the implementation of the credential endpoint
-// should take.
+// VciSingleIssueResponseAction - The next action that the implementation of the credential endpoint should take.
 type VciSingleIssueResponseAction string
 
 const (
 	VciSingleIssueResponseActionOk                  VciSingleIssueResponseAction = "OK"
+	VciSingleIssueResponseActionOkJwt               VciSingleIssueResponseAction = "OK_JWT"
 	VciSingleIssueResponseActionAccepted            VciSingleIssueResponseAction = "ACCEPTED"
+	VciSingleIssueResponseActionAcceptedJwt         VciSingleIssueResponseAction = "ACCEPTED_JWT"
+	VciSingleIssueResponseActionBadRequest          VciSingleIssueResponseAction = "BAD_REQUEST"
 	VciSingleIssueResponseActionUnauthorized        VciSingleIssueResponseAction = "UNAUTHORIZED"
 	VciSingleIssueResponseActionForbidden           VciSingleIssueResponseAction = "FORBIDDEN"
 	VciSingleIssueResponseActionInternalServerError VciSingleIssueResponseAction = "INTERNAL_SERVER_ERROR"
@@ -23,7 +25,7 @@ func (e VciSingleIssueResponseAction) ToPointer() *VciSingleIssueResponseAction 
 func (e *VciSingleIssueResponseAction) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "OK", "ACCEPTED", "UNAUTHORIZED", "FORBIDDEN", "INTERNAL_SERVER_ERROR", "CALLER_ERROR":
+		case "OK", "OK_JWT", "ACCEPTED", "ACCEPTED_JWT", "BAD_REQUEST", "UNAUTHORIZED", "FORBIDDEN", "INTERNAL_SERVER_ERROR", "CALLER_ERROR":
 			return true
 		}
 	}
@@ -35,12 +37,10 @@ type VciSingleIssueResponse struct {
 	ResultCode *string `json:"resultCode,omitzero"`
 	// A short message which explains the result of the API call.
 	ResultMessage *string `json:"resultMessage,omitzero"`
-	// The next action that the implementation of the credential endpoint
-	// should take.
+	// The next action that the implementation of the credential endpoint should take.
 	//
 	Action *VciSingleIssueResponseAction `json:"action,omitzero"`
-	// The content of the response that the implementation of the credential
-	// endpoint should return.
+	// The content of the response that the implementation of the credential endpoint should return.
 	//
 	ResponseContent *string `json:"responseContent,omitzero"`
 	// The issued transaction ID.

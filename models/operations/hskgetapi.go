@@ -30,6 +30,7 @@ func (h *HskGetAPIRequest) GetHandle() string {
 type HskGetAPIResponse struct {
 	HTTPMeta       components.HTTPMetadata `json:"-"`
 	HskGetResponse *components.HskGetResponse
+	Headers        map[string][]string
 }
 
 func (h HskGetAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (h *HskGetAPIResponse) GetHskGetResponse() *components.HskGetResponse {
 		return nil
 	}
 	return h.HskGetResponse
+}
+
+func (h *HskGetAPIResponse) GetHeaders() map[string][]string {
+	if h == nil {
+		return map[string][]string{}
+	}
+	return h.Headers
 }

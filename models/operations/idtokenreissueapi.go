@@ -42,6 +42,7 @@ type IdtokenReissueAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// ID token reissued successfully
 	IdtokenReissueResponse *components.IdtokenReissueResponse
+	Headers                map[string][]string
 }
 
 func (i IdtokenReissueAPIResponse) MarshalJSON() ([]byte, error) {
@@ -67,4 +68,11 @@ func (i *IdtokenReissueAPIResponse) GetIdtokenReissueResponse() *components.Idto
 		return nil
 	}
 	return i.IdtokenReissueResponse
+}
+
+func (i *IdtokenReissueAPIResponse) GetHeaders() map[string][]string {
+	if i == nil {
+		return map[string][]string{}
+	}
+	return i.Headers
 }

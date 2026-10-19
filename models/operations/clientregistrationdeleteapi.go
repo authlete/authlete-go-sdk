@@ -8,8 +8,7 @@ import (
 )
 
 type ClientRegistrationDeleteAPIRequestBody struct {
-	// Client metadata in JSON format that complies with [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591)
-	// (OAuth 2.0 Dynamic Client Registration Protocol).
+	// Client metadata in JSON format that complies with [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591) (OAuth 2.0 Dynamic Client Registration Protocol).
 	//
 	JSON *string `json:"json,omitzero"`
 	// The client registration access token. Used only for GET, UPDATE, and DELETE requests.
@@ -64,6 +63,7 @@ func (c *ClientRegistrationDeleteAPIRequest) GetBody() ClientRegistrationDeleteA
 type ClientRegistrationDeleteAPIResponse struct {
 	HTTPMeta                   components.HTTPMetadata `json:"-"`
 	ClientRegistrationResponse *components.ClientRegistrationResponse
+	Headers                    map[string][]string
 }
 
 func (c ClientRegistrationDeleteAPIResponse) MarshalJSON() ([]byte, error) {
@@ -89,4 +89,11 @@ func (c *ClientRegistrationDeleteAPIResponse) GetClientRegistrationResponse() *c
 		return nil
 	}
 	return c.ClientRegistrationResponse
+}
+
+func (c *ClientRegistrationDeleteAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

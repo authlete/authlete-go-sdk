@@ -9,8 +9,7 @@ import (
 type AuthTokenDeleteAPIRequest struct {
 	// A service ID.
 	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
-	// The identifier of an existing access token. The identifier is the value of the access token
-	// or the value of the hash of the access token.
+	// The identifier of an existing access token. The identifier is the value of the access token or the value of the hash of the access token.
 	//
 	AccessTokenIdentifier string `pathParam:"style=simple,explode=false,name=accessTokenIdentifier"`
 }
@@ -31,6 +30,7 @@ func (a *AuthTokenDeleteAPIRequest) GetAccessTokenIdentifier() string {
 
 type AuthTokenDeleteAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
+	Headers  map[string][]string
 }
 
 func (a *AuthTokenDeleteAPIResponse) GetHTTPMeta() components.HTTPMetadata {
@@ -38,4 +38,11 @@ func (a *AuthTokenDeleteAPIResponse) GetHTTPMeta() components.HTTPMetadata {
 		return components.HTTPMetadata{}
 	}
 	return a.HTTPMeta
+}
+
+func (a *AuthTokenDeleteAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

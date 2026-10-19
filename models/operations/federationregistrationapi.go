@@ -30,6 +30,7 @@ func (f *FederationRegistrationAPIRequest) GetBody() components.FederationRegist
 type FederationRegistrationAPIResponse struct {
 	HTTPMeta                       components.HTTPMetadata `json:"-"`
 	FederationRegistrationResponse *components.FederationRegistrationResponse
+	Headers                        map[string][]string
 }
 
 func (f FederationRegistrationAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (f *FederationRegistrationAPIResponse) GetFederationRegistrationResponse() 
 		return nil
 	}
 	return f.FederationRegistrationResponse
+}
+
+func (f *FederationRegistrationAPIResponse) GetHeaders() map[string][]string {
+	if f == nil {
+		return map[string][]string{}
+	}
+	return f.Headers
 }

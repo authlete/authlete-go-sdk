@@ -1,7 +1,6 @@
 # AuthorizationFailRequestReason
 
-The reason of the failure of the authorization request.
-For more details, see [NO_INTERACTION] in the description of `/auth/authorization` API.
+The reason of the failure of the authorization request. For more details, see [NO_INTERACTION] in the description of `/auth/authorization` API.
 
 
 ## Example Usage
@@ -32,3 +31,6 @@ value := components.AuthorizationFailRequestReasonUnknown
 | `AuthorizationFailRequestReasonConsentRequired`          | CONSENT_REQUIRED                                         |
 | `AuthorizationFailRequestReasonInteractionRequired`      | INTERACTION_REQUIRED                                     |
 | `AuthorizationFailRequestReasonInvalidTarget`            | INVALID_TARGET                                           |
+| `AuthorizationFailRequestReasonTemporarilyUnavailable`   | TEMPORARILY_UNAVAILABLE                                  |
+| `AuthorizationFailRequestReasonInvalidScope`             | INVALID_SCOPE                                            |
+| `AuthorizationFailRequestReasonUnauthorizedClient`       | UNAUTHORIZED_CLIENT                                      |

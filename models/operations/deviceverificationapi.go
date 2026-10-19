@@ -31,6 +31,7 @@ type DeviceVerificationAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Device verification completed successfully
 	DeviceVerificationResponse *components.DeviceVerificationResponse
+	Headers                    map[string][]string
 }
 
 func (d DeviceVerificationAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (d *DeviceVerificationAPIResponse) GetDeviceVerificationResponse() *compone
 		return nil
 	}
 	return d.DeviceVerificationResponse
+}
+
+func (d *DeviceVerificationAPIResponse) GetHeaders() map[string][]string {
+	if d == nil {
+		return map[string][]string{}
+	}
+	return d.Headers
 }

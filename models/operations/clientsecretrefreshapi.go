@@ -32,6 +32,7 @@ func (c *ClientSecretRefreshAPIRequest) GetClientIdentifier() string {
 type ClientSecretRefreshAPIResponse struct {
 	HTTPMeta                    components.HTTPMetadata `json:"-"`
 	ClientSecretRefreshResponse *components.ClientSecretRefreshResponse
+	Headers                     map[string][]string
 }
 
 func (c ClientSecretRefreshAPIResponse) MarshalJSON() ([]byte, error) {
@@ -57,4 +58,11 @@ func (c *ClientSecretRefreshAPIResponse) GetClientSecretRefreshResponse() *compo
 		return nil
 	}
 	return c.ClientSecretRefreshResponse
+}
+
+func (c *ClientSecretRefreshAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

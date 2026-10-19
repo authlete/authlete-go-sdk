@@ -31,6 +31,7 @@ type GrantMAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Grant management completed successfully
 	GMResponse *components.GMResponse
+	Headers    map[string][]string
 }
 
 func (g GrantMAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (g *GrantMAPIResponse) GetGMResponse() *components.GMResponse {
 		return nil
 	}
 	return g.GMResponse
+}
+
+func (g *GrantMAPIResponse) GetHeaders() map[string][]string {
+	if g == nil {
+		return map[string][]string{}
+	}
+	return g.Headers
 }

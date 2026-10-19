@@ -2,8 +2,7 @@
 
 package components
 
-// VciBatchIssueResponseAction - The next action that the implementation of the batch credential
-// endpoint should take.
+// VciBatchIssueResponseAction - The next action that the implementation of the batch credential endpoint should take.
 type VciBatchIssueResponseAction string
 
 const (
@@ -34,12 +33,10 @@ type VciBatchIssueResponse struct {
 	ResultCode *string `json:"resultCode,omitzero"`
 	// A short message which explains the result of the API call.
 	ResultMessage *string `json:"resultMessage,omitzero"`
-	// The next action that the implementation of the batch credential
-	// endpoint should take.
+	// The next action that the implementation of the batch credential endpoint should take.
 	//
 	Action *VciBatchIssueResponseAction `json:"action,omitzero"`
-	// The content of the response that the implementation of the batch
-	// credential endpoint should return.
+	// The content of the response that the implementation of the batch credential endpoint should return.
 	//
 	ResponseContent *string `json:"responseContent,omitzero"`
 }

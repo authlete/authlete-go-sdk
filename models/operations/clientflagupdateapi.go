@@ -50,6 +50,7 @@ func (c *ClientFlagUpdateAPIRequest) GetBody() *components.ClientFlagUpdateReque
 type ClientFlagUpdateAPIResponse struct {
 	HTTPMeta                 components.HTTPMetadata `json:"-"`
 	ClientFlagUpdateResponse *components.ClientFlagUpdateResponse
+	Headers                  map[string][]string
 }
 
 func (c ClientFlagUpdateAPIResponse) MarshalJSON() ([]byte, error) {
@@ -75,4 +76,11 @@ func (c *ClientFlagUpdateAPIResponse) GetClientFlagUpdateResponse() *components.
 		return nil
 	}
 	return c.ClientFlagUpdateResponse
+}
+
+func (c *ClientFlagUpdateAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

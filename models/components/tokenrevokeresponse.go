@@ -7,7 +7,10 @@ type TokenRevokeResponse struct {
 	ResultCode *string `json:"resultCode,omitzero"`
 	// A short message which explains the result of the API call.
 	ResultMessage *string `json:"resultMessage,omitzero"`
-	// The number of tokens revoked
+	// The number of tokens revoked.
+	//
+	// If the target has more than 20 tokens, the response `count` will be 20 and the remainder is left untouched. To fully wipe them, call the endpoint repeatedly until `count` returns 0.
+	//
 	Count *int64 `json:"count,omitzero"`
 }
 

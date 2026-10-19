@@ -14,6 +14,7 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/authlete/authlete-go-sdk/retry"
 	"net/http"
+	"time"
 )
 
 type Federation struct {
@@ -31,12 +32,8 @@ func newFederation(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *
 }
 
 // Configuration - Process Entity Configuration Request
-// This API gathers the federation configuration about a service.
-// The authorization server implementation should
-// retrieve the value of the `action`
-// response parameter from the API response and take the following steps
-// according to the value.
-func (s *Federation) Configuration(ctx context.Context, serviceID string, body *operations.FederationConfigurationAPIRequestBody, opts ...operations.Option) (*operations.FederationConfigurationAPIResponse, error) {
+// This API gathers the federation configuration about a service. The authorization server implementation should retrieve the value of the `action` response parameter from the API response and take the following steps according to the value.
+func (s *Federation) Configuration(ctx context.Context, serviceID string, body operations.FederationConfigurationAPIRequestBody, opts ...operations.Option) (*operations.FederationConfigurationAPIResponse, error) {
 	request := operations.FederationConfigurationAPIRequest{
 		ServiceID: serviceID,
 		Body:      body,
@@ -73,7 +70,7 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body *
 		OperationID:      "federation_configuration_api",
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Body", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -81,6 +78,11 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body *
 	timeout := o.Timeout
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
 	}
 
 	if timeout != nil {
@@ -112,6 +114,16 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body *
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -120,11 +132,8 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body *
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -183,7 +192,7 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body *
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -241,7 +250,34 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body *
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -266,7 +302,7 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body *
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -306,27 +342,8 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body *
 }
 
 // Registration - Process Federation Registration Request
-// The Authlete API is for implementations of the **federation registration
-// endpoint** that accepts "explicit client registration". Its details are
-// defined in [OpenID Connect Federation 1.0](https://openid.net/specs/openid-connect-federation-1_0.html).
-// The endpoint accepts `POST` requests whose `Content-Type`
-// is either of the following.
-// 1. `application/entity-statement+jwt`- `application/trust-chain+json`
-// When the `Content-Type` of a request is
-// `application/entity-statement+jwt`, the content of the request is
-// the entity configuration of a relying party that is to be registered.
-// In this case, the implementation of the federation registration endpoint
-// should call Authlete's `/federation/registration` API with the
-// entity configuration set to the `entityConfiguration` request
-// parameter.
-// On the other hand, when the `Content-Type` of a request is
-// `application/trust-chain+json`, the content of the request is a
-// JSON array that contains entity statements in JWT format. The sequence
-// of the entity statements composes the trust chain of a relying party
-// that is to be registered. In this case, the implementation of the
-// federation registration endpoint should call Authlete's
-// `/federation/registration` API with the trust chain set to the
-// `trustChain` request parameter.
+// The Authlete API is for implementations of the **federation registration endpoint** that accepts "explicit client registration". Its details are defined in [OpenID Connect Federation 1.0](https://openid.net/specs/openid-connect-federation-1_0.html). The endpoint accepts `POST` requests whose `Content-Type` is either of the following.
+// 1. `application/entity-statement+jwt`- `application/trust-chain+json` When the `Content-Type` of a request is `application/entity-statement+jwt`, the content of the request is the entity configuration of a relying party that is to be registered. In this case, the implementation of the federation registration endpoint should call Authlete's `/federation/registration` API with the entity configuration set to the `entityConfiguration` request parameter. On the other hand, when the `Content-Type` of a request is `application/trust-chain+json`, the content of the request is a JSON array that contains entity statements in JWT format. The sequence of the entity statements composes the trust chain of a relying party that is to be registered. In this case, the implementation of the federation registration endpoint should call Authlete's `/federation/registration` API with the trust chain set to the `trustChain` request parameter.
 func (s *Federation) Registration(ctx context.Context, serviceID string, body components.FederationRegistrationRequest, opts ...operations.Option) (*operations.FederationRegistrationAPIResponse, error) {
 	request := operations.FederationRegistrationAPIRequest{
 		ServiceID: serviceID,
@@ -374,6 +391,11 @@ func (s *Federation) Registration(ctx context.Context, serviceID string, body co
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -403,6 +425,16 @@ func (s *Federation) Registration(ctx context.Context, serviceID string, body co
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -411,11 +443,8 @@ func (s *Federation) Registration(ctx context.Context, serviceID string, body co
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -474,7 +503,7 @@ func (s *Federation) Registration(ctx context.Context, serviceID string, body co
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -532,7 +561,34 @@ func (s *Federation) Registration(ctx context.Context, serviceID string, body co
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -557,7 +613,7 @@ func (s *Federation) Registration(ctx context.Context, serviceID string, body co
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{

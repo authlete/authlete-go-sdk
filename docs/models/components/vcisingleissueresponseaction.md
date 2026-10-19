@@ -1,7 +1,6 @@
 # VciSingleIssueResponseAction
 
-The next action that the implementation of the credential endpoint
-should take.
+The next action that the implementation of the credential endpoint should take.
 
 
 ## Example Usage
@@ -23,7 +22,10 @@ custom := components.VciSingleIssueResponseAction("custom_value")
 | Name                                              | Value                                             |
 | ------------------------------------------------- | ------------------------------------------------- |
 | `VciSingleIssueResponseActionOk`                  | OK                                                |
+| `VciSingleIssueResponseActionOkJwt`               | OK_JWT                                            |
 | `VciSingleIssueResponseActionAccepted`            | ACCEPTED                                          |
+| `VciSingleIssueResponseActionAcceptedJwt`         | ACCEPTED_JWT                                      |
+| `VciSingleIssueResponseActionBadRequest`          | BAD_REQUEST                                       |
 | `VciSingleIssueResponseActionUnauthorized`        | UNAUTHORIZED                                      |
 | `VciSingleIssueResponseActionForbidden`           | FORBIDDEN                                         |
 | `VciSingleIssueResponseActionInternalServerError` | INTERNAL_SERVER_ERROR                             |

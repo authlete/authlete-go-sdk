@@ -30,6 +30,7 @@ func (v *VciOfferCreateAPIRequest) GetBody() components.VciOfferCreateRequest {
 type VciOfferCreateAPIResponse struct {
 	HTTPMeta               components.HTTPMetadata `json:"-"`
 	VciOfferCreateResponse *components.VciOfferCreateResponse
+	Headers                map[string][]string
 }
 
 func (v VciOfferCreateAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (v *VciOfferCreateAPIResponse) GetVciOfferCreateResponse() *components.VciO
 		return nil
 	}
 	return v.VciOfferCreateResponse
+}
+
+func (v *VciOfferCreateAPIResponse) GetHeaders() map[string][]string {
+	if v == nil {
+		return map[string][]string{}
+	}
+	return v.Headers
 }

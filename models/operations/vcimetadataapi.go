@@ -31,6 +31,7 @@ type VciMetadataAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// VCI metadata retrieved successfully
 	VciMetadataResponse *components.VciMetadataResponse
+	Headers             map[string][]string
 }
 
 func (v VciMetadataAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (v *VciMetadataAPIResponse) GetVciMetadataResponse() *components.VciMetadat
 		return nil
 	}
 	return v.VciMetadataResponse
+}
+
+func (v *VciMetadataAPIResponse) GetHeaders() map[string][]string {
+	if v == nil {
+		return map[string][]string{}
+	}
+	return v.Headers
 }

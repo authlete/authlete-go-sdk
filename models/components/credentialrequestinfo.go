@@ -11,6 +11,8 @@ type CredentialRequestInfo struct {
 	Identifier *string `json:"identifier,omitzero"`
 	// The value of the format parameter in the credential request.
 	Format *string `json:"format,omitzero"`
+	// The identifier of the credential configuration referenced by the credential request.
+	CredentialConfigurationID *string `json:"credentialConfigurationId,omitzero"`
 	// The binding key specified by the proof in the credential request.
 	BindingKey *string `json:"bindingKey,omitzero"`
 	// The binding keys specified by the proofs in the credential request.
@@ -42,6 +44,13 @@ func (c *CredentialRequestInfo) GetFormat() *string {
 		return nil
 	}
 	return c.Format
+}
+
+func (c *CredentialRequestInfo) GetCredentialConfigurationID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CredentialConfigurationID
 }
 
 func (c *CredentialRequestInfo) GetBindingKey() *string {

@@ -1,0 +1,9 @@
+# BackchannelLogoutTokenAPIRequest
+
+
+## Fields
+
+| Field                                                                                                | Type                                                                                                 | Required                                                                                             | Description                                                                                          |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `ServiceID`                                                                                          | `string`                                                                                             | :heavy_check_mark:                                                                                   | A service ID.                                                                                        |
+| `Body`                                                                                               | [components.BackchannelLogoutTokenRequest](../../models/components/backchannellogouttokenrequest.md) | :heavy_check_mark:                                                                                   | N/A                                                                                                  |

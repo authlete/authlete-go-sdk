@@ -10,9 +10,7 @@ import (
 type ClientGetListAPIRequest struct {
 	// A service ID.
 	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
-	// The developer of client applications. The default value is null. If this parameter is not set
-	// to `null`, client application of the specified developer are returned. Otherwise, all client
-	// applications that belong to the service are returned.
+	// The developer of client applications. The default value is null. If this parameter is not set to `null`, client application of the specified developer are returned. Otherwise, all client applications that belong to the service are returned.
 	//
 	Developer *string `queryParam:"style=form,explode=true,name=developer"`
 	// Start index (inclusive) of the result set. The default value is 0. Must not be a negative number.
@@ -52,6 +50,7 @@ func (c *ClientGetListAPIRequest) GetEnd() *int {
 type ClientGetListAPIResponse struct {
 	HTTPMeta              components.HTTPMetadata `json:"-"`
 	ClientGetListResponse *components.ClientGetListResponse
+	Headers               map[string][]string
 }
 
 func (c ClientGetListAPIResponse) MarshalJSON() ([]byte, error) {
@@ -77,4 +76,11 @@ func (c *ClientGetListAPIResponse) GetClientGetListResponse() *components.Client
 		return nil
 	}
 	return c.ClientGetListResponse
+}
+
+func (c *ClientGetListAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

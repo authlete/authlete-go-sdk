@@ -30,6 +30,7 @@ func (v *VciDeferredIssueAPIRequest) GetBody() components.VciDeferredIssueReques
 type VciDeferredIssueAPIResponse struct {
 	HTTPMeta                 components.HTTPMetadata `json:"-"`
 	VciDeferredIssueResponse *components.VciDeferredIssueResponse
+	Headers                  map[string][]string
 }
 
 func (v VciDeferredIssueAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (v *VciDeferredIssueAPIResponse) GetVciDeferredIssueResponse() *components.
 		return nil
 	}
 	return v.VciDeferredIssueResponse
+}
+
+func (v *VciDeferredIssueAPIResponse) GetHeaders() map[string][]string {
+	if v == nil {
+		return map[string][]string{}
+	}
+	return v.Headers
 }

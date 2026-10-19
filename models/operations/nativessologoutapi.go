@@ -30,6 +30,7 @@ func (n *NativeSsoLogoutAPIRequest) GetBody() components.NativeSsoLogoutRequest 
 type NativeSsoLogoutAPIResponse struct {
 	HTTPMeta                components.HTTPMetadata `json:"-"`
 	NativeSsoLogoutResponse *components.NativeSsoLogoutResponse
+	Headers                 map[string][]string
 }
 
 func (n NativeSsoLogoutAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (n *NativeSsoLogoutAPIResponse) GetNativeSsoLogoutResponse() *components.Na
 		return nil
 	}
 	return n.NativeSsoLogoutResponse
+}
+
+func (n *NativeSsoLogoutAPIResponse) GetHeaders() map[string][]string {
+	if n == nil {
+		return map[string][]string{}
+	}
+	return n.Headers
 }

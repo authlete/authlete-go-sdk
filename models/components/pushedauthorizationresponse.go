@@ -29,9 +29,7 @@ func (e *PushedAuthorizationResponseAction) IsExact() bool {
 	return false
 }
 
-// PushedAuthorizationResponseClientAuthMethod - The client authentication method that the client application declares that it uses at the token
-// endpoint. This property corresponds to `token_endpoint_auth_method` in [OpenID Connect Dynamic
-// Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
+// PushedAuthorizationResponseClientAuthMethod - The client authentication method that the client application declares that it uses at the token endpoint. This property corresponds to `token_endpoint_auth_method` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
 type PushedAuthorizationResponseClientAuthMethod string
 
 const (
@@ -43,6 +41,7 @@ const (
 	PushedAuthorizationResponseClientAuthMethodTLSClientAuth           PushedAuthorizationResponseClientAuthMethod = "TLS_CLIENT_AUTH"
 	PushedAuthorizationResponseClientAuthMethodSelfSignedTLSClientAuth PushedAuthorizationResponseClientAuthMethod = "SELF_SIGNED_TLS_CLIENT_AUTH"
 	PushedAuthorizationResponseClientAuthMethodAttestJwtClientAuth     PushedAuthorizationResponseClientAuthMethod = "ATTEST_JWT_CLIENT_AUTH"
+	PushedAuthorizationResponseClientAuthMethodSpiffeJwt               PushedAuthorizationResponseClientAuthMethod = "SPIFFE_JWT"
 )
 
 func (e PushedAuthorizationResponseClientAuthMethod) ToPointer() *PushedAuthorizationResponseClientAuthMethod {
@@ -53,7 +52,7 @@ func (e PushedAuthorizationResponseClientAuthMethod) ToPointer() *PushedAuthoriz
 func (e *PushedAuthorizationResponseClientAuthMethod) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "NONE", "CLIENT_SECRET_BASIC", "CLIENT_SECRET_POST", "CLIENT_SECRET_JWT", "PRIVATE_KEY_JWT", "TLS_CLIENT_AUTH", "SELF_SIGNED_TLS_CLIENT_AUTH", "ATTEST_JWT_CLIENT_AUTH":
+		case "NONE", "CLIENT_SECRET_BASIC", "CLIENT_SECRET_POST", "CLIENT_SECRET_JWT", "PRIVATE_KEY_JWT", "TLS_CLIENT_AUTH", "SELF_SIGNED_TLS_CLIENT_AUTH", "ATTEST_JWT_CLIENT_AUTH", "SPIFFE_JWT":
 			return true
 		}
 	}
@@ -70,17 +69,13 @@ type PushedAuthorizationResponse struct {
 	// The request_uri created to the client to be used as request_uri on the authorize call.
 	//
 	RequestURI *string `json:"requestUri,omitzero"`
-	// The content that the authorization server implementation is to return to the client
-	// application.
+	// The content that the authorization server implementation is to return to the client application.
 	//
 	ResponseContent *string `json:"responseContent,omitzero"`
-	// The client authentication method that the client application declares that it uses at the token
-	// endpoint. This property corresponds to `token_endpoint_auth_method` in [OpenID Connect Dynamic
-	// Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
+	// The client authentication method that the client application declares that it uses at the token endpoint. This property corresponds to `token_endpoint_auth_method` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
 	//
 	ClientAuthMethod *PushedAuthorizationResponseClientAuthMethod `json:"clientAuthMethod,omitzero"`
-	// Get the expected nonce value for DPoP proof JWT, which should be used
-	// as the value of the `DPoP-Nonce` HTTP header.
+	// Get the expected nonce value for DPoP proof JWT, which should be used as the value of the `DPoP-Nonce` HTTP header.
 	//
 	DpopNonce *string `json:"dpopNonce,omitzero"`
 }

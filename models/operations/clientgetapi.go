@@ -31,6 +31,7 @@ func (c *ClientGetAPIRequest) GetClientID() string {
 type ClientGetAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	Client   *components.Client
+	Headers  map[string][]string
 }
 
 func (c ClientGetAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (c *ClientGetAPIResponse) GetClient() *components.Client {
 		return nil
 	}
 	return c.Client
+}
+
+func (c *ClientGetAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

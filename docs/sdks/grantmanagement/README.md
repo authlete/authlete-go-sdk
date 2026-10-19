@@ -8,8 +8,7 @@
 
 ## ProcessRequest
 
-The API is for the implementation of the grant management endpoint which is
-defined in "[Grant Management for OAuth 2.0](https://openid.net/specs/fapi-grant-management.html)".
+The API is for the implementation of the grant management endpoint which is defined in "[Grant Management for OAuth 2.0](https://openid.net/specs/fapi-grant-management.html)".
 
 
 ### Example Usage
@@ -65,5 +64,6 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |

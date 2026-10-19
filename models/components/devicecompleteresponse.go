@@ -2,6 +2,10 @@
 
 package components
 
+import (
+	"github.com/authlete/authlete-go-sdk/internal/utils"
+)
+
 // DeviceCompleteResponseAction - The next action that the authorization server implementation should take.
 type DeviceCompleteResponseAction string
 
@@ -36,6 +40,20 @@ type DeviceCompleteResponse struct {
 	// The next action that the authorization server implementation should take.
 	//
 	Action *DeviceCompleteResponseAction `json:"action,omitzero"`
+	// the claims that the user has consented for the client application to know.
+	//
+	ConsentedClaims []string `json:"consentedClaims,omitzero"`
+}
+
+func (d DeviceCompleteResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DeviceCompleteResponse) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *DeviceCompleteResponse) GetResultCode() *string {
@@ -57,4 +75,11 @@ func (d *DeviceCompleteResponse) GetAction() *DeviceCompleteResponseAction {
 		return nil
 	}
 	return d.Action
+}
+
+func (d *DeviceCompleteResponse) GetConsentedClaims() []string {
+	if d == nil {
+		return nil
+	}
+	return d.ConsentedClaims
 }
