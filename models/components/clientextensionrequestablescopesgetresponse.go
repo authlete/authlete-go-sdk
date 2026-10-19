@@ -4,13 +4,12 @@ package components
 
 import (
 	"github.com/authlete/authlete-go-sdk/internal/utils"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 )
 
 type ClientExtensionRequestableScopesGetResponse struct {
 	// The requestable scopes for this client. This is null if the Requestable Scopes per Client feature is not enabled for this client.
 	//
-	RequestableScopes optionalnullable.OptionalNullable[[]string] `json:"requestableScopes,omitzero"`
+	RequestableScopes []string `json:"requestableScopes,omitzero"`
 }
 
 func (c ClientExtensionRequestableScopesGetResponse) MarshalJSON() ([]byte, error) {
@@ -24,7 +23,7 @@ func (c *ClientExtensionRequestableScopesGetResponse) UnmarshalJSON(data []byte)
 	return nil
 }
 
-func (c *ClientExtensionRequestableScopesGetResponse) GetRequestableScopes() optionalnullable.OptionalNullable[[]string] {
+func (c *ClientExtensionRequestableScopesGetResponse) GetRequestableScopes() []string {
 	if c == nil {
 		return nil
 	}

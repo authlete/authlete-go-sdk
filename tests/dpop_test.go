@@ -80,7 +80,7 @@ func TestDpopFlow(t *testing.T) {
 	sdkClient := createSDKClient(serviceToken)
 
 	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
-		TokenEndpoint:       setValue(dpopTokenEndpoint),
+		TokenEndpoint:       ptr(dpopTokenEndpoint),
 		AccessTokenDuration: ptr(tokenDurationSeconds),
 	}})
 	require.NoError(t, err, "failed to update service")
@@ -140,7 +140,7 @@ func TestDpopRequired(t *testing.T) {
 	sdkClient := createSDKClient(serviceToken)
 
 	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
-		TokenEndpoint:       setValue(dpopTokenEndpoint),
+		TokenEndpoint:       ptr(dpopTokenEndpoint),
 		AccessTokenDuration: ptr(tokenDurationSeconds),
 	}})
 	require.NoError(t, err, "failed to update service")

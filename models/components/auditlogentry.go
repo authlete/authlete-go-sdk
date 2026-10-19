@@ -4,7 +4,6 @@ package components
 
 import (
 	"github.com/authlete/authlete-go-sdk/internal/utils"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"time"
 )
 
@@ -38,7 +37,7 @@ type AuditLogEntry struct {
 	Status *Status `json:"status,omitzero"`
 	// When the event occurred (ISO 8601). May be null for entries without a recorded timestamp; such entries are only returned on the first page of results.
 	//
-	Timestamp optionalnullable.OptionalNullable[time.Time] `json:"timestamp,omitzero"`
+	Timestamp *time.Time `json:"timestamp,omitzero"`
 	// The cluster or region where the event occurred.
 	Cluster *string `json:"cluster,omitzero"`
 	// The API path that triggered the event.
@@ -78,7 +77,7 @@ func (a *AuditLogEntry) GetStatus() *Status {
 	return a.Status
 }
 
-func (a *AuditLogEntry) GetTimestamp() optionalnullable.OptionalNullable[time.Time] {
+func (a *AuditLogEntry) GetTimestamp() *time.Time {
 	if a == nil {
 		return nil
 	}

@@ -270,7 +270,6 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
@@ -307,7 +306,7 @@ func main() {
             ParRequired: authlete.Pointer(false),
             RequestObjectRequired: authlete.Pointer(false),
             DefaultMaxAge: authlete.Pointer[int](0),
-            IDTokenSignAlg: optionalnullable.From(authlete.Pointer(components.JwsAlgRs256)),
+            IDTokenSignAlg: components.JwsAlgRs256.ToPointer(),
             AuthTimeRequired: authlete.Pointer(false),
             SubjectType: components.SubjectTypePublic.ToPointer(),
             BcUserCodeRequired: authlete.Pointer(false),

@@ -74,10 +74,10 @@ func TestRefreshTokenFlow(t *testing.T) {
 	sdkClient := createSDKClient(serviceToken)
 
 	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
-		SupportedGrantTypes: setValue([]components.GrantType{
+		SupportedGrantTypes: []components.GrantType{
 			components.GrantTypeAuthorizationCode,
 			components.GrantTypeRefreshToken,
-		}),
+		},
 		AccessTokenDuration:  ptr(tokenDurationSeconds),
 		RefreshTokenDuration: ptr(tokenDurationSeconds),
 	}})
@@ -140,9 +140,9 @@ func TestRefreshTokenNotSupported(t *testing.T) {
 	sdkClient := createSDKClient(serviceToken)
 
 	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
-		SupportedGrantTypes: setValue([]components.GrantType{
+		SupportedGrantTypes: []components.GrantType{
 			components.GrantTypeAuthorizationCode,
-		}),
+		},
 		AccessTokenDuration:  ptr(tokenDurationSeconds),
 		RefreshTokenDuration: ptr(tokenDurationSeconds),
 	}})
@@ -150,10 +150,10 @@ func TestRefreshTokenNotSupported(t *testing.T) {
 
 	t.Cleanup(func() {
 		_, _ = mgmtClient.Service.Update(context.Background(), operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
-			SupportedGrantTypes: setValue([]components.GrantType{
+			SupportedGrantTypes: []components.GrantType{
 				components.GrantTypeAuthorizationCode,
 				components.GrantTypeRefreshToken,
-			}),
+			},
 			AccessTokenDuration:  ptr(tokenDurationSeconds),
 			RefreshTokenDuration: ptr(tokenDurationSeconds),
 		}})

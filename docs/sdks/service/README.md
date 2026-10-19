@@ -208,7 +208,6 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"github.com/authlete/authlete-go-sdk/models/components"
 	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
@@ -224,45 +223,45 @@ func main() {
 
     res, err := s.Service.Update(ctx, operations.ServiceUpdateAPIRequest{
         Body: &components.ServiceInput{
-            ServiceName: optionalnullable.From(authlete.Pointer("My updated service")),
-            Issuer: optionalnullable.From(authlete.Pointer("https://my-service.example.com")),
+            ServiceName: authlete.Pointer("My updated service"),
+            Issuer: authlete.Pointer("https://my-service.example.com"),
             ClientsPerDeveloper: authlete.Pointer[int](0),
-            SupportedGrantTypes: optionalnullable.From(authlete.Pointer([]components.GrantType{
+            SupportedGrantTypes: []components.GrantType{
                 components.GrantTypeAuthorizationCode,
                 components.GrantTypeRefreshToken,
-            })),
-            SupportedResponseTypes: optionalnullable.From(authlete.Pointer([]components.ResponseType{
+            },
+            SupportedResponseTypes: []components.ResponseType{
                 components.ResponseTypeCode,
-            })),
+            },
             ErrorDescriptionOmitted: authlete.Pointer(false),
             ErrorURIOmitted: authlete.Pointer(false),
-            AuthorizationEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/authz")),
-            SupportedDisplays: optionalnullable.From(authlete.Pointer([]components.Display{
+            AuthorizationEndpoint: authlete.Pointer("https://my-service.example.com/authz"),
+            SupportedDisplays: []components.Display{
                 components.DisplayPage,
-            })),
+            },
             PkceRequired: authlete.Pointer(true),
             PkceS256Required: authlete.Pointer(false),
             AuthorizationResponseDuration: authlete.Pointer[int64](0),
             AuthorizationCodeDuration: authlete.Pointer[int64](0),
-            TokenEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/token")),
-            SupportedTokenAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
+            TokenEndpoint: authlete.Pointer("https://my-service.example.com/token"),
+            SupportedTokenAuthMethods: []components.ClientAuthMethod{
                 components.ClientAuthMethodClientSecretBasic,
-            })),
+            },
             MissingClientIDAllowed: authlete.Pointer(false),
-            RevocationEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/revocation")),
-            SupportedRevocationAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
+            RevocationEndpoint: authlete.Pointer("https://my-service.example.com/revocation"),
+            SupportedRevocationAuthMethods: []components.ClientAuthMethod{
                 components.ClientAuthMethodClientSecretBasic,
-            })),
-            IntrospectionEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/introspection")),
-            SupportedIntrospectionAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
+            },
+            IntrospectionEndpoint: authlete.Pointer("https://my-service.example.com/introspection"),
+            SupportedIntrospectionAuthMethods: []components.ClientAuthMethod{
                 components.ClientAuthMethodClientSecretBasic,
-            })),
+            },
             PushedAuthReqDuration: authlete.Pointer[int64](0),
             ParRequired: authlete.Pointer(false),
             RequestObjectRequired: authlete.Pointer(false),
             TraditionalRequestObjectProcessingApplied: authlete.Pointer(false),
             MutualTLSValidatePkiCertChain: authlete.Pointer(false),
-            AccessTokenType: optionalnullable.From(authlete.Pointer("Bearer")),
+            AccessTokenType: authlete.Pointer("Bearer"),
             TLSClientCertificateBoundAccessTokens: authlete.Pointer(false),
             AccessTokenDuration: authlete.Pointer[int64](3600),
             SingleAccessTokenPerSubject: authlete.Pointer(false),
@@ -270,7 +269,7 @@ func main() {
             RefreshTokenDurationKept: authlete.Pointer(false),
             RefreshTokenDurationReset: authlete.Pointer(false),
             RefreshTokenKept: authlete.Pointer(false),
-            SupportedScopes: optionalnullable.From(authlete.Pointer([]components.Scope{
+            SupportedScopes: []components.Scope{
                 components.Scope{
                     Name: authlete.Pointer("history.read"),
                     DefaultEntry: authlete.Pointer(false),
@@ -281,13 +280,13 @@ func main() {
                     DefaultEntry: authlete.Pointer(false),
                     Description: authlete.Pointer("A permission to read your timeline."),
                 },
-            })),
+            },
             ScopeRequired: authlete.Pointer(false),
             IDTokenDuration: authlete.Pointer[int64](0),
             AllowableClockSkew: authlete.Pointer[int](0),
-            SupportedClaimTypes: optionalnullable.From(authlete.Pointer([]components.ClaimType{
+            SupportedClaimTypes: []components.ClaimType{
                 components.ClaimTypeNormal,
-            })),
+            },
             ClaimShortcutRestrictive: authlete.Pointer(false),
             DynamicRegistrationSupported: authlete.Pointer(false),
             BackchannelAuthReqIDDuration: authlete.Pointer[int](0),
@@ -297,7 +296,7 @@ func main() {
             DeviceFlowCodeDuration: authlete.Pointer[int](0),
             DeviceFlowPollingInterval: authlete.Pointer[int](0),
             UserCodeLength: authlete.Pointer[int](0),
-            Attributes: optionalnullable.From(authlete.Pointer([]components.Pair{
+            Attributes: []components.Pair{
                 components.Pair{
                     Key: authlete.Pointer("attribute1-key"),
                     Value: authlete.Pointer("attribute1-value"),
@@ -306,7 +305,7 @@ func main() {
                     Key: authlete.Pointer("attribute2-key"),
                     Value: authlete.Pointer("attribute2-value"),
                 },
-            })),
+            },
             NbfOptional: authlete.Pointer(false),
             IssSuppressed: authlete.Pointer(false),
             TokenExpirationLinked: authlete.Pointer(false),
@@ -366,7 +365,6 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"github.com/authlete/authlete-go-sdk/models/components"
 	"log"
 )
@@ -382,8 +380,8 @@ func main() {
         APIServerID: authlete.Pointer[int64](76281),
         OrganizationID: 123456789012345,
         Service: &components.ServiceInput{
-            ServiceName: optionalnullable.From(authlete.Pointer("My service")),
-            Issuer: optionalnullable.From(authlete.Pointer("https://my-service.example.com")),
+            ServiceName: authlete.Pointer("My service"),
+            Issuer: authlete.Pointer("https://my-service.example.com"),
         },
     })
     if err != nil {

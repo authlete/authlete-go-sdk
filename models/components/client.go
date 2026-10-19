@@ -4,7 +4,6 @@ package components
 
 import (
 	"github.com/authlete/authlete-go-sdk/internal/utils"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 )
 
 type ResponseMode string
@@ -149,7 +148,7 @@ type Client struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	AuthorizationSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"authorizationSignAlg,omitzero"`
+	AuthorizationSignAlg *JwsAlg `json:"authorizationSignAlg,omitzero"`
 	// this is the 'alg' header value for encrypted JWT tokens. Depending upon the context, this refers to key transport scheme to be used by the client and by the server. For instance:
 	// - as `authorizationEncryptionAlg` value, it refers to the encoding algorithm used by server for transporting they keys on JARM objects
 	// - as `requestEncryptionAlg` value, it refers to the expected key transport encoding algorithm that server expect from client when encrypting a Request Object
@@ -157,13 +156,13 @@ type Client struct {
 	//
 	// **Please note that some of the algorithms are more secure than others, some are not supported very well cross platforms and some (like RSA1_5) is known to be weak**.
 	//
-	AuthorizationEncryptionAlg optionalnullable.OptionalNullable[JweAlg] `json:"authorizationEncryptionAlg,omitzero"`
+	AuthorizationEncryptionAlg *JweAlg `json:"authorizationEncryptionAlg,omitzero"`
 	// This is the encryption algorithm to be used when encrypting a JWT on client or server side. Depending upon the context, this refers to encryption done by the client or by the server. For instance:
 	//   - as `authorizationEncryptionEnc` value, it refers to the encryption algorithm used by server when creating a JARM response
 	//   - as `requestEncryptionEnc` value, it refers to the expected encryption algorithm used by the client when encrypting a Request Object
 	//   - as `idTokenEncryptionEnc` value, it refers to the algorithm used by the server to encrypt id_tokens
 	//
-	AuthorizationEncryptionEnc optionalnullable.OptionalNullable[JweEnc] `json:"authorizationEncryptionEnc,omitzero"`
+	AuthorizationEncryptionEnc *JweEnc `json:"authorizationEncryptionEnc,omitzero"`
 	// The client authentication method that the client application declares that it uses at the token endpoint. This property corresponds to `token_endpoint_auth_method` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
 	//
 	TokenAuthMethod *ClientAuthMethod `json:"tokenAuthMethod,omitzero"`
@@ -174,7 +173,7 @@ type Client struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	TokenAuthSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"tokenAuthSignAlg,omitzero"`
+	TokenAuthSignAlg *JwsAlg `json:"tokenAuthSignAlg,omitzero"`
 	// The key ID of a JWK containing a self-signed certificate of this client.
 	//
 	SelfSignedCertificateKeyID *string `json:"selfSignedCertificateKeyId,omitzero"`
@@ -218,7 +217,7 @@ type Client struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	RequestSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"requestSignAlg,omitzero"`
+	RequestSignAlg *JwsAlg `json:"requestSignAlg,omitzero"`
 	// this is the 'alg' header value for encrypted JWT tokens. Depending upon the context, this refers to key transport scheme to be used by the client and by the server. For instance:
 	// - as `authorizationEncryptionAlg` value, it refers to the encoding algorithm used by server for transporting they keys on JARM objects
 	// - as `requestEncryptionAlg` value, it refers to the expected key transport encoding algorithm that server expect from client when encrypting a Request Object
@@ -226,13 +225,13 @@ type Client struct {
 	//
 	// **Please note that some of the algorithms are more secure than others, some are not supported very well cross platforms and some (like RSA1_5) is known to be weak**.
 	//
-	RequestEncryptionAlg optionalnullable.OptionalNullable[JweAlg] `json:"requestEncryptionAlg,omitzero"`
+	RequestEncryptionAlg *JweAlg `json:"requestEncryptionAlg,omitzero"`
 	// This is the encryption algorithm to be used when encrypting a JWT on client or server side. Depending upon the context, this refers to encryption done by the client or by the server. For instance:
 	//   - as `authorizationEncryptionEnc` value, it refers to the encryption algorithm used by server when creating a JARM response
 	//   - as `requestEncryptionEnc` value, it refers to the expected encryption algorithm used by the client when encrypting a Request Object
 	//   - as `idTokenEncryptionEnc` value, it refers to the algorithm used by the server to encrypt id_tokens
 	//
-	RequestEncryptionEnc optionalnullable.OptionalNullable[JweEnc] `json:"requestEncryptionEnc,omitzero"`
+	RequestEncryptionEnc *JweEnc `json:"requestEncryptionEnc,omitzero"`
 	// An array of URLs each of which points to a request object.
 	//
 	// Authlete requires that URLs used as values for `request_uri` request parameter be pre-registered. This property is used for the pre-registration. See [OpenID Connect Core 1.0, 6.2. Passing a Request Object by Reference](https://openid.net/specs/openid-connect-core-1_0.html#RequestUriParameter) for details.
@@ -253,7 +252,7 @@ type Client struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	IDTokenSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"idTokenSignAlg,omitzero"`
+	IDTokenSignAlg *JwsAlg `json:"idTokenSignAlg,omitzero"`
 	// this is the 'alg' header value for encrypted JWT tokens. Depending upon the context, this refers to key transport scheme to be used by the client and by the server. For instance:
 	// - as `authorizationEncryptionAlg` value, it refers to the encoding algorithm used by server for transporting they keys on JARM objects
 	// - as `requestEncryptionAlg` value, it refers to the expected key transport encoding algorithm that server expect from client when encrypting a Request Object
@@ -261,13 +260,13 @@ type Client struct {
 	//
 	// **Please note that some of the algorithms are more secure than others, some are not supported very well cross platforms and some (like RSA1_5) is known to be weak**.
 	//
-	IDTokenEncryptionAlg optionalnullable.OptionalNullable[JweAlg] `json:"idTokenEncryptionAlg,omitzero"`
+	IDTokenEncryptionAlg *JweAlg `json:"idTokenEncryptionAlg,omitzero"`
 	// This is the encryption algorithm to be used when encrypting a JWT on client or server side. Depending upon the context, this refers to encryption done by the client or by the server. For instance:
 	//   - as `authorizationEncryptionEnc` value, it refers to the encryption algorithm used by server when creating a JARM response
 	//   - as `requestEncryptionEnc` value, it refers to the expected encryption algorithm used by the client when encrypting a Request Object
 	//   - as `idTokenEncryptionEnc` value, it refers to the algorithm used by the server to encrypt id_tokens
 	//
-	IDTokenEncryptionEnc optionalnullable.OptionalNullable[JweEnc] `json:"idTokenEncryptionEnc,omitzero"`
+	IDTokenEncryptionEnc *JweEnc `json:"idTokenEncryptionEnc,omitzero"`
 	// The flag to indicate whether this client requires `auth_time` claim to be embedded in the ID token.
 	//
 	// This property corresponds to `require_auth_time` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
@@ -297,7 +296,7 @@ type Client struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	UserInfoSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"userInfoSignAlg,omitzero"`
+	UserInfoSignAlg *JwsAlg `json:"userInfoSignAlg,omitzero"`
 	// this is the 'alg' header value for encrypted JWT tokens. Depending upon the context, this refers to key transport scheme to be used by the client and by the server. For instance:
 	// - as `authorizationEncryptionAlg` value, it refers to the encoding algorithm used by server for transporting they keys on JARM objects
 	// - as `requestEncryptionAlg` value, it refers to the expected key transport encoding algorithm that server expect from client when encrypting a Request Object
@@ -305,13 +304,13 @@ type Client struct {
 	//
 	// **Please note that some of the algorithms are more secure than others, some are not supported very well cross platforms and some (like RSA1_5) is known to be weak**.
 	//
-	UserInfoEncryptionAlg optionalnullable.OptionalNullable[JweAlg] `json:"userInfoEncryptionAlg,omitzero"`
+	UserInfoEncryptionAlg *JweAlg `json:"userInfoEncryptionAlg,omitzero"`
 	// This is the encryption algorithm to be used when encrypting a JWT on client or server side. Depending upon the context, this refers to encryption done by the client or by the server. For instance:
 	//   - as `authorizationEncryptionEnc` value, it refers to the encryption algorithm used by server when creating a JARM response
 	//   - as `requestEncryptionEnc` value, it refers to the expected encryption algorithm used by the client when encrypting a Request Object
 	//   - as `idTokenEncryptionEnc` value, it refers to the algorithm used by the server to encrypt id_tokens
 	//
-	UserInfoEncryptionEnc optionalnullable.OptionalNullable[JweEnc] `json:"userInfoEncryptionEnc,omitzero"`
+	UserInfoEncryptionEnc *JweEnc `json:"userInfoEncryptionEnc,omitzero"`
 	// The URL which a third party can use to initiate a login by the client application.
 	//
 	// This property corresponds to `initiate_login_uri` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
@@ -360,7 +359,7 @@ type Client struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	BcRequestSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"bcRequestSignAlg,omitzero"`
+	BcRequestSignAlg *JwsAlg `json:"bcRequestSignAlg,omitzero"`
 	// The boolean flag to indicate whether a user code is required when this client makes a backchannel authentication request.
 	//
 	// This property corresponds to the `backchannel_user_code_parameter` metadata.
@@ -694,21 +693,21 @@ func (c *Client) GetRedirectUris() []string {
 	return c.RedirectUris
 }
 
-func (c *Client) GetAuthorizationSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *Client) GetAuthorizationSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
 	return c.AuthorizationSignAlg
 }
 
-func (c *Client) GetAuthorizationEncryptionAlg() optionalnullable.OptionalNullable[JweAlg] {
+func (c *Client) GetAuthorizationEncryptionAlg() *JweAlg {
 	if c == nil {
 		return nil
 	}
 	return c.AuthorizationEncryptionAlg
 }
 
-func (c *Client) GetAuthorizationEncryptionEnc() optionalnullable.OptionalNullable[JweEnc] {
+func (c *Client) GetAuthorizationEncryptionEnc() *JweEnc {
 	if c == nil {
 		return nil
 	}
@@ -722,7 +721,7 @@ func (c *Client) GetTokenAuthMethod() *ClientAuthMethod {
 	return c.TokenAuthMethod
 }
 
-func (c *Client) GetTokenAuthSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *Client) GetTokenAuthSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
@@ -785,21 +784,21 @@ func (c *Client) GetRequestObjectRequired() *bool {
 	return c.RequestObjectRequired
 }
 
-func (c *Client) GetRequestSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *Client) GetRequestSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
 	return c.RequestSignAlg
 }
 
-func (c *Client) GetRequestEncryptionAlg() optionalnullable.OptionalNullable[JweAlg] {
+func (c *Client) GetRequestEncryptionAlg() *JweAlg {
 	if c == nil {
 		return nil
 	}
 	return c.RequestEncryptionAlg
 }
 
-func (c *Client) GetRequestEncryptionEnc() optionalnullable.OptionalNullable[JweEnc] {
+func (c *Client) GetRequestEncryptionEnc() *JweEnc {
 	if c == nil {
 		return nil
 	}
@@ -827,21 +826,21 @@ func (c *Client) GetDefaultAcrs() []string {
 	return c.DefaultAcrs
 }
 
-func (c *Client) GetIDTokenSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *Client) GetIDTokenSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
 	return c.IDTokenSignAlg
 }
 
-func (c *Client) GetIDTokenEncryptionAlg() optionalnullable.OptionalNullable[JweAlg] {
+func (c *Client) GetIDTokenEncryptionAlg() *JweAlg {
 	if c == nil {
 		return nil
 	}
 	return c.IDTokenEncryptionAlg
 }
 
-func (c *Client) GetIDTokenEncryptionEnc() optionalnullable.OptionalNullable[JweEnc] {
+func (c *Client) GetIDTokenEncryptionEnc() *JweEnc {
 	if c == nil {
 		return nil
 	}
@@ -890,21 +889,21 @@ func (c *Client) GetJwks() *string {
 	return c.Jwks
 }
 
-func (c *Client) GetUserInfoSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *Client) GetUserInfoSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
 	return c.UserInfoSignAlg
 }
 
-func (c *Client) GetUserInfoEncryptionAlg() optionalnullable.OptionalNullable[JweAlg] {
+func (c *Client) GetUserInfoEncryptionAlg() *JweAlg {
 	if c == nil {
 		return nil
 	}
 	return c.UserInfoEncryptionAlg
 }
 
-func (c *Client) GetUserInfoEncryptionEnc() optionalnullable.OptionalNullable[JweEnc] {
+func (c *Client) GetUserInfoEncryptionEnc() *JweEnc {
 	if c == nil {
 		return nil
 	}
@@ -974,7 +973,7 @@ func (c *Client) GetBcNotificationEndpoint() *string {
 	return c.BcNotificationEndpoint
 }
 
-func (c *Client) GetBcRequestSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *Client) GetBcRequestSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
@@ -1338,7 +1337,7 @@ type ClientInput struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	AuthorizationSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"authorizationSignAlg,omitzero"`
+	AuthorizationSignAlg *JwsAlg `json:"authorizationSignAlg,omitzero"`
 	// this is the 'alg' header value for encrypted JWT tokens. Depending upon the context, this refers to key transport scheme to be used by the client and by the server. For instance:
 	// - as `authorizationEncryptionAlg` value, it refers to the encoding algorithm used by server for transporting they keys on JARM objects
 	// - as `requestEncryptionAlg` value, it refers to the expected key transport encoding algorithm that server expect from client when encrypting a Request Object
@@ -1346,13 +1345,13 @@ type ClientInput struct {
 	//
 	// **Please note that some of the algorithms are more secure than others, some are not supported very well cross platforms and some (like RSA1_5) is known to be weak**.
 	//
-	AuthorizationEncryptionAlg optionalnullable.OptionalNullable[JweAlg] `json:"authorizationEncryptionAlg,omitzero"`
+	AuthorizationEncryptionAlg *JweAlg `json:"authorizationEncryptionAlg,omitzero"`
 	// This is the encryption algorithm to be used when encrypting a JWT on client or server side. Depending upon the context, this refers to encryption done by the client or by the server. For instance:
 	//   - as `authorizationEncryptionEnc` value, it refers to the encryption algorithm used by server when creating a JARM response
 	//   - as `requestEncryptionEnc` value, it refers to the expected encryption algorithm used by the client when encrypting a Request Object
 	//   - as `idTokenEncryptionEnc` value, it refers to the algorithm used by the server to encrypt id_tokens
 	//
-	AuthorizationEncryptionEnc optionalnullable.OptionalNullable[JweEnc] `json:"authorizationEncryptionEnc,omitzero"`
+	AuthorizationEncryptionEnc *JweEnc `json:"authorizationEncryptionEnc,omitzero"`
 	// The client authentication method that the client application declares that it uses at the token endpoint. This property corresponds to `token_endpoint_auth_method` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
 	//
 	TokenAuthMethod *ClientAuthMethod `json:"tokenAuthMethod,omitzero"`
@@ -1363,7 +1362,7 @@ type ClientInput struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	TokenAuthSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"tokenAuthSignAlg,omitzero"`
+	TokenAuthSignAlg *JwsAlg `json:"tokenAuthSignAlg,omitzero"`
 	// The key ID of a JWK containing a self-signed certificate of this client.
 	//
 	SelfSignedCertificateKeyID *string `json:"selfSignedCertificateKeyId,omitzero"`
@@ -1407,7 +1406,7 @@ type ClientInput struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	RequestSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"requestSignAlg,omitzero"`
+	RequestSignAlg *JwsAlg `json:"requestSignAlg,omitzero"`
 	// this is the 'alg' header value for encrypted JWT tokens. Depending upon the context, this refers to key transport scheme to be used by the client and by the server. For instance:
 	// - as `authorizationEncryptionAlg` value, it refers to the encoding algorithm used by server for transporting they keys on JARM objects
 	// - as `requestEncryptionAlg` value, it refers to the expected key transport encoding algorithm that server expect from client when encrypting a Request Object
@@ -1415,13 +1414,13 @@ type ClientInput struct {
 	//
 	// **Please note that some of the algorithms are more secure than others, some are not supported very well cross platforms and some (like RSA1_5) is known to be weak**.
 	//
-	RequestEncryptionAlg optionalnullable.OptionalNullable[JweAlg] `json:"requestEncryptionAlg,omitzero"`
+	RequestEncryptionAlg *JweAlg `json:"requestEncryptionAlg,omitzero"`
 	// This is the encryption algorithm to be used when encrypting a JWT on client or server side. Depending upon the context, this refers to encryption done by the client or by the server. For instance:
 	//   - as `authorizationEncryptionEnc` value, it refers to the encryption algorithm used by server when creating a JARM response
 	//   - as `requestEncryptionEnc` value, it refers to the expected encryption algorithm used by the client when encrypting a Request Object
 	//   - as `idTokenEncryptionEnc` value, it refers to the algorithm used by the server to encrypt id_tokens
 	//
-	RequestEncryptionEnc optionalnullable.OptionalNullable[JweEnc] `json:"requestEncryptionEnc,omitzero"`
+	RequestEncryptionEnc *JweEnc `json:"requestEncryptionEnc,omitzero"`
 	// An array of URLs each of which points to a request object.
 	//
 	// Authlete requires that URLs used as values for `request_uri` request parameter be pre-registered. This property is used for the pre-registration. See [OpenID Connect Core 1.0, 6.2. Passing a Request Object by Reference](https://openid.net/specs/openid-connect-core-1_0.html#RequestUriParameter) for details.
@@ -1442,7 +1441,7 @@ type ClientInput struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	IDTokenSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"idTokenSignAlg,omitzero"`
+	IDTokenSignAlg *JwsAlg `json:"idTokenSignAlg,omitzero"`
 	// this is the 'alg' header value for encrypted JWT tokens. Depending upon the context, this refers to key transport scheme to be used by the client and by the server. For instance:
 	// - as `authorizationEncryptionAlg` value, it refers to the encoding algorithm used by server for transporting they keys on JARM objects
 	// - as `requestEncryptionAlg` value, it refers to the expected key transport encoding algorithm that server expect from client when encrypting a Request Object
@@ -1450,13 +1449,13 @@ type ClientInput struct {
 	//
 	// **Please note that some of the algorithms are more secure than others, some are not supported very well cross platforms and some (like RSA1_5) is known to be weak**.
 	//
-	IDTokenEncryptionAlg optionalnullable.OptionalNullable[JweAlg] `json:"idTokenEncryptionAlg,omitzero"`
+	IDTokenEncryptionAlg *JweAlg `json:"idTokenEncryptionAlg,omitzero"`
 	// This is the encryption algorithm to be used when encrypting a JWT on client or server side. Depending upon the context, this refers to encryption done by the client or by the server. For instance:
 	//   - as `authorizationEncryptionEnc` value, it refers to the encryption algorithm used by server when creating a JARM response
 	//   - as `requestEncryptionEnc` value, it refers to the expected encryption algorithm used by the client when encrypting a Request Object
 	//   - as `idTokenEncryptionEnc` value, it refers to the algorithm used by the server to encrypt id_tokens
 	//
-	IDTokenEncryptionEnc optionalnullable.OptionalNullable[JweEnc] `json:"idTokenEncryptionEnc,omitzero"`
+	IDTokenEncryptionEnc *JweEnc `json:"idTokenEncryptionEnc,omitzero"`
 	// The flag to indicate whether this client requires `auth_time` claim to be embedded in the ID token.
 	//
 	// This property corresponds to `require_auth_time` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
@@ -1483,7 +1482,7 @@ type ClientInput struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	UserInfoSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"userInfoSignAlg,omitzero"`
+	UserInfoSignAlg *JwsAlg `json:"userInfoSignAlg,omitzero"`
 	// this is the 'alg' header value for encrypted JWT tokens. Depending upon the context, this refers to key transport scheme to be used by the client and by the server. For instance:
 	// - as `authorizationEncryptionAlg` value, it refers to the encoding algorithm used by server for transporting they keys on JARM objects
 	// - as `requestEncryptionAlg` value, it refers to the expected key transport encoding algorithm that server expect from client when encrypting a Request Object
@@ -1491,13 +1490,13 @@ type ClientInput struct {
 	//
 	// **Please note that some of the algorithms are more secure than others, some are not supported very well cross platforms and some (like RSA1_5) is known to be weak**.
 	//
-	UserInfoEncryptionAlg optionalnullable.OptionalNullable[JweAlg] `json:"userInfoEncryptionAlg,omitzero"`
+	UserInfoEncryptionAlg *JweAlg `json:"userInfoEncryptionAlg,omitzero"`
 	// This is the encryption algorithm to be used when encrypting a JWT on client or server side. Depending upon the context, this refers to encryption done by the client or by the server. For instance:
 	//   - as `authorizationEncryptionEnc` value, it refers to the encryption algorithm used by server when creating a JARM response
 	//   - as `requestEncryptionEnc` value, it refers to the expected encryption algorithm used by the client when encrypting a Request Object
 	//   - as `idTokenEncryptionEnc` value, it refers to the algorithm used by the server to encrypt id_tokens
 	//
-	UserInfoEncryptionEnc optionalnullable.OptionalNullable[JweEnc] `json:"userInfoEncryptionEnc,omitzero"`
+	UserInfoEncryptionEnc *JweEnc `json:"userInfoEncryptionEnc,omitzero"`
 	// The URL which a third party can use to initiate a login by the client application.
 	//
 	// This property corresponds to `initiate_login_uri` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
@@ -1546,7 +1545,7 @@ type ClientInput struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	BcRequestSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"bcRequestSignAlg,omitzero"`
+	BcRequestSignAlg *JwsAlg `json:"bcRequestSignAlg,omitzero"`
 	// The boolean flag to indicate whether a user code is required when this client makes a backchannel authentication request.
 	//
 	// This property corresponds to the `backchannel_user_code_parameter` metadata.
@@ -1762,21 +1761,21 @@ func (c *ClientInput) GetRedirectUris() []string {
 	return c.RedirectUris
 }
 
-func (c *ClientInput) GetAuthorizationSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *ClientInput) GetAuthorizationSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
 	return c.AuthorizationSignAlg
 }
 
-func (c *ClientInput) GetAuthorizationEncryptionAlg() optionalnullable.OptionalNullable[JweAlg] {
+func (c *ClientInput) GetAuthorizationEncryptionAlg() *JweAlg {
 	if c == nil {
 		return nil
 	}
 	return c.AuthorizationEncryptionAlg
 }
 
-func (c *ClientInput) GetAuthorizationEncryptionEnc() optionalnullable.OptionalNullable[JweEnc] {
+func (c *ClientInput) GetAuthorizationEncryptionEnc() *JweEnc {
 	if c == nil {
 		return nil
 	}
@@ -1790,7 +1789,7 @@ func (c *ClientInput) GetTokenAuthMethod() *ClientAuthMethod {
 	return c.TokenAuthMethod
 }
 
-func (c *ClientInput) GetTokenAuthSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *ClientInput) GetTokenAuthSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
@@ -1853,21 +1852,21 @@ func (c *ClientInput) GetRequestObjectRequired() *bool {
 	return c.RequestObjectRequired
 }
 
-func (c *ClientInput) GetRequestSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *ClientInput) GetRequestSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
 	return c.RequestSignAlg
 }
 
-func (c *ClientInput) GetRequestEncryptionAlg() optionalnullable.OptionalNullable[JweAlg] {
+func (c *ClientInput) GetRequestEncryptionAlg() *JweAlg {
 	if c == nil {
 		return nil
 	}
 	return c.RequestEncryptionAlg
 }
 
-func (c *ClientInput) GetRequestEncryptionEnc() optionalnullable.OptionalNullable[JweEnc] {
+func (c *ClientInput) GetRequestEncryptionEnc() *JweEnc {
 	if c == nil {
 		return nil
 	}
@@ -1895,21 +1894,21 @@ func (c *ClientInput) GetDefaultAcrs() []string {
 	return c.DefaultAcrs
 }
 
-func (c *ClientInput) GetIDTokenSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *ClientInput) GetIDTokenSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
 	return c.IDTokenSignAlg
 }
 
-func (c *ClientInput) GetIDTokenEncryptionAlg() optionalnullable.OptionalNullable[JweAlg] {
+func (c *ClientInput) GetIDTokenEncryptionAlg() *JweAlg {
 	if c == nil {
 		return nil
 	}
 	return c.IDTokenEncryptionAlg
 }
 
-func (c *ClientInput) GetIDTokenEncryptionEnc() optionalnullable.OptionalNullable[JweEnc] {
+func (c *ClientInput) GetIDTokenEncryptionEnc() *JweEnc {
 	if c == nil {
 		return nil
 	}
@@ -1951,21 +1950,21 @@ func (c *ClientInput) GetJwks() *string {
 	return c.Jwks
 }
 
-func (c *ClientInput) GetUserInfoSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *ClientInput) GetUserInfoSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}
 	return c.UserInfoSignAlg
 }
 
-func (c *ClientInput) GetUserInfoEncryptionAlg() optionalnullable.OptionalNullable[JweAlg] {
+func (c *ClientInput) GetUserInfoEncryptionAlg() *JweAlg {
 	if c == nil {
 		return nil
 	}
 	return c.UserInfoEncryptionAlg
 }
 
-func (c *ClientInput) GetUserInfoEncryptionEnc() optionalnullable.OptionalNullable[JweEnc] {
+func (c *ClientInput) GetUserInfoEncryptionEnc() *JweEnc {
 	if c == nil {
 		return nil
 	}
@@ -2035,7 +2034,7 @@ func (c *ClientInput) GetBcNotificationEndpoint() *string {
 	return c.BcNotificationEndpoint
 }
 
-func (c *ClientInput) GetBcRequestSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (c *ClientInput) GetBcRequestSignAlg() *JwsAlg {
 	if c == nil {
 		return nil
 	}

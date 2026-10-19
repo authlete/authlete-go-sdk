@@ -10,7 +10,6 @@ import (
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
 	"github.com/authlete/authlete-go-sdk/models/operations"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"github.com/stretchr/testify/require"
 )
 
@@ -82,20 +81,6 @@ func assertTokenValid(t *testing.T, sdk *authlete.Authlete, svcID string, access
 
 func ptr[T any](v T) *T {
 	return &v
-}
-
-// setValue wraps v for an OptionalNullable field, so it is sent as v.
-func setValue[T any](v T) optionalnullable.OptionalNullable[T] {
-	return optionalnullable.From(&v)
-}
-
-// setUnlessNil wraps p for an OptionalNullable field, leaving the field unset
-// (omitted) when p is nil rather than sending an explicit null.
-func setUnlessNil[T any](p *T) optionalnullable.OptionalNullable[T] {
-	if p == nil {
-		return nil
-	}
-	return optionalnullable.From(p)
 }
 
 func ptrStr(s *string) string {
