@@ -19,3 +19,13 @@ Based on:
 - [go v0.0.15] .
 ### Releases
 - [Go v0.0.15] https://github.com/authlete/authlete-go-sdk/releases/tag/v0.0.15 - .
+
+## 2026-10-19 11:24:43
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.802.0 (2.948.4) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [go v0.2.1] .
+### Releases
+- [Go v0.2.1] https://github.com/authlete/authlete-go-sdk/releases/tag/v0.2.1 - .
