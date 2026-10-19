@@ -9,13 +9,14 @@ import (
 
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"github.com/stretchr/testify/require"
 )
 
 var (
-	apiBaseURL   = requireEnv("API_BASE_URL")
-	serviceID    = requireEnv("SERVICE_ID")
-	serviceToken = requireEnv("SERVICE_TOKEN")
+	apiBaseURL   = os.Getenv("API_BASE_URL")
+	serviceID    = os.Getenv("SERVICE_ID")
+	serviceToken = os.Getenv("SERVICE_TOKEN")
 	mgmtToken    = envOrDefault("ORG_TOKEN", serviceToken)
 )
 
@@ -25,14 +26,6 @@ const (
 	subject              = "testuser"
 	tokenDurationSeconds = int64(600)
 )
-
-func requireEnv(key string) string {
-	v := os.Getenv(key)
-	if v == "" {
-		panic(fmt.Sprintf("required environment variable %s is not set", key))
-	}
-	return v
-}
 
 func envOrDefault(key, fallback string) string {
 	if v := os.Getenv(key); v != "" {
@@ -87,6 +80,20 @@ func assertTokenValid(t *testing.T, sdk *authlete.Authlete, svcID string, access
 
 func ptr[T any](v T) *T {
 	return &v
+}
+
+// setValue wraps v for an OptionalNullable field, so it is sent as v.
+func setValue[T any](v T) optionalnullable.OptionalNullable[T] {
+	return optionalnullable.From(&v)
+}
+
+// setUnlessNil wraps p for an OptionalNullable field, leaving the field unset
+// (omitted) when p is nil rather than sending an explicit null.
+func setUnlessNil[T any](p *T) optionalnullable.OptionalNullable[T] {
+	if p == nil {
+		return nil
+	}
+	return optionalnullable.From(p)
 }
 
 func ptrStr(s *string) string {
