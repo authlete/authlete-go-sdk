@@ -24,6 +24,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -31,13 +32,16 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.DeviceFlow.Authorization(ctx, "<id>", components.DeviceAuthorizationRequest{
-        Parameters: "client_id=26888344961664&scope=history.read",
-        ClientID: authlete.Pointer("26888344961664"),
-        ClientSecret: authlete.Pointer("SfnYOLkJdofrb_66mTd6q03_SDoDEUnpXtvqFaE4k6L6UcpZzbdVJi2GpBj48AvGeDDllwsTruC62WYqQ_LGog"),
+    res, err := s.DeviceFlow.Authorization(ctx, operations.DeviceAuthorizationAPIRequest{
+        Body: components.DeviceAuthorizationRequest{
+            Parameters: "client_id=26888344961664&scope=history.read",
+            ClientID: authlete.Pointer("26888344961664"),
+            ClientSecret: authlete.Pointer("SfnYOLkJdofrb_66mTd6q03_SDoDEUnpXtvqFaE4k6L6UcpZzbdVJi2GpBj48AvGeDDllwsTruC62WYqQ_LGog"),
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -50,12 +54,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                      | Type                                                                                           | Required                                                                                       | Description                                                                                    |
-| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `ctx`                                                                                          | [context.Context](https://pkg.go.dev/context#Context)                                          | :heavy_check_mark:                                                                             | The context to use for the request.                                                            |
-| `serviceID`                                                                                    | `string`                                                                                       | :heavy_check_mark:                                                                             | A service ID.                                                                                  |
-| `body`                                                                                         | [components.DeviceAuthorizationRequest](../../models/components/deviceauthorizationrequest.md) | :heavy_check_mark:                                                                             | N/A                                                                                            |
-| `opts`                                                                                         | [][operations.Option](../../models/operations/option.md)                                       | :heavy_minus_sign:                                                                             | The options for this request.                                                                  |
+| Parameter                                                                                            | Type                                                                                                 | Required                                                                                             | Description                                                                                          |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `ctx`                                                                                                | [context.Context](https://pkg.go.dev/context#Context)                                                | :heavy_check_mark:                                                                                   | The context to use for the request.                                                                  |
+| `request`                                                                                            | [operations.DeviceAuthorizationAPIRequest](../../models/operations/deviceauthorizationapirequest.md) | :heavy_check_mark:                                                                                   | The request object to use for the request.                                                           |
+| `opts`                                                                                               | [][operations.Option](../../models/operations/option.md)                                             | :heavy_minus_sign:                                                                                   | The options for this request.                                                                        |
 
 ### Response
 
@@ -86,6 +89,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -93,11 +97,14 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.DeviceFlow.Verification(ctx, "<id>", components.DeviceVerificationRequest{
-        UserCode: "XWWKPBWVXQ",
+    res, err := s.DeviceFlow.Verification(ctx, operations.DeviceVerificationAPIRequest{
+        Body: components.DeviceVerificationRequest{
+            UserCode: "XWWKPBWVXQ",
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -110,12 +117,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                    | Type                                                                                         | Required                                                                                     | Description                                                                                  |
-| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `ctx`                                                                                        | [context.Context](https://pkg.go.dev/context#Context)                                        | :heavy_check_mark:                                                                           | The context to use for the request.                                                          |
-| `serviceID`                                                                                  | `string`                                                                                     | :heavy_check_mark:                                                                           | A service ID.                                                                                |
-| `body`                                                                                       | [components.DeviceVerificationRequest](../../models/components/deviceverificationrequest.md) | :heavy_check_mark:                                                                           | N/A                                                                                          |
-| `opts`                                                                                       | [][operations.Option](../../models/operations/option.md)                                     | :heavy_minus_sign:                                                                           | The options for this request.                                                                |
+| Parameter                                                                                          | Type                                                                                               | Required                                                                                           | Description                                                                                        |
+| -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `ctx`                                                                                              | [context.Context](https://pkg.go.dev/context#Context)                                              | :heavy_check_mark:                                                                                 | The context to use for the request.                                                                |
+| `request`                                                                                          | [operations.DeviceVerificationAPIRequest](../../models/operations/deviceverificationapirequest.md) | :heavy_check_mark:                                                                                 | The request object to use for the request.                                                         |
+| `opts`                                                                                             | [][operations.Option](../../models/operations/option.md)                                           | :heavy_minus_sign:                                                                                 | The options for this request.                                                                      |
 
 ### Response
 
@@ -146,6 +152,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -153,13 +160,16 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.DeviceFlow.Complete(ctx, "<id>", components.DeviceCompleteRequest{
-        UserCode: "XWWKPBWVXQ",
-        Result: components.DeviceCompleteRequestResultAuthorized,
-        Subject: "john",
+    res, err := s.DeviceFlow.Complete(ctx, operations.DeviceCompleteAPIRequest{
+        Body: components.DeviceCompleteRequest{
+            UserCode: "XWWKPBWVXQ",
+            Result: components.DeviceCompleteRequestResultAuthorized,
+            Subject: "john",
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -172,12 +182,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                            | Type                                                                                 | Required                                                                             | Description                                                                          |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| `ctx`                                                                                | [context.Context](https://pkg.go.dev/context#Context)                                | :heavy_check_mark:                                                                   | The context to use for the request.                                                  |
-| `serviceID`                                                                          | `string`                                                                             | :heavy_check_mark:                                                                   | A service ID.                                                                        |
-| `body`                                                                               | [components.DeviceCompleteRequest](../../models/components/devicecompleterequest.md) | :heavy_check_mark:                                                                   | N/A                                                                                  |
-| `opts`                                                                               | [][operations.Option](../../models/operations/option.md)                             | :heavy_minus_sign:                                                                   | The options for this request.                                                        |
+| Parameter                                                                                  | Type                                                                                       | Required                                                                                   | Description                                                                                |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `ctx`                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                      | :heavy_check_mark:                                                                         | The context to use for the request.                                                        |
+| `request`                                                                                  | [operations.DeviceCompleteAPIRequest](../../models/operations/devicecompleteapirequest.md) | :heavy_check_mark:                                                                         | The request object to use for the request.                                                 |
+| `opts`                                                                                     | [][operations.Option](../../models/operations/option.md)                                   | :heavy_minus_sign:                                                                         | The options for this request.                                                              |
 
 ### Response
 

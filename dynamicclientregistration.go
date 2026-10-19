@@ -33,10 +33,9 @@ func newDynamicClientRegistration(rootSDK *Authlete, sdkConfig config.SDKConfigu
 
 // Register Client
 // Register a client. This API is supposed to be used to implement a client registration endpoint that complies with [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591) (OAuth 2.0 Dynamic Client Registration Protocol).
-func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID string, body operations.ClientRegistrationAPIRequestBody, opts ...operations.Option) (*operations.ClientRegistrationAPIResponse, error) {
-	request := operations.ClientRegistrationAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *DynamicClientRegistration) Register(ctx context.Context, request operations.ClientRegistrationAPIRequest, opts ...operations.Option) (*operations.ClientRegistrationAPIResponse, error) {
+	globals := operations.ClientRegistrationAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/client/registration", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/client/registration", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -343,10 +342,9 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 
 // Get Client
 // Get a dynamically registered client. This API is supposed to be used to implement a client registration management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592) (OAuth 2.0 Dynamic Registration Management).
-func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, body operations.ClientRegistrationGetAPIRequestBody, opts ...operations.Option) (*operations.ClientRegistrationGetAPIResponse, error) {
-	request := operations.ClientRegistrationGetAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *DynamicClientRegistration) Get(ctx context.Context, request operations.ClientRegistrationGetAPIRequest, opts ...operations.Option) (*operations.ClientRegistrationGetAPIResponse, error) {
+	globals := operations.ClientRegistrationGetAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -367,7 +365,7 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/client/registration/get", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/client/registration/get", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -653,10 +651,9 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 
 // Update Client
 // Update a dynamically registered client. This API is supposed to be used to implement a client registration management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592) (OAuth 2.0 Dynamic Registration Management).
-func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string, body operations.ClientRegistrationUpdateAPIRequestBody, opts ...operations.Option) (*operations.ClientRegistrationUpdateAPIResponse, error) {
-	request := operations.ClientRegistrationUpdateAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *DynamicClientRegistration) Update(ctx context.Context, request operations.ClientRegistrationUpdateAPIRequest, opts ...operations.Option) (*operations.ClientRegistrationUpdateAPIResponse, error) {
+	globals := operations.ClientRegistrationUpdateAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -677,7 +674,7 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/client/registration/update", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/client/registration/update", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -963,10 +960,9 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 
 // Delete Client
 // Delete a dynamically registered client. This API is supposed to be used to implement a client registration management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592) (OAuth 2.0 Dynamic Registration Management).
-func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string, body operations.ClientRegistrationDeleteAPIRequestBody, opts ...operations.Option) (*operations.ClientRegistrationDeleteAPIResponse, error) {
-	request := operations.ClientRegistrationDeleteAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *DynamicClientRegistration) Delete(ctx context.Context, request operations.ClientRegistrationDeleteAPIRequest, opts ...operations.Option) (*operations.ClientRegistrationDeleteAPIResponse, error) {
+	globals := operations.ClientRegistrationDeleteAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -987,7 +983,7 @@ func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/client/registration/delete", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/client/registration/delete", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

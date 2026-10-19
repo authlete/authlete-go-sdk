@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type AuthIntrospectionStandardAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (a *AuthIntrospectionStandardAPIGlobals) GetServiceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceID
+}
+
 type AuthIntrospectionStandardAPIRequest struct {
 	// A service ID.
-	ServiceID string                                  `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                                 `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.StandardIntrospectionRequest `request:"mediaType=application/json"`
 }
 
-func (a *AuthIntrospectionStandardAPIRequest) GetServiceID() string {
+func (a *AuthIntrospectionStandardAPIRequest) GetServiceID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.ServiceID
 }

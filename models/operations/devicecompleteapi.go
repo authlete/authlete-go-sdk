@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type DeviceCompleteAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (d *DeviceCompleteAPIGlobals) GetServiceID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ServiceID
+}
+
 type DeviceCompleteAPIRequest struct {
 	// A service ID.
-	ServiceID string                           `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                          `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.DeviceCompleteRequest `request:"mediaType=application/json"`
 }
 
-func (d *DeviceCompleteAPIRequest) GetServiceID() string {
+func (d *DeviceCompleteAPIRequest) GetServiceID() *string {
 	if d == nil {
-		return ""
+		return nil
 	}
 	return d.ServiceID
 }

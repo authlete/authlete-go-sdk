@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type GrantMAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (g *GrantMAPIGlobals) GetServiceID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ServiceID
+}
+
 type GrantMAPIRequest struct {
 	// A service ID.
-	ServiceID string               `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string              `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.GMRequest `request:"mediaType=application/json"`
 }
 
-func (g *GrantMAPIRequest) GetServiceID() string {
+func (g *GrantMAPIRequest) GetServiceID() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.ServiceID
 }

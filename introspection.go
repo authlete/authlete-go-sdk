@@ -33,10 +33,9 @@ func newIntrospection(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hook
 
 // Process Introspection Request
 // This API gathers information about an access token.
-func (s *Introspection) Process(ctx context.Context, serviceID string, body components.IntrospectionRequest, opts ...operations.Option) (*operations.AuthIntrospectionAPIResponse, error) {
-	request := operations.AuthIntrospectionAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Introspection) Process(ctx context.Context, request operations.AuthIntrospectionAPIRequest, opts ...operations.Option) (*operations.AuthIntrospectionAPIResponse, error) {
+	globals := operations.AuthIntrospectionAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *Introspection) Process(ctx context.Context, serviceID string, body comp
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/introspection", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/introspection", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -343,10 +342,9 @@ func (s *Introspection) Process(ctx context.Context, serviceID string, body comp
 
 // StandardProcess - Process OAuth 2.0 Introspection Request
 // This API exists to help your authorization server provide its own introspection API which complies with [RFC 7662](https://tools.ietf.org/html/rfc7662) (OAuth 2.0 Token Introspection).
-func (s *Introspection) StandardProcess(ctx context.Context, serviceID string, body components.StandardIntrospectionRequest, opts ...operations.Option) (*operations.AuthIntrospectionStandardAPIResponse, error) {
-	request := operations.AuthIntrospectionStandardAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Introspection) StandardProcess(ctx context.Context, request operations.AuthIntrospectionStandardAPIRequest, opts ...operations.Option) (*operations.AuthIntrospectionStandardAPIResponse, error) {
+	globals := operations.AuthIntrospectionStandardAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -367,7 +365,7 @@ func (s *Introspection) StandardProcess(ctx context.Context, serviceID string, b
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/introspection/standard", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/introspection/standard", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

@@ -688,59 +688,7 @@ paths:
         - Service Management
       x-speakeasy-group: service
       x-speakeasy-name-override: update
-  /api/{serviceId}/service/delete:
-    delete:
-      summary: Delete Service ⚡
-      description: |
-        Delete a service.
-      parameters:
-        - in: path
-          name: serviceId
-          description: A service ID.
-          schema:
-            type: string
-          required: true
-      responses:
-        '204':
-          description: The service was successfully deleted.
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '429':
-          $ref: '#/components/responses/429'
-        '500':
-          $ref: '#/components/responses/500'
-      operationId: service_delete_api
-      x-code-samples:
-        - lang: shell
-          label: curl
-          source: |
-            curl -v -X DELETE https://us.authlete.com/api/9503564192/service/delete/21653835348762 \
-            -H 'Authorization: Bearer V5a40R6dWvw2gMkCOBFdZcM95q4HC0Z-T0YKD9-nR6F'
-        - lang: java
-          label: java
-          source: |
-            AuthleteConfiguration conf = ...;
-            AuthleteApi api = AuthleteApiFactory.create(conf);
-
-            long serviceId = ...;
-
-            api.deleteService(serviceId);
-        - lang: python
-          source: |
-            conf = ...
-            api = AuthleteApiImpl(conf)
-
-            serviceId = ...
-
-            api.deleteService(serviceId)
-      tags:
-        - Service Management
-      x-speakeasy-group: service
-      x-speakeasy-name-override: delete
+  /api/{serviceId}/service/delete: {}
   /api/service:
     servers:
       - url: https://login.authlete.com
@@ -1905,7 +1853,7 @@ paths:
       tags:
         - Client Management
       x-speakeasy-group: client.management
-      x-speakeasy-name-override: listAuthorizedApplications
+      x-speakeasy-name-override: getAuthorizedApplications
     post:
       summary: Get Authorized Applications
       description: |
@@ -1949,7 +1897,7 @@ paths:
       tags:
         - Client Management
       x-speakeasy-group: client.management
-      x-speakeasy-name-override: listAuthorizedApplicationsWithBody
+      x-speakeasy-name-override: getAuthorizedApplicationsByPost
     x-code-samples:
       - lang: shell
         label: curl
@@ -2241,7 +2189,7 @@ paths:
       tags:
         - Client Management
       x-speakeasy-group: client.management
-      x-speakeasy-name-override: revokeClientTokens
+      x-speakeasy-name-override: deleteClientTokensByPost
     x-code-samples:
       - lang: shell
         label: curl
@@ -2393,7 +2341,7 @@ paths:
       tags:
         - Client Management
       x-speakeasy-group: client.management
-      x-speakeasy-name-override: getGrantedScopesForClient
+      x-speakeasy-name-override: getClientGrantedScopes
     post:
       summary: Get Granted Scopes
       description: |
@@ -2448,7 +2396,7 @@ paths:
       tags:
         - Client Management
       x-speakeasy-group: client.management
-      x-speakeasy-name-override: createGrantedScopes
+      x-speakeasy-name-override: getClientGrantedScopesByPost
     x-code-samples:
       - lang: shell
         label: curl
@@ -2596,7 +2544,7 @@ paths:
       tags:
         - Client Management
       x-speakeasy-group: client.management
-      x-speakeasy-name-override: deleteGrantedScopesForClient
+      x-speakeasy-name-override: deleteClientGrantedScopes
   /api/{serviceId}/client/granted_scopes/delete/{clientId}/{subject}:
     delete:
       summary: Delete Granted Scopes (by Subject)
@@ -2656,7 +2604,7 @@ paths:
           description: The ID of the service to retrieve a list of clients from.
           required: true
           schema:
-            type: integer
+            type: string
         - in: query
           name: cursor
           schema:
@@ -2706,6 +2654,8 @@ paths:
           nextCursor: $.nextCursor
       tags:
         - Client Management
+      x-speakeasy-group: client
+      x-speakeasy-name-override: listByCursor
   /api/{serviceId}/client/search:
     get:
       summary: Search Clients
@@ -2754,7 +2704,7 @@ paths:
           description: The ID of the service to retrieve a list of clients from.
           required: true
           schema:
-            type: integer
+            type: string
         - in: query
           name: q
           schema:
@@ -2817,6 +2767,8 @@ paths:
           nextCursor: $.nextCursor
       tags:
         - Client Management
+      x-speakeasy-group: client
+      x-speakeasy-name-override: search
   /api/{serviceId}/auth/authorization:
     post:
       summary: Process Authorization Request
@@ -7658,7 +7610,7 @@ paths:
       tags:
         - Client Management
       x-speakeasy-group: client.management
-      x-speakeasy-name-override: updateRequestableScopesWithBody
+      x-speakeasy-name-override: updateRequestableScopesByPost
     put:
       summary: Update Requestable Scopes
       description: |
@@ -17565,3 +17517,9 @@ x-speakeasy-retries:
     - 429
   retryConnectionErrors: true
 x-speakeasy-timeout: 5000
+x-speakeasy-globals:
+  parameters:
+    - name: serviceId
+      in: path
+      schema:
+        type: string

@@ -24,6 +24,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -31,10 +32,13 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.HardwareSecurityKeys.Create(ctx, "<id>", components.HskCreateRequest{})
+    res, err := s.HardwareSecurityKeys.Create(ctx, operations.HskCreateAPIRequest{
+        Body: components.HskCreateRequest{},
+    })
     if err != nil {
         log.Fatal(err)
     }
@@ -46,12 +50,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                  | Type                                                                       | Required                                                                   | Description                                                                |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `ctx`                                                                      | [context.Context](https://pkg.go.dev/context#Context)                      | :heavy_check_mark:                                                         | The context to use for the request.                                        |
-| `serviceID`                                                                | `string`                                                                   | :heavy_check_mark:                                                         | A service ID.                                                              |
-| `body`                                                                     | [components.HskCreateRequest](../../models/components/hskcreaterequest.md) | :heavy_check_mark:                                                         | N/A                                                                        |
-| `opts`                                                                     | [][operations.Option](../../models/operations/option.md)                   | :heavy_minus_sign:                                                         | The options for this request.                                              |
+| Parameter                                                                        | Type                                                                             | Required                                                                         | Description                                                                      |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `ctx`                                                                            | [context.Context](https://pkg.go.dev/context#Context)                            | :heavy_check_mark:                                                               | The context to use for the request.                                              |
+| `request`                                                                        | [operations.HskCreateAPIRequest](../../models/operations/hskcreateapirequest.md) | :heavy_check_mark:                                                               | The request object to use for the request.                                       |
+| `opts`                                                                           | [][operations.Option](../../models/operations/option.md)                         | :heavy_minus_sign:                                                               | The options for this request.                                                    |
 
 ### Response
 
@@ -80,6 +83,7 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -87,10 +91,13 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.HardwareSecurityKeys.Delete(ctx, "<id>", "<value>")
+    res, err := s.HardwareSecurityKeys.Delete(ctx, operations.HskDeleteAPIRequest{
+        Handle: "<value>",
+    })
     if err != nil {
         log.Fatal(err)
     }
@@ -102,12 +109,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                | Type                                                     | Required                                                 | Description                                              |
-| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |
-| `serviceID`                                              | `string`                                                 | :heavy_check_mark:                                       | A service ID.                                            |
-| `handle`                                                 | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      |
-| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |
+| Parameter                                                                        | Type                                                                             | Required                                                                         | Description                                                                      |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `ctx`                                                                            | [context.Context](https://pkg.go.dev/context#Context)                            | :heavy_check_mark:                                                               | The context to use for the request.                                              |
+| `request`                                                                        | [operations.HskDeleteAPIRequest](../../models/operations/hskdeleteapirequest.md) | :heavy_check_mark:                                                               | The request object to use for the request.                                       |
+| `opts`                                                                           | [][operations.Option](../../models/operations/option.md)                         | :heavy_minus_sign:                                                               | The options for this request.                                                    |
 
 ### Response
 
@@ -136,6 +142,7 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -143,10 +150,13 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.HardwareSecurityKeys.Get(ctx, "<id>", "<value>")
+    res, err := s.HardwareSecurityKeys.Get(ctx, operations.HskGetAPIRequest{
+        Handle: "<value>",
+    })
     if err != nil {
         log.Fatal(err)
     }
@@ -158,12 +168,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                | Type                                                     | Required                                                 | Description                                              |
-| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |
-| `serviceID`                                              | `string`                                                 | :heavy_check_mark:                                       | A service ID.                                            |
-| `handle`                                                 | `string`                                                 | :heavy_check_mark:                                       | N/A                                                      |
-| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |
+| Parameter                                                                  | Type                                                                       | Required                                                                   | Description                                                                |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `ctx`                                                                      | [context.Context](https://pkg.go.dev/context#Context)                      | :heavy_check_mark:                                                         | The context to use for the request.                                        |
+| `request`                                                                  | [operations.HskGetAPIRequest](../../models/operations/hskgetapirequest.md) | :heavy_check_mark:                                                         | The request object to use for the request.                                 |
+| `opts`                                                                     | [][operations.Option](../../models/operations/option.md)                   | :heavy_minus_sign:                                                         | The options for this request.                                              |
 
 ### Response
 
@@ -192,6 +201,7 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -199,10 +209,11 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.HardwareSecurityKeys.List(ctx, "<id>")
+    res, err := s.HardwareSecurityKeys.List(ctx, operations.HskGetListAPIRequest{})
     if err != nil {
         log.Fatal(err)
     }
@@ -214,11 +225,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                | Type                                                     | Required                                                 | Description                                              |
-| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |
-| `serviceID`                                              | `string`                                                 | :heavy_check_mark:                                       | A service ID.                                            |
-| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |
+| Parameter                                                                          | Type                                                                               | Required                                                                           | Description                                                                        |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `ctx`                                                                              | [context.Context](https://pkg.go.dev/context#Context)                              | :heavy_check_mark:                                                                 | The context to use for the request.                                                |
+| `request`                                                                          | [operations.HskGetListAPIRequest](../../models/operations/hskgetlistapirequest.md) | :heavy_check_mark:                                                                 | The request object to use for the request.                                         |
+| `opts`                                                                             | [][operations.Option](../../models/operations/option.md)                           | :heavy_minus_sign:                                                                 | The options for this request.                                                      |
 
 ### Response
 

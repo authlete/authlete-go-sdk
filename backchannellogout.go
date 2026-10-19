@@ -33,10 +33,9 @@ func newBackChannelLogout(rootSDK *Authlete, sdkConfig config.SDKConfiguration, 
 
 // BackchannelLogoutTokenAPI - Backchannel Logout Token Issuing
 // The `/backchannel/logout/token` API issues a logout token for a client application in the context of [OpenID Connect Back-Channel Logout 1.0](https://openid.net/specs/openid-connect-backchannel-1_0.html).
-func (s *BackChannelLogout) BackchannelLogoutTokenAPI(ctx context.Context, serviceID string, body components.BackchannelLogoutTokenRequest, opts ...operations.Option) (*operations.BackchannelLogoutTokenAPIResponse, error) {
-	request := operations.BackchannelLogoutTokenAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *BackChannelLogout) BackchannelLogoutTokenAPI(ctx context.Context, request operations.BackchannelLogoutTokenAPIRequest, opts ...operations.Option) (*operations.BackchannelLogoutTokenAPIResponse, error) {
+	globals := operations.BackchannelLogoutTokenAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *BackChannelLogout) BackchannelLogoutTokenAPI(ctx context.Context, servi
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/logout/token", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/logout/token", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

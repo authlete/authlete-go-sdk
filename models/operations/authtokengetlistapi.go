@@ -7,9 +7,20 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type AuthTokenGetListAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (a *AuthTokenGetListAPIGlobals) GetServiceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceID
+}
+
 type AuthTokenGetListAPIRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// Client Identifier (client ID or client ID alias).
 	//
 	ClientIdentifier *string `queryParam:"style=form,explode=true,name=clientIdentifier"`
@@ -23,9 +34,9 @@ type AuthTokenGetListAPIRequest struct {
 	End *int `queryParam:"style=form,explode=true,name=end"`
 }
 
-func (a *AuthTokenGetListAPIRequest) GetServiceID() string {
+func (a *AuthTokenGetListAPIRequest) GetServiceID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.ServiceID
 }

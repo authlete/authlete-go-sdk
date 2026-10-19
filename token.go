@@ -36,10 +36,9 @@ func newToken(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *hooks
 
 // Process Token Request
 // This API parses request parameters of an authorization request and returns necessary data for the authorization server implementation to process the authorization request further.
-func (s *Token) Process(ctx context.Context, serviceID string, body components.TokenRequest, opts ...operations.Option) (*operations.AuthTokenAPIResponse, error) {
-	request := operations.AuthTokenAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Token) Process(ctx context.Context, request operations.AuthTokenAPIRequest, opts ...operations.Option) (*operations.AuthTokenAPIResponse, error) {
+	globals := operations.AuthTokenAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -60,7 +59,7 @@ func (s *Token) Process(ctx context.Context, serviceID string, body components.T
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -346,10 +345,9 @@ func (s *Token) Process(ctx context.Context, serviceID string, body components.T
 
 // Fail Token Request
 // This API generates a content of an error token response that the authorization server implementation returns to the client application.
-func (s *Token) Fail(ctx context.Context, serviceID string, body components.TokenFailRequest, opts ...operations.Option) (*operations.AuthTokenFailAPIResponse, error) {
-	request := operations.AuthTokenFailAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Token) Fail(ctx context.Context, request operations.AuthTokenFailAPIRequest, opts ...operations.Option) (*operations.AuthTokenFailAPIResponse, error) {
+	globals := operations.AuthTokenFailAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -370,7 +368,7 @@ func (s *Token) Fail(ctx context.Context, serviceID string, body components.Toke
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/fail", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/fail", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -656,10 +654,9 @@ func (s *Token) Fail(ctx context.Context, serviceID string, body components.Toke
 
 // Issue Token Response
 // This API generates a content of a successful token response that the authorization server implementation returns to the client application.
-func (s *Token) Issue(ctx context.Context, serviceID string, body components.TokenIssueRequest, opts ...operations.Option) (*operations.AuthTokenIssueAPIResponse, error) {
-	request := operations.AuthTokenIssueAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Token) Issue(ctx context.Context, request operations.AuthTokenIssueAPIRequest, opts ...operations.Option) (*operations.AuthTokenIssueAPIResponse, error) {
+	globals := operations.AuthTokenIssueAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -680,7 +677,7 @@ func (s *Token) Issue(ctx context.Context, serviceID string, body components.Tok
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/issue", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/issue", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

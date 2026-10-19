@@ -7,6 +7,17 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientRegistrationGetAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientRegistrationGetAPIGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientRegistrationGetAPIRequestBody struct {
 	// Client metadata in JSON format that complies with [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591) (OAuth 2.0 Dynamic Client Registration Protocol).
 	//
@@ -42,13 +53,13 @@ func (c *ClientRegistrationGetAPIRequestBody) GetClientID() string {
 
 type ClientRegistrationGetAPIRequest struct {
 	// A service ID.
-	ServiceID string                              `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                             `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      ClientRegistrationGetAPIRequestBody `request:"mediaType=application/json"`
 }
 
-func (c *ClientRegistrationGetAPIRequest) GetServiceID() string {
+func (c *ClientRegistrationGetAPIRequest) GetServiceID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ServiceID
 }

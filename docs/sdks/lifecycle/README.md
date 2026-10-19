@@ -20,6 +20,7 @@ package main
 import(
 	"context"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -28,7 +29,7 @@ func main() {
 
     s := authlete.New()
 
-    res, err := s.Lifecycle.GetAPILifecycleHealthcheck(ctx, nil)
+    res, err := s.Lifecycle.GetAPILifecycleHealthcheck(ctx, operations.GetAPILifecycleHealthcheckRequest{})
     if err != nil {
         log.Fatal(err)
     }
@@ -40,11 +41,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                | Type                                                                     | Required                                                                 | Description                                                              |
-| ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| `ctx`                                                                    | [context.Context](https://pkg.go.dev/context#Context)                    | :heavy_check_mark:                                                       | The context to use for the request.                                      |
-| `extended`                                                               | `*bool`                                                                  | :heavy_minus_sign:                                                       | If `true`, perform extended health checks (e.g. database connectivity).<br/> |
-| `opts`                                                                   | [][operations.Option](../../models/operations/option.md)                 | :heavy_minus_sign:                                                       | The options for this request.                                            |
+| Parameter                                                                                                    | Type                                                                                                         | Required                                                                                                     | Description                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `ctx`                                                                                                        | [context.Context](https://pkg.go.dev/context#Context)                                                        | :heavy_check_mark:                                                                                           | The context to use for the request.                                                                          |
+| `request`                                                                                                    | [operations.GetAPILifecycleHealthcheckRequest](../../models/operations/getapilifecyclehealthcheckrequest.md) | :heavy_check_mark:                                                                                           | The request object to use for the request.                                                                   |
+| `opts`                                                                                                       | [][operations.Option](../../models/operations/option.md)                                                     | :heavy_minus_sign:                                                                                           | The options for this request.                                                                                |
 
 ### Response
 

@@ -33,10 +33,9 @@ func newUserinfo(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *ho
 
 // Process UserInfo Request
 // This API gathers information about a user.
-func (s *Userinfo) Process(ctx context.Context, serviceID string, body components.UserinfoRequest, opts ...operations.Option) (*operations.AuthUserinfoAPIResponse, error) {
-	request := operations.AuthUserinfoAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Userinfo) Process(ctx context.Context, request operations.AuthUserinfoAPIRequest, opts ...operations.Option) (*operations.AuthUserinfoAPIResponse, error) {
+	globals := operations.AuthUserinfoAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *Userinfo) Process(ctx context.Context, serviceID string, body component
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/userinfo", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/userinfo", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -343,10 +342,9 @@ func (s *Userinfo) Process(ctx context.Context, serviceID string, body component
 
 // Issue UserInfo Response
 // This API generates an ID token.
-func (s *Userinfo) Issue(ctx context.Context, serviceID string, body components.UserinfoIssueRequest, opts ...operations.Option) (*operations.AuthUserinfoIssueAPIResponse, error) {
-	request := operations.AuthUserinfoIssueAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Userinfo) Issue(ctx context.Context, request operations.AuthUserinfoIssueAPIRequest, opts ...operations.Option) (*operations.AuthUserinfoIssueAPIResponse, error) {
+	globals := operations.AuthUserinfoIssueAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -367,7 +365,7 @@ func (s *Userinfo) Issue(ctx context.Context, serviceID string, body components.
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/userinfo/issue", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/userinfo/issue", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

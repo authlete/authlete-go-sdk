@@ -7,7 +7,6 @@
 * [Get](#get) - Get Service
 * [List](#list) - List Services
 * [Update](#update) - Update Service
-* [Delete](#delete) - Delete Service ⚡
 * [Create](#create) - Create Service (IDP)
 * [Remove](#remove) - Remove Service (IDP) ⚡
 * [GetConfiguration](#getconfiguration) - Get Service Configuration
@@ -29,6 +28,7 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -36,10 +36,11 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Service.Get(ctx, "<id>")
+    res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
     if err != nil {
         log.Fatal(err)
     }
@@ -58,6 +59,7 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -65,10 +67,11 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Service.Get(ctx, "<id>")
+    res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
     if err != nil {
         log.Fatal(err)
     }
@@ -80,11 +83,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                | Type                                                     | Required                                                 | Description                                              |
-| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |
-| `serviceID`                                              | `string`                                                 | :heavy_check_mark:                                       | A service ID.                                            |
-| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |
+| Parameter                                                                          | Type                                                                               | Required                                                                           | Description                                                                        |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `ctx`                                                                              | [context.Context](https://pkg.go.dev/context#Context)                              | :heavy_check_mark:                                                                 | The context to use for the request.                                                |
+| `request`                                                                          | [operations.ServiceGetAPIRequest](../../models/operations/servicegetapirequest.md) | :heavy_check_mark:                                                                 | The request object to use for the request.                                         |
+| `opts`                                                                             | [][operations.Option](../../models/operations/option.md)                           | :heavy_minus_sign:                                                                 | The options for this request.                                                      |
 
 ### Response
 
@@ -118,6 +121,7 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -128,7 +132,7 @@ func main() {
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Service.List(ctx, nil, nil)
+    res, err := s.Service.List(ctx, operations.ServiceGetListAPIRequest{})
     if err != nil {
         log.Fatal(err)
     }
@@ -147,6 +151,7 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -157,7 +162,7 @@ func main() {
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Service.List(ctx, nil, nil)
+    res, err := s.Service.List(ctx, operations.ServiceGetListAPIRequest{})
     if err != nil {
         log.Fatal(err)
     }
@@ -169,12 +174,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                         | Type                                                                                              | Required                                                                                          | Description                                                                                       |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `ctx`                                                                                             | [context.Context](https://pkg.go.dev/context#Context)                                             | :heavy_check_mark:                                                                                | The context to use for the request.                                                               |
-| `start`                                                                                           | `*int`                                                                                            | :heavy_minus_sign:                                                                                | Start index (inclusive) of the result set. The default value is 0. Must not be a negative number. |
-| `end`                                                                                             | `*int`                                                                                            | :heavy_minus_sign:                                                                                | End index (exclusive) of the result set. The default value is 5. Must not be a negative number.   |
-| `opts`                                                                                            | [][operations.Option](../../models/operations/option.md)                                          | :heavy_minus_sign:                                                                                | The options for this request.                                                                     |
+| Parameter                                                                                  | Type                                                                                       | Required                                                                                   | Description                                                                                |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `ctx`                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                      | :heavy_check_mark:                                                                         | The context to use for the request.                                                        |
+| `request`                                                                                  | [operations.ServiceGetListAPIRequest](../../models/operations/servicegetlistapirequest.md) | :heavy_check_mark:                                                                         | The request object to use for the request.                                                 |
+| `opts`                                                                                     | [][operations.Option](../../models/operations/option.md)                                   | :heavy_minus_sign:                                                                         | The options for this request.                                                              |
 
 ### Response
 
@@ -206,6 +210,7 @@ import(
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -213,103 +218,106 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Service.Update(ctx, "<id>", &components.ServiceInput{
-        ServiceName: optionalnullable.From(authlete.Pointer("My updated service")),
-        Issuer: optionalnullable.From(authlete.Pointer("https://my-service.example.com")),
-        ClientsPerDeveloper: authlete.Pointer[int](0),
-        SupportedGrantTypes: optionalnullable.From(authlete.Pointer([]components.GrantType{
-            components.GrantTypeAuthorizationCode,
-            components.GrantTypeRefreshToken,
-        })),
-        SupportedResponseTypes: optionalnullable.From(authlete.Pointer([]components.ResponseType{
-            components.ResponseTypeCode,
-        })),
-        ErrorDescriptionOmitted: authlete.Pointer(false),
-        ErrorURIOmitted: authlete.Pointer(false),
-        AuthorizationEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/authz")),
-        SupportedDisplays: optionalnullable.From(authlete.Pointer([]components.Display{
-            components.DisplayPage,
-        })),
-        PkceRequired: authlete.Pointer(true),
-        PkceS256Required: authlete.Pointer(false),
-        AuthorizationResponseDuration: authlete.Pointer[int64](0),
-        AuthorizationCodeDuration: authlete.Pointer[int64](0),
-        TokenEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/token")),
-        SupportedTokenAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
-            components.ClientAuthMethodClientSecretBasic,
-        })),
-        MissingClientIDAllowed: authlete.Pointer(false),
-        RevocationEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/revocation")),
-        SupportedRevocationAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
-            components.ClientAuthMethodClientSecretBasic,
-        })),
-        IntrospectionEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/introspection")),
-        SupportedIntrospectionAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
-            components.ClientAuthMethodClientSecretBasic,
-        })),
-        PushedAuthReqDuration: authlete.Pointer[int64](0),
-        ParRequired: authlete.Pointer(false),
-        RequestObjectRequired: authlete.Pointer(false),
-        TraditionalRequestObjectProcessingApplied: authlete.Pointer(false),
-        MutualTLSValidatePkiCertChain: authlete.Pointer(false),
-        AccessTokenType: optionalnullable.From(authlete.Pointer("Bearer")),
-        TLSClientCertificateBoundAccessTokens: authlete.Pointer(false),
-        AccessTokenDuration: authlete.Pointer[int64](3600),
-        SingleAccessTokenPerSubject: authlete.Pointer(false),
-        RefreshTokenDuration: authlete.Pointer[int64](3600),
-        RefreshTokenDurationKept: authlete.Pointer(false),
-        RefreshTokenDurationReset: authlete.Pointer(false),
-        RefreshTokenKept: authlete.Pointer(false),
-        SupportedScopes: optionalnullable.From(authlete.Pointer([]components.Scope{
-            components.Scope{
-                Name: authlete.Pointer("history.read"),
-                DefaultEntry: authlete.Pointer(false),
-                Description: authlete.Pointer("A permission to read your history."),
-            },
-            components.Scope{
-                Name: authlete.Pointer("timeline.read"),
-                DefaultEntry: authlete.Pointer(false),
-                Description: authlete.Pointer("A permission to read your timeline."),
-            },
-        })),
-        ScopeRequired: authlete.Pointer(false),
-        IDTokenDuration: authlete.Pointer[int64](0),
-        AllowableClockSkew: authlete.Pointer[int](0),
-        SupportedClaimTypes: optionalnullable.From(authlete.Pointer([]components.ClaimType{
-            components.ClaimTypeNormal,
-        })),
-        ClaimShortcutRestrictive: authlete.Pointer(false),
-        DynamicRegistrationSupported: authlete.Pointer(false),
-        BackchannelAuthReqIDDuration: authlete.Pointer[int](0),
-        BackchannelPollingInterval: authlete.Pointer[int](0),
-        BackchannelUserCodeParameterSupported: authlete.Pointer(false),
-        BackchannelBindingMessageRequiredInFapi: authlete.Pointer(false),
-        DeviceFlowCodeDuration: authlete.Pointer[int](0),
-        DeviceFlowPollingInterval: authlete.Pointer[int](0),
-        UserCodeLength: authlete.Pointer[int](0),
-        Attributes: optionalnullable.From(authlete.Pointer([]components.Pair{
-            components.Pair{
-                Key: authlete.Pointer("attribute1-key"),
-                Value: authlete.Pointer("attribute1-value"),
-            },
-            components.Pair{
-                Key: authlete.Pointer("attribute2-key"),
-                Value: authlete.Pointer("attribute2-value"),
-            },
-        })),
-        NbfOptional: authlete.Pointer(false),
-        IssSuppressed: authlete.Pointer(false),
-        TokenExpirationLinked: authlete.Pointer(false),
-        FrontChannelRequestObjectEncryptionRequired: authlete.Pointer(false),
-        RequestObjectEncryptionAlgMatchRequired: authlete.Pointer(false),
-        RequestObjectEncryptionEncMatchRequired: authlete.Pointer(false),
-        HsmEnabled: authlete.Pointer(false),
-        GrantManagementActionRequired: authlete.Pointer(false),
-        UnauthorizedOnClientConfigSupported: authlete.Pointer(false),
-        DcrScopeUsedAsRequestable: authlete.Pointer(false),
+    res, err := s.Service.Update(ctx, operations.ServiceUpdateAPIRequest{
+        Body: &components.ServiceInput{
+            ServiceName: optionalnullable.From(authlete.Pointer("My updated service")),
+            Issuer: optionalnullable.From(authlete.Pointer("https://my-service.example.com")),
+            ClientsPerDeveloper: authlete.Pointer[int](0),
+            SupportedGrantTypes: optionalnullable.From(authlete.Pointer([]components.GrantType{
+                components.GrantTypeAuthorizationCode,
+                components.GrantTypeRefreshToken,
+            })),
+            SupportedResponseTypes: optionalnullable.From(authlete.Pointer([]components.ResponseType{
+                components.ResponseTypeCode,
+            })),
+            ErrorDescriptionOmitted: authlete.Pointer(false),
+            ErrorURIOmitted: authlete.Pointer(false),
+            AuthorizationEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/authz")),
+            SupportedDisplays: optionalnullable.From(authlete.Pointer([]components.Display{
+                components.DisplayPage,
+            })),
+            PkceRequired: authlete.Pointer(true),
+            PkceS256Required: authlete.Pointer(false),
+            AuthorizationResponseDuration: authlete.Pointer[int64](0),
+            AuthorizationCodeDuration: authlete.Pointer[int64](0),
+            TokenEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/token")),
+            SupportedTokenAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
+                components.ClientAuthMethodClientSecretBasic,
+            })),
+            MissingClientIDAllowed: authlete.Pointer(false),
+            RevocationEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/revocation")),
+            SupportedRevocationAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
+                components.ClientAuthMethodClientSecretBasic,
+            })),
+            IntrospectionEndpoint: optionalnullable.From(authlete.Pointer("https://my-service.example.com/introspection")),
+            SupportedIntrospectionAuthMethods: optionalnullable.From(authlete.Pointer([]components.ClientAuthMethod{
+                components.ClientAuthMethodClientSecretBasic,
+            })),
+            PushedAuthReqDuration: authlete.Pointer[int64](0),
+            ParRequired: authlete.Pointer(false),
+            RequestObjectRequired: authlete.Pointer(false),
+            TraditionalRequestObjectProcessingApplied: authlete.Pointer(false),
+            MutualTLSValidatePkiCertChain: authlete.Pointer(false),
+            AccessTokenType: optionalnullable.From(authlete.Pointer("Bearer")),
+            TLSClientCertificateBoundAccessTokens: authlete.Pointer(false),
+            AccessTokenDuration: authlete.Pointer[int64](3600),
+            SingleAccessTokenPerSubject: authlete.Pointer(false),
+            RefreshTokenDuration: authlete.Pointer[int64](3600),
+            RefreshTokenDurationKept: authlete.Pointer(false),
+            RefreshTokenDurationReset: authlete.Pointer(false),
+            RefreshTokenKept: authlete.Pointer(false),
+            SupportedScopes: optionalnullable.From(authlete.Pointer([]components.Scope{
+                components.Scope{
+                    Name: authlete.Pointer("history.read"),
+                    DefaultEntry: authlete.Pointer(false),
+                    Description: authlete.Pointer("A permission to read your history."),
+                },
+                components.Scope{
+                    Name: authlete.Pointer("timeline.read"),
+                    DefaultEntry: authlete.Pointer(false),
+                    Description: authlete.Pointer("A permission to read your timeline."),
+                },
+            })),
+            ScopeRequired: authlete.Pointer(false),
+            IDTokenDuration: authlete.Pointer[int64](0),
+            AllowableClockSkew: authlete.Pointer[int](0),
+            SupportedClaimTypes: optionalnullable.From(authlete.Pointer([]components.ClaimType{
+                components.ClaimTypeNormal,
+            })),
+            ClaimShortcutRestrictive: authlete.Pointer(false),
+            DynamicRegistrationSupported: authlete.Pointer(false),
+            BackchannelAuthReqIDDuration: authlete.Pointer[int](0),
+            BackchannelPollingInterval: authlete.Pointer[int](0),
+            BackchannelUserCodeParameterSupported: authlete.Pointer(false),
+            BackchannelBindingMessageRequiredInFapi: authlete.Pointer(false),
+            DeviceFlowCodeDuration: authlete.Pointer[int](0),
+            DeviceFlowPollingInterval: authlete.Pointer[int](0),
+            UserCodeLength: authlete.Pointer[int](0),
+            Attributes: optionalnullable.From(authlete.Pointer([]components.Pair{
+                components.Pair{
+                    Key: authlete.Pointer("attribute1-key"),
+                    Value: authlete.Pointer("attribute1-value"),
+                },
+                components.Pair{
+                    Key: authlete.Pointer("attribute2-key"),
+                    Value: authlete.Pointer("attribute2-value"),
+                },
+            })),
+            NbfOptional: authlete.Pointer(false),
+            IssSuppressed: authlete.Pointer(false),
+            TokenExpirationLinked: authlete.Pointer(false),
+            FrontChannelRequestObjectEncryptionRequired: authlete.Pointer(false),
+            RequestObjectEncryptionAlgMatchRequired: authlete.Pointer(false),
+            RequestObjectEncryptionEncMatchRequired: authlete.Pointer(false),
+            HsmEnabled: authlete.Pointer(false),
+            GrantManagementActionRequired: authlete.Pointer(false),
+            UnauthorizedOnClientConfigSupported: authlete.Pointer(false),
+            DcrScopeUsedAsRequestable: authlete.Pointer(false),
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -322,72 +330,15 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                                                                                                                                                                               | Type                                                                                                                                                                                                                                                    | Required                                                                                                                                                                                                                                                | Description                                                                                                                                                                                                                                             | Example                                                                                                                                                                                                                                                 |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ctx`                                                                                                                                                                                                                                                   | [context.Context](https://pkg.go.dev/context#Context)                                                                                                                                                                                                   | :heavy_check_mark:                                                                                                                                                                                                                                      | The context to use for the request.                                                                                                                                                                                                                     |                                                                                                                                                                                                                                                         |
-| `serviceID`                                                                                                                                                                                                                                             | `string`                                                                                                                                                                                                                                                | :heavy_check_mark:                                                                                                                                                                                                                                      | A service ID.                                                                                                                                                                                                                                           |                                                                                                                                                                                                                                                         |
-| `body`                                                                                                                                                                                                                                                  | [*components.ServiceInput](../../models/components/serviceinput.md)                                                                                                                                                                                     | :heavy_minus_sign:                                                                                                                                                                                                                                      | N/A                                                                                                                                                                                                                                                     | {<br/>"number": 715948317,<br/>"serviceName": "My Test Service",<br/>"issuer": "https://example.com",<br/>"supportedScopes": [<br/>"profile",<br/>"email",<br/>"openid"<br/>],<br/>"supportedResponseTypes": [<br/>"CODE"<br/>],<br/>"supportedGrantTypes": [<br/>"AUTHORIZATION_CODE",<br/>"REFRESH_TOKEN"<br/>]<br/>} |
-| `opts`                                                                                                                                                                                                                                                  | [][operations.Option](../../models/operations/option.md)                                                                                                                                                                                                | :heavy_minus_sign:                                                                                                                                                                                                                                      | The options for this request.                                                                                                                                                                                                                           |                                                                                                                                                                                                                                                         |
+| Parameter                                                                                | Type                                                                                     | Required                                                                                 | Description                                                                              |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ctx`                                                                                    | [context.Context](https://pkg.go.dev/context#Context)                                    | :heavy_check_mark:                                                                       | The context to use for the request.                                                      |
+| `request`                                                                                | [operations.ServiceUpdateAPIRequest](../../models/operations/serviceupdateapirequest.md) | :heavy_check_mark:                                                                       | The request object to use for the request.                                               |
+| `opts`                                                                                   | [][operations.Option](../../models/operations/option.md)                                 | :heavy_minus_sign:                                                                       | The options for this request.                                                            |
 
 ### Response
 
 **[*operations.ServiceUpdateAPIResponse](../../models/operations/serviceupdateapiresponse.md), error**
-
-### Errors
-
-| Error Type            | Status Code           | Content Type          |
-| --------------------- | --------------------- | --------------------- |
-| apierrors.ResultError | 400, 401, 403         | application/json      |
-| apierrors.ResultError | 429                   | application/json      |
-| apierrors.ResultError | 500                   | application/json      |
-| apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
-
-## Delete
-
-Delete a service.
-
-
-### Example Usage
-
-<!-- UsageSnippet language="go" operationID="service_delete_api" method="delete" path="/api/{serviceId}/service/delete" -->
-```go
-package main
-
-import(
-	"context"
-	"os"
-	authlete "github.com/authlete/authlete-go-sdk"
-	"log"
-)
-
-func main() {
-    ctx := context.Background()
-
-    s := authlete.New(
-        authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
-    )
-
-    res, err := s.Service.Delete(ctx, "<id>")
-    if err != nil {
-        log.Fatal(err)
-    }
-    if res != nil {
-        // handle response
-    }
-}
-```
-
-### Parameters
-
-| Parameter                                                | Type                                                     | Required                                                 | Description                                              |
-| -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| `ctx`                                                    | [context.Context](https://pkg.go.dev/context#Context)    | :heavy_check_mark:                                       | The context to use for the request.                      |
-| `serviceID`                                              | `string`                                                 | :heavy_check_mark:                                       | A service ID.                                            |
-| `opts`                                                   | [][operations.Option](../../models/operations/option.md) | :heavy_minus_sign:                                       | The options for this request.                            |
-
-### Response
-
-**[*operations.ServiceDeleteAPIResponse](../../models/operations/servicedeleteapiresponse.md), error**
 
 ### Errors
 
@@ -543,6 +494,7 @@ import(
 	"context"
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -550,10 +502,11 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Service.GetConfiguration(ctx, "<id>", nil, nil)
+    res, err := s.Service.GetConfiguration(ctx, operations.ServiceConfigurationAPIRequest{})
     if err != nil {
         log.Fatal(err)
     }
@@ -565,13 +518,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                                                                                                        | Type                                                                                                                                                                             | Required                                                                                                                                                                         | Description                                                                                                                                                                      |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ctx`                                                                                                                                                                            | [context.Context](https://pkg.go.dev/context#Context)                                                                                                                            | :heavy_check_mark:                                                                                                                                                               | The context to use for the request.                                                                                                                                              |
-| `serviceID`                                                                                                                                                                      | `string`                                                                                                                                                                         | :heavy_check_mark:                                                                                                                                                               | A service ID.                                                                                                                                                                    |
-| `pretty`                                                                                                                                                                         | `*bool`                                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                               | This boolean value indicates whether the JSON in the response should be formatted or not. If `true`, the JSON in the response is pretty-formatted. The default value is `false`. |
-| `patch`                                                                                                                                                                          | `*string`                                                                                                                                                                        | :heavy_minus_sign:                                                                                                                                                               | Get the JSON Patch [RFC 6902 JavaScript Object Notation (JSON) Patch](https://www.rfc-editor.org/rfc/rfc6902) to be applied.                                                     |
-| `opts`                                                                                                                                                                           | [][operations.Option](../../models/operations/option.md)                                                                                                                         | :heavy_minus_sign:                                                                                                                                                               | The options for this request.                                                                                                                                                    |
+| Parameter                                                                                              | Type                                                                                                   | Required                                                                                               | Description                                                                                            |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `ctx`                                                                                                  | [context.Context](https://pkg.go.dev/context#Context)                                                  | :heavy_check_mark:                                                                                     | The context to use for the request.                                                                    |
+| `request`                                                                                              | [operations.ServiceConfigurationAPIRequest](../../models/operations/serviceconfigurationapirequest.md) | :heavy_check_mark:                                                                                     | The request object to use for the request.                                                             |
+| `opts`                                                                                                 | [][operations.Option](../../models/operations/option.md)                                               | :heavy_minus_sign:                                                                                     | The options for this request.                                                                          |
 
 ### Response
 

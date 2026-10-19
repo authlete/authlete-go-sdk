@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type FederationRegistrationAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (f *FederationRegistrationAPIGlobals) GetServiceID() *string {
+	if f == nil {
+		return nil
+	}
+	return f.ServiceID
+}
+
 type FederationRegistrationAPIRequest struct {
 	// A service ID.
-	ServiceID string                                   `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                                  `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.FederationRegistrationRequest `request:"mediaType=application/json"`
 }
 
-func (f *FederationRegistrationAPIRequest) GetServiceID() string {
+func (f *FederationRegistrationAPIRequest) GetServiceID() *string {
 	if f == nil {
-		return ""
+		return nil
 	}
 	return f.ServiceID
 }

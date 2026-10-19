@@ -6,17 +6,28 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientExtensionRequestablesScopesDeleteAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientExtensionRequestablesScopesDeleteAPIGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientExtensionRequestablesScopesDeleteAPIRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// A client ID.
 	//
 	ClientID string `pathParam:"style=simple,explode=false,name=clientId"`
 }
 
-func (c *ClientExtensionRequestablesScopesDeleteAPIRequest) GetServiceID() string {
+func (c *ClientExtensionRequestablesScopesDeleteAPIRequest) GetServiceID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ServiceID
 }

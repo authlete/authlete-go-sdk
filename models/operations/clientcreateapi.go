@@ -7,9 +7,20 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientCreateAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientCreateAPIGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientCreateAPIRequest struct {
 	// A service ID.
-	ServiceID string                  `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                 `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      *components.ClientInput `request:"mediaType=application/json"`
 }
 
@@ -24,9 +35,9 @@ func (c *ClientCreateAPIRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *ClientCreateAPIRequest) GetServiceID() string {
+func (c *ClientCreateAPIRequest) GetServiceID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ServiceID
 }

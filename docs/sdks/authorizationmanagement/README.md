@@ -22,6 +22,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -29,11 +30,14 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Authorization.Management.GetTicketInfo(ctx, "<id>", components.AuthorizationTicketInfoRequest{
-        Ticket: "<value>",
+    res, err := s.Authorization.Management.GetTicketInfo(ctx, operations.GetAuthorizationTicketInfoRequest{
+        Body: components.AuthorizationTicketInfoRequest{
+            Ticket: "<value>",
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -46,12 +50,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                              | Type                                                                                                   | Required                                                                                               | Description                                                                                            |
-| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| `ctx`                                                                                                  | [context.Context](https://pkg.go.dev/context#Context)                                                  | :heavy_check_mark:                                                                                     | The context to use for the request.                                                                    |
-| `serviceID`                                                                                            | `string`                                                                                               | :heavy_check_mark:                                                                                     | A service ID.                                                                                          |
-| `body`                                                                                                 | [components.AuthorizationTicketInfoRequest](../../models/components/authorizationticketinforequest.md) | :heavy_check_mark:                                                                                     | N/A                                                                                                    |
-| `opts`                                                                                                 | [][operations.Option](../../models/operations/option.md)                                               | :heavy_minus_sign:                                                                                     | The options for this request.                                                                          |
+| Parameter                                                                                                    | Type                                                                                                         | Required                                                                                                     | Description                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `ctx`                                                                                                        | [context.Context](https://pkg.go.dev/context#Context)                                                        | :heavy_check_mark:                                                                                           | The context to use for the request.                                                                          |
+| `request`                                                                                                    | [operations.GetAuthorizationTicketInfoRequest](../../models/operations/getauthorizationticketinforequest.md) | :heavy_check_mark:                                                                                           | The request object to use for the request.                                                                   |
+| `opts`                                                                                                       | [][operations.Option](../../models/operations/option.md)                                                     | :heavy_minus_sign:                                                                                           | The options for this request.                                                                                |
 
 ### Response
 
@@ -81,6 +84,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -88,12 +92,15 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Authorization.Management.UpdateTicket(ctx, "<id>", components.AuthorizationTicketUpdateRequest{
-        Ticket: "<value>",
-        Info: components.AuthorizationTicketInfo{},
+    res, err := s.Authorization.Management.UpdateTicket(ctx, operations.UpdateAuthorizationTicketRequest{
+        Body: components.AuthorizationTicketUpdateRequest{
+            Ticket: "<value>",
+            Info: components.AuthorizationTicketInfo{},
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -109,8 +116,7 @@ func main() {
 | Parameter                                                                                                  | Type                                                                                                       | Required                                                                                                   | Description                                                                                                |
 | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `ctx`                                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                                      | :heavy_check_mark:                                                                                         | The context to use for the request.                                                                        |
-| `serviceID`                                                                                                | `string`                                                                                                   | :heavy_check_mark:                                                                                         | A service ID.                                                                                              |
-| `body`                                                                                                     | [components.AuthorizationTicketUpdateRequest](../../models/components/authorizationticketupdaterequest.md) | :heavy_check_mark:                                                                                         | N/A                                                                                                        |
+| `request`                                                                                                  | [operations.UpdateAuthorizationTicketRequest](../../models/operations/updateauthorizationticketrequest.md) | :heavy_check_mark:                                                                                         | The request object to use for the request.                                                                 |
 | `opts`                                                                                                     | [][operations.Option](../../models/operations/option.md)                                                   | :heavy_minus_sign:                                                                                         | The options for this request.                                                                              |
 
 ### Response

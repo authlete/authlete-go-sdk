@@ -7,6 +7,17 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type FederationConfigurationAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (f *FederationConfigurationAPIGlobals) GetServiceID() *string {
+	if f == nil {
+		return nil
+	}
+	return f.ServiceID
+}
+
 type FederationConfigurationAPIRequestBody struct {
 	// The entity types for which the entity configuration is requested. When omitted or empty, it defaults to `OPENID_PROVIDER` only (backward compatibility). Unsupported entity types are ignored. `OPENID_CREDENTIAL_ISSUER` requires the Verifiable Credentials feature (Authlete 3.0+).
 	//
@@ -33,13 +44,13 @@ func (f *FederationConfigurationAPIRequestBody) GetEntityTypes() []components.En
 
 type FederationConfigurationAPIRequest struct {
 	// A service ID.
-	ServiceID string                                `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                               `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      FederationConfigurationAPIRequestBody `request:"mediaType=application/json"`
 }
 
-func (f *FederationConfigurationAPIRequest) GetServiceID() string {
+func (f *FederationConfigurationAPIRequest) GetServiceID() *string {
 	if f == nil {
-		return ""
+		return nil
 	}
 	return f.ServiceID
 }

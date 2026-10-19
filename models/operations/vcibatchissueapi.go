@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type VciBatchIssueAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (v *VciBatchIssueAPIGlobals) GetServiceID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.ServiceID
+}
+
 type VciBatchIssueAPIRequest struct {
 	// A service ID.
-	ServiceID string                          `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                         `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.VciBatchIssueRequest `request:"mediaType=application/json"`
 }
 
-func (v *VciBatchIssueAPIRequest) GetServiceID() string {
+func (v *VciBatchIssueAPIRequest) GetServiceID() *string {
 	if v == nil {
-		return ""
+		return nil
 	}
 	return v.ServiceID
 }

@@ -9,9 +9,20 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientCursorListAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientCursorListAPIGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientCursorListAPIRequest struct {
 	// The ID of the service to retrieve a list of clients from.
-	ServiceID int64 `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// This should be set to the value of `nextCursor` from a previous call to this endpoint. Which will retrieve the next set of clients available and receive the next available set. If this is not provided the list operation will start from the beginning.
 	//
 	Cursor *string `queryParam:"style=form,explode=true,name=cursor"`
@@ -23,9 +34,9 @@ type ClientCursorListAPIRequest struct {
 	IncludeTotalCount *bool `queryParam:"style=form,explode=true,name=includeTotalCount"`
 }
 
-func (c *ClientCursorListAPIRequest) GetServiceID() int64 {
+func (c *ClientCursorListAPIRequest) GetServiceID() *string {
 	if c == nil {
-		return 0
+		return nil
 	}
 	return c.ServiceID
 }

@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type UpdateAuthorizationTicketGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (u *UpdateAuthorizationTicketGlobals) GetServiceID() *string {
+	if u == nil {
+		return nil
+	}
+	return u.ServiceID
+}
+
 type UpdateAuthorizationTicketRequest struct {
 	// A service ID.
-	ServiceID string                                      `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                                     `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.AuthorizationTicketUpdateRequest `request:"mediaType=application/json"`
 }
 
-func (u *UpdateAuthorizationTicketRequest) GetServiceID() string {
+func (u *UpdateAuthorizationTicketRequest) GetServiceID() *string {
 	if u == nil {
-		return ""
+		return nil
 	}
 	return u.ServiceID
 }

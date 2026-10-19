@@ -7,6 +7,17 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientGrantedScopesGetAPIPostGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientGrantedScopesGetAPIPostGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientGrantedScopesGetAPIPostRequestBody struct {
 	// Unique user ID of an end-user.
 	Subject string `json:"subject"`
@@ -21,16 +32,16 @@ func (c *ClientGrantedScopesGetAPIPostRequestBody) GetSubject() string {
 
 type ClientGrantedScopesGetAPIPostRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// A client ID.
 	//
 	ClientID string                                   `pathParam:"style=simple,explode=false,name=clientId"`
 	Body     ClientGrantedScopesGetAPIPostRequestBody `request:"mediaType=application/json"`
 }
 
-func (c *ClientGrantedScopesGetAPIPostRequest) GetServiceID() string {
+func (c *ClientGrantedScopesGetAPIPostRequest) GetServiceID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ServiceID
 }

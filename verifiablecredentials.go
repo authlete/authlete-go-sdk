@@ -33,10 +33,9 @@ func newVerifiableCredentials(rootSDK *Authlete, sdkConfig config.SDKConfigurati
 
 // GetMetadata - Get Verifiable Credential Issuer Metadata
 // Get verifiable credential issuer metadata
-func (s *VerifiableCredentials) GetMetadata(ctx context.Context, serviceID string, body components.VciMetadataRequest, opts ...operations.Option) (*operations.VciMetadataAPIResponse, error) {
-	request := operations.VciMetadataAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) GetMetadata(ctx context.Context, request operations.VciMetadataAPIRequest, opts ...operations.Option) (*operations.VciMetadataAPIResponse, error) {
+	globals := operations.VciMetadataAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *VerifiableCredentials) GetMetadata(ctx context.Context, serviceID strin
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/metadata", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/metadata", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -343,10 +342,9 @@ func (s *VerifiableCredentials) GetMetadata(ctx context.Context, serviceID strin
 
 // GetJwtIssuer - Get JWT Issuer Information
 // Get JWT issuer information for VCI
-func (s *VerifiableCredentials) GetJwtIssuer(ctx context.Context, serviceID string, body components.VciJwtissuerRequest, opts ...operations.Option) (*operations.VciJwtissuerAPIResponse, error) {
-	request := operations.VciJwtissuerAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) GetJwtIssuer(ctx context.Context, request operations.VciJwtissuerAPIRequest, opts ...operations.Option) (*operations.VciJwtissuerAPIResponse, error) {
+	globals := operations.VciJwtissuerAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -367,7 +365,7 @@ func (s *VerifiableCredentials) GetJwtIssuer(ctx context.Context, serviceID stri
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/jwtissuer", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/jwtissuer", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -653,10 +651,9 @@ func (s *VerifiableCredentials) GetJwtIssuer(ctx context.Context, serviceID stri
 
 // GetJwks - Get JSON Web Key Set
 // Get JSON Web Key Set for VCI
-func (s *VerifiableCredentials) GetJwks(ctx context.Context, serviceID string, body components.VciJwksRequest, opts ...operations.Option) (*operations.VciJwksAPIResponse, error) {
-	request := operations.VciJwksAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) GetJwks(ctx context.Context, request operations.VciJwksAPIRequest, opts ...operations.Option) (*operations.VciJwksAPIResponse, error) {
+	globals := operations.VciJwksAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -677,7 +674,7 @@ func (s *VerifiableCredentials) GetJwks(ctx context.Context, serviceID string, b
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/jwks", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/jwks", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -963,10 +960,9 @@ func (s *VerifiableCredentials) GetJwks(ctx context.Context, serviceID string, b
 
 // CreateOffer - Create Credential Offer
 // Create a verifiable credential offer
-func (s *VerifiableCredentials) CreateOffer(ctx context.Context, serviceID string, body components.VciOfferCreateRequest, opts ...operations.Option) (*operations.VciOfferCreateAPIResponse, error) {
-	request := operations.VciOfferCreateAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) CreateOffer(ctx context.Context, request operations.VciOfferCreateAPIRequest, opts ...operations.Option) (*operations.VciOfferCreateAPIResponse, error) {
+	globals := operations.VciOfferCreateAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -987,7 +983,7 @@ func (s *VerifiableCredentials) CreateOffer(ctx context.Context, serviceID strin
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/offer/create", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/offer/create", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1273,10 +1269,9 @@ func (s *VerifiableCredentials) CreateOffer(ctx context.Context, serviceID strin
 
 // GetOfferInfo - Get Credential Offer Information
 // Get information about a verifiable credential offer
-func (s *VerifiableCredentials) GetOfferInfo(ctx context.Context, serviceID string, body components.VciOfferInfoRequest, opts ...operations.Option) (*operations.VciOfferInfoAPIResponse, error) {
-	request := operations.VciOfferInfoAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) GetOfferInfo(ctx context.Context, request operations.VciOfferInfoAPIRequest, opts ...operations.Option) (*operations.VciOfferInfoAPIResponse, error) {
+	globals := operations.VciOfferInfoAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -1297,7 +1292,7 @@ func (s *VerifiableCredentials) GetOfferInfo(ctx context.Context, serviceID stri
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/offer/info", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/offer/info", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1583,10 +1578,9 @@ func (s *VerifiableCredentials) GetOfferInfo(ctx context.Context, serviceID stri
 
 // Parse Single Credential
 // Parse a single verifiable credential
-func (s *VerifiableCredentials) Parse(ctx context.Context, serviceID string, body components.VciSingleParseRequest, opts ...operations.Option) (*operations.VciSingleParseAPIResponse, error) {
-	request := operations.VciSingleParseAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) Parse(ctx context.Context, request operations.VciSingleParseAPIRequest, opts ...operations.Option) (*operations.VciSingleParseAPIResponse, error) {
+	globals := operations.VciSingleParseAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -1607,7 +1601,7 @@ func (s *VerifiableCredentials) Parse(ctx context.Context, serviceID string, bod
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/single/parse", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/single/parse", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1893,10 +1887,9 @@ func (s *VerifiableCredentials) Parse(ctx context.Context, serviceID string, bod
 
 // Issue Single Credential
 // Issue a single verifiable credential
-func (s *VerifiableCredentials) Issue(ctx context.Context, serviceID string, body components.VciSingleIssueRequest, opts ...operations.Option) (*operations.VciSingleIssueAPIResponse, error) {
-	request := operations.VciSingleIssueAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) Issue(ctx context.Context, request operations.VciSingleIssueAPIRequest, opts ...operations.Option) (*operations.VciSingleIssueAPIResponse, error) {
+	globals := operations.VciSingleIssueAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -1917,7 +1910,7 @@ func (s *VerifiableCredentials) Issue(ctx context.Context, serviceID string, bod
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/single/issue", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/single/issue", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2203,10 +2196,9 @@ func (s *VerifiableCredentials) Issue(ctx context.Context, serviceID string, bod
 
 // BatchParse - Parse Batch Credentials
 // Parse multiple verifiable credentials in batch
-func (s *VerifiableCredentials) BatchParse(ctx context.Context, serviceID string, body components.VciBatchParseRequest, opts ...operations.Option) (*operations.VciBatchParseAPIResponse, error) {
-	request := operations.VciBatchParseAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) BatchParse(ctx context.Context, request operations.VciBatchParseAPIRequest, opts ...operations.Option) (*operations.VciBatchParseAPIResponse, error) {
+	globals := operations.VciBatchParseAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -2227,7 +2219,7 @@ func (s *VerifiableCredentials) BatchParse(ctx context.Context, serviceID string
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/batch/parse", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/batch/parse", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2513,10 +2505,9 @@ func (s *VerifiableCredentials) BatchParse(ctx context.Context, serviceID string
 
 // BatchIssue - Issue Batch Credentials
 // Issue multiple verifiable credentials in batch
-func (s *VerifiableCredentials) BatchIssue(ctx context.Context, serviceID string, body components.VciBatchIssueRequest, opts ...operations.Option) (*operations.VciBatchIssueAPIResponse, error) {
-	request := operations.VciBatchIssueAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) BatchIssue(ctx context.Context, request operations.VciBatchIssueAPIRequest, opts ...operations.Option) (*operations.VciBatchIssueAPIResponse, error) {
+	globals := operations.VciBatchIssueAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -2537,7 +2528,7 @@ func (s *VerifiableCredentials) BatchIssue(ctx context.Context, serviceID string
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/batch/issue", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/batch/issue", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2823,10 +2814,9 @@ func (s *VerifiableCredentials) BatchIssue(ctx context.Context, serviceID string
 
 // DeferredParse - Parse Deferred Credential
 // Parse a deferred verifiable credential
-func (s *VerifiableCredentials) DeferredParse(ctx context.Context, serviceID string, body components.VciDeferredParseRequest, opts ...operations.Option) (*operations.VciDeferredParseAPIResponse, error) {
-	request := operations.VciDeferredParseAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) DeferredParse(ctx context.Context, request operations.VciDeferredParseAPIRequest, opts ...operations.Option) (*operations.VciDeferredParseAPIResponse, error) {
+	globals := operations.VciDeferredParseAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -2847,7 +2837,7 @@ func (s *VerifiableCredentials) DeferredParse(ctx context.Context, serviceID str
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/deferred/parse", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/deferred/parse", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -3133,10 +3123,9 @@ func (s *VerifiableCredentials) DeferredParse(ctx context.Context, serviceID str
 
 // DeferredIssue - Issue Deferred Credential
 // Issue a deferred verifiable credential
-func (s *VerifiableCredentials) DeferredIssue(ctx context.Context, serviceID string, body components.VciDeferredIssueRequest, opts ...operations.Option) (*operations.VciDeferredIssueAPIResponse, error) {
-	request := operations.VciDeferredIssueAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *VerifiableCredentials) DeferredIssue(ctx context.Context, request operations.VciDeferredIssueAPIRequest, opts ...operations.Option) (*operations.VciDeferredIssueAPIResponse, error) {
+	globals := operations.VciDeferredIssueAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -3157,7 +3146,7 @@ func (s *VerifiableCredentials) DeferredIssue(ctx context.Context, serviceID str
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/deferred/issue", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/vci/deferred/issue", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

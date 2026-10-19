@@ -33,10 +33,9 @@ func newCiba(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *hooks.
 
 // ProcessAuthentication - Process Backchannel Authentication Request
 // This API parses request parameters of a [backchannel authentication request](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_request) and returns necessary data for the authorization server implementation to process the backchannel authentication request further.
-func (s *Ciba) ProcessAuthentication(ctx context.Context, serviceID string, body components.BackchannelAuthenticationRequest, opts ...operations.Option) (*operations.BackchannelAuthenticationAPIResponse, error) {
-	request := operations.BackchannelAuthenticationAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Ciba) ProcessAuthentication(ctx context.Context, request operations.BackchannelAuthenticationAPIRequest, opts ...operations.Option) (*operations.BackchannelAuthenticationAPIResponse, error) {
+	globals := operations.BackchannelAuthenticationAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *Ciba) ProcessAuthentication(ctx context.Context, serviceID string, body
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/authentication", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/authentication", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -343,10 +342,9 @@ func (s *Ciba) ProcessAuthentication(ctx context.Context, serviceID string, body
 
 // Issue Backchannel Authentication Response
 // This API prepares JSON that contains an `auth_req_id`. The JSON should be used as the response body of the response which is returned to the client from the [backchannel authentication endpoint](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_backchannel_endpoint)
-func (s *Ciba) Issue(ctx context.Context, serviceID string, body components.BackchannelAuthenticationIssueRequest, opts ...operations.Option) (*operations.BackchannelAuthenticationIssueAPIResponse, error) {
-	request := operations.BackchannelAuthenticationIssueAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Ciba) Issue(ctx context.Context, request operations.BackchannelAuthenticationIssueAPIRequest, opts ...operations.Option) (*operations.BackchannelAuthenticationIssueAPIResponse, error) {
+	globals := operations.BackchannelAuthenticationIssueAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -367,7 +365,7 @@ func (s *Ciba) Issue(ctx context.Context, serviceID string, body components.Back
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/authentication/issue", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/authentication/issue", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -653,10 +651,9 @@ func (s *Ciba) Issue(ctx context.Context, serviceID string, body components.Back
 
 // Fail Backchannel Authentication Request
 // The API prepares JSON that contains an error. The JSON should be used as the response body of the response which is returned to the client from the [backchannel authentication endpoint](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_backchannel_endpoint).
-func (s *Ciba) Fail(ctx context.Context, serviceID string, body components.BackchannelAuthenticationFailRequest, opts ...operations.Option) (*operations.BackchannelAuthenticationFailAPIResponse, error) {
-	request := operations.BackchannelAuthenticationFailAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Ciba) Fail(ctx context.Context, request operations.BackchannelAuthenticationFailAPIRequest, opts ...operations.Option) (*operations.BackchannelAuthenticationFailAPIResponse, error) {
+	globals := operations.BackchannelAuthenticationFailAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -677,7 +674,7 @@ func (s *Ciba) Fail(ctx context.Context, serviceID string, body components.Backc
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/authentication/fail", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/authentication/fail", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -963,10 +960,9 @@ func (s *Ciba) Fail(ctx context.Context, serviceID string, body components.Backc
 
 // Complete Backchannel Authentication
 // This API returns information about what action the authorization server should take after it receives the result of end-user's decision about whether the end-user has approved or rejected a client application's request on the authentication device.
-func (s *Ciba) Complete(ctx context.Context, serviceID string, body components.BackchannelAuthenticationCompleteRequest, opts ...operations.Option) (*operations.BackchannelAuthenticationCompleteAPIResponse, error) {
-	request := operations.BackchannelAuthenticationCompleteAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Ciba) Complete(ctx context.Context, request operations.BackchannelAuthenticationCompleteAPIRequest, opts ...operations.Option) (*operations.BackchannelAuthenticationCompleteAPIResponse, error) {
+	globals := operations.BackchannelAuthenticationCompleteAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -987,7 +983,7 @@ func (s *Ciba) Complete(ctx context.Context, serviceID string, body components.B
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/authentication/complete", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/backchannel/authentication/complete", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

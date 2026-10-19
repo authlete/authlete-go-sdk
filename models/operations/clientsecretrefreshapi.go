@@ -7,17 +7,28 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientSecretRefreshAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientSecretRefreshAPIGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientSecretRefreshAPIRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// The client ID or the client ID alias of a client.
 	//
 	ClientIdentifier string `pathParam:"style=simple,explode=false,name=clientIdentifier"`
 }
 
-func (c *ClientSecretRefreshAPIRequest) GetServiceID() string {
+func (c *ClientSecretRefreshAPIRequest) GetServiceID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ServiceID
 }

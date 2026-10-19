@@ -32,10 +32,9 @@ func newAuthorizationManagement(rootSDK *Authlete, sdkConfig config.SDKConfigura
 }
 
 // GetTicketInfo - Get Ticket Information
-func (s *AuthorizationManagement) GetTicketInfo(ctx context.Context, serviceID string, body components.AuthorizationTicketInfoRequest, opts ...operations.Option) (*operations.GetAuthorizationTicketInfoResponse, error) {
-	request := operations.GetAuthorizationTicketInfoRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *AuthorizationManagement) GetTicketInfo(ctx context.Context, request operations.GetAuthorizationTicketInfoRequest, opts ...operations.Option) (*operations.GetAuthorizationTicketInfoResponse, error) {
+	globals := operations.GetAuthorizationTicketInfoGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -56,7 +55,7 @@ func (s *AuthorizationManagement) GetTicketInfo(ctx context.Context, serviceID s
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization/ticket/info", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization/ticket/info", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -341,10 +340,9 @@ func (s *AuthorizationManagement) GetTicketInfo(ctx context.Context, serviceID s
 }
 
 // UpdateTicket - Update Ticket Information
-func (s *AuthorizationManagement) UpdateTicket(ctx context.Context, serviceID string, body components.AuthorizationTicketUpdateRequest, opts ...operations.Option) (*operations.UpdateAuthorizationTicketResponse, error) {
-	request := operations.UpdateAuthorizationTicketRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *AuthorizationManagement) UpdateTicket(ctx context.Context, request operations.UpdateAuthorizationTicketRequest, opts ...operations.Option) (*operations.UpdateAuthorizationTicketResponse, error) {
+	globals := operations.UpdateAuthorizationTicketGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -365,7 +363,7 @@ func (s *AuthorizationManagement) UpdateTicket(ctx context.Context, serviceID st
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization/ticket/update", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization/ticket/update", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

@@ -33,10 +33,9 @@ func newRevocation(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *
 
 // Process Revocation Request
 // This API revokes access tokens and refresh tokens.
-func (s *Revocation) Process(ctx context.Context, serviceID string, body components.RevocationRequest, opts ...operations.Option) (*operations.AuthRevocationAPIResponse, error) {
-	request := operations.AuthRevocationAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Revocation) Process(ctx context.Context, request operations.AuthRevocationAPIRequest, opts ...operations.Option) (*operations.AuthRevocationAPIResponse, error) {
+	globals := operations.AuthRevocationAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *Revocation) Process(ctx context.Context, serviceID string, body compone
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/revocation", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/revocation", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

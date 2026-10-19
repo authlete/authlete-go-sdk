@@ -9,9 +9,20 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientSearchAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientSearchAPIGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientSearchAPIRequest struct {
 	// The ID of the service to retrieve a list of clients from.
-	ServiceID int64 `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// The search query. See the description of this API for the supported syntax and fields.
 	//
 	// This parameter is required unless `cursor` is provided. When `cursor` is provided, this parameter is ignored and the search query stored in the cursor is used instead.
@@ -30,9 +41,9 @@ type ClientSearchAPIRequest struct {
 	IncludeTotalCount *bool `queryParam:"style=form,explode=true,name=includeTotalCount"`
 }
 
-func (c *ClientSearchAPIRequest) GetServiceID() int64 {
+func (c *ClientSearchAPIRequest) GetServiceID() *string {
 	if c == nil {
-		return 0
+		return nil
 	}
 	return c.ServiceID
 }

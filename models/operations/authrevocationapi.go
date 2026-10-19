@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type AuthRevocationAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (a *AuthRevocationAPIGlobals) GetServiceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceID
+}
+
 type AuthRevocationAPIRequest struct {
 	// A service ID.
-	ServiceID string                       `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                      `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.RevocationRequest `request:"mediaType=application/json"`
 }
 
-func (a *AuthRevocationAPIRequest) GetServiceID() string {
+func (a *AuthRevocationAPIRequest) GetServiceID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.ServiceID
 }

@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type BackchannelAuthenticationIssueAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (b *BackchannelAuthenticationIssueAPIGlobals) GetServiceID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ServiceID
+}
+
 type BackchannelAuthenticationIssueAPIRequest struct {
 	// A service ID.
-	ServiceID string                                           `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                                          `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.BackchannelAuthenticationIssueRequest `request:"mediaType=application/json"`
 }
 
-func (b *BackchannelAuthenticationIssueAPIRequest) GetServiceID() string {
+func (b *BackchannelAuthenticationIssueAPIRequest) GetServiceID() *string {
 	if b == nil {
-		return ""
+		return nil
 	}
 	return b.ServiceID
 }
