@@ -13,7 +13,19 @@ permissions:
       - .speakeasy/gen.lock
   workflow_dispatch: {}
 jobs:
+  # A Go release is a tag, and a tagged version is cached by the Go proxy for
+  # good, so check before tagging: these offline tests fail if the IdP hook
+  # line patched into New() (.speakeasy/patches/authlete.go.patch) is missing.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go test $(go list ./... | grep -v /tests)
   publish:
+    needs: test
     uses: speakeasy-api/sdk-generation-action/.github/workflows/sdk-publish.yaml@v15
     with:
       target: authlete
