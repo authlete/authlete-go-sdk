@@ -14,7 +14,7 @@ targets:
         sourceRevisionDigest: sha256:37d30d8bd1a90210c9c81eb9d0722a61f2877768a476fed4331722f49e557aab
         sourceBlobDigest: sha256:82a8b3b2ef0d1e56a7ebd60b339627d97da9b50eeafb7108d3ee104a41a2e206
         codeSamplesNamespace: authlete-oas-go-code-samples
-        codeSamplesRevisionDigest: sha256:dfb124c2f2be7a850cc9b4380d0d03b25cb2a4aad4d5c6068123bce6f1a6b22f
+        codeSamplesRevisionDigest: sha256:09b98b4735159f3fb37233e19c15b912793b8b4066a27f6701afeda71b57eae0
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

@@ -235,10 +235,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Authlete {
 	sdk := &Authlete{
-		SDKVersion: "0.3.1",
+		SDKVersion: "0.4.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.3.1 2.948.4 3.0.16 github.com/authlete/authlete-go-sdk",
-			SDKVersion:        "0.3.1",
+			UserAgent:         "speakeasy-sdk/go 0.4.0 2.948.4 3.0.16 github.com/authlete/authlete-go-sdk",
+			SDKVersion:        "0.4.0",
 			GenVersion:        "2.948.4",
 			OpenAPIDocVersion: "3.0.16",
 			Globals:           globals.Globals{},
@@ -249,6 +249,8 @@ func New(opts ...SDKOption) *Authlete {
 	for _, opt := range opts {
 		opt(sdk)
 	}
+
+	registerAuthleteHooks(sdk) // hand-written, see idp.go
 
 	sdk.sdkConfiguration.FillGlobalsFromEnv()
 
