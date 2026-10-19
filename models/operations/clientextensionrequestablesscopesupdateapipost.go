@@ -41,6 +41,7 @@ type ClientExtensionRequestablesScopesUpdateAPIPostResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Requestable scopes updated successfully
 	ClientExtensionRequestableScopesUpdateResponse *components.ClientExtensionRequestableScopesUpdateResponse
+	Headers                                        map[string][]string
 }
 
 func (c ClientExtensionRequestablesScopesUpdateAPIPostResponse) MarshalJSON() ([]byte, error) {
@@ -66,4 +67,11 @@ func (c *ClientExtensionRequestablesScopesUpdateAPIPostResponse) GetClientExtens
 		return nil
 	}
 	return c.ClientExtensionRequestableScopesUpdateResponse
+}
+
+func (c *ClientExtensionRequestablesScopesUpdateAPIPostResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

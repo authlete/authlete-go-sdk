@@ -10,8 +10,7 @@
 
 ## Process
 
-This API parses request parameters of an authorization request and returns necessary data for the
-authorization server implementation to process the authorization request further.
+This API parses request parameters of an authorization request and returns necessary data for the authorization server implementation to process the authorization request further.
 
 
 ### Example Usage
@@ -67,13 +66,13 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
 ## Fail
 
-This API generates a content of an error token response that the authorization server implementation
-returns to the client application.
+This API generates a content of an error token response that the authorization server implementation returns to the client application.
 
 
 ### Example Usage
@@ -128,13 +127,13 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
 ## Issue
 
-This API generates a content of a successful token response that the authorization server implementation
-returns to the client application.
+This API generates a content of a successful token response that the authorization server implementation returns to the client application.
 
 
 ### Example Usage
@@ -189,5 +188,6 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |

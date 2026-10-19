@@ -31,6 +31,7 @@ type AuthTokenRevokeAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Token revoked successfully
 	TokenRevokeResponse *components.TokenRevokeResponse
+	Headers             map[string][]string
 }
 
 func (a AuthTokenRevokeAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (a *AuthTokenRevokeAPIResponse) GetTokenRevokeResponse() *components.TokenR
 		return nil
 	}
 	return a.TokenRevokeResponse
+}
+
+func (a *AuthTokenRevokeAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

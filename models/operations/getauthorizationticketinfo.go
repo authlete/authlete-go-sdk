@@ -30,6 +30,7 @@ func (g *GetAuthorizationTicketInfoRequest) GetBody() components.AuthorizationTi
 type GetAuthorizationTicketInfoResponse struct {
 	HTTPMeta                        components.HTTPMetadata `json:"-"`
 	AuthorizationTicketInfoResponse *components.AuthorizationTicketInfoResponse
+	Headers                         map[string][]string
 }
 
 func (g GetAuthorizationTicketInfoResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (g *GetAuthorizationTicketInfoResponse) GetAuthorizationTicketInfoResponse(
 		return nil
 	}
 	return g.AuthorizationTicketInfoResponse
+}
+
+func (g *GetAuthorizationTicketInfoResponse) GetHeaders() map[string][]string {
+	if g == nil {
+		return map[string][]string{}
+	}
+	return g.Headers
 }

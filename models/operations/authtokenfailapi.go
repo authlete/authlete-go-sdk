@@ -30,6 +30,7 @@ func (a *AuthTokenFailAPIRequest) GetBody() components.TokenFailRequest {
 type AuthTokenFailAPIResponse struct {
 	HTTPMeta          components.HTTPMetadata `json:"-"`
 	TokenFailResponse *components.TokenFailResponse
+	Headers           map[string][]string
 }
 
 func (a AuthTokenFailAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (a *AuthTokenFailAPIResponse) GetTokenFailResponse() *components.TokenFailR
 		return nil
 	}
 	return a.TokenFailResponse
+}
+
+func (a *AuthTokenFailAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

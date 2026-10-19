@@ -14,6 +14,7 @@ import (
 	"github.com/authlete/authlete-go-sdk/retry"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 type Lifecycle struct {
@@ -74,6 +75,11 @@ func (s *Lifecycle) GetAPILifecycleHealthcheck(ctx context.Context, extended *bo
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -100,6 +106,16 @@ func (s *Lifecycle) GetAPILifecycleHealthcheck(ctx context.Context, extended *bo
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -108,11 +124,8 @@ func (s *Lifecycle) GetAPILifecycleHealthcheck(ctx context.Context, extended *bo
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -171,7 +184,7 @@ func (s *Lifecycle) GetAPILifecycleHealthcheck(ctx context.Context, extended *bo
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err

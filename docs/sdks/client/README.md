@@ -63,7 +63,8 @@ func main() {
 
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
-| apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 400, 401, 403, 404    | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -71,9 +72,7 @@ func main() {
 
 Get a list of clients on a service.
 
-If the access token can view a full service (including an admin), all clients within the
-service are returned. Otherwise, only clients that the access token can view within the
-service are returned.
+If the access token can view a full service (including an admin), all clients within the service are returned. Otherwise, only clients that the access token can view within the service are returned.
 - ViewClient: []
 
 
@@ -142,7 +141,7 @@ func main() {
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ctx`                                                                                                                                                                                                                                             | [context.Context](https://pkg.go.dev/context#Context)                                                                                                                                                                                             | :heavy_check_mark:                                                                                                                                                                                                                                | The context to use for the request.                                                                                                                                                                                                               |
 | `serviceID`                                                                                                                                                                                                                                       | `string`                                                                                                                                                                                                                                          | :heavy_check_mark:                                                                                                                                                                                                                                | A service ID.                                                                                                                                                                                                                                     |
-| `developer`                                                                                                                                                                                                                                       | `*string`                                                                                                                                                                                                                                         | :heavy_minus_sign:                                                                                                                                                                                                                                | The developer of client applications. The default value is null. If this parameter is not set<br/>to `null`, client application of the specified developer are returned. Otherwise, all client<br/>applications that belong to the service are returned.<br/> |
+| `developer`                                                                                                                                                                                                                                       | `*string`                                                                                                                                                                                                                                         | :heavy_minus_sign:                                                                                                                                                                                                                                | The developer of client applications. The default value is null. If this parameter is not set to `null`, client application of the specified developer are returned. Otherwise, all client applications that belong to the service are returned.<br/> |
 | `start`                                                                                                                                                                                                                                           | `*int`                                                                                                                                                                                                                                            | :heavy_minus_sign:                                                                                                                                                                                                                                | Start index (inclusive) of the result set. The default value is 0. Must not be a negative number.                                                                                                                                                 |
 | `end`                                                                                                                                                                                                                                             | `*int`                                                                                                                                                                                                                                            | :heavy_minus_sign:                                                                                                                                                                                                                                | End index (exclusive) of the result set. The default value is 5. Must not be a negative number.                                                                                                                                                   |
 | `opts`                                                                                                                                                                                                                                            | [][operations.Option](../../models/operations/option.md)                                                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                                                                                                | The options for this request.                                                                                                                                                                                                                     |
@@ -156,6 +155,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -188,10 +188,8 @@ func main() {
     res, err := s.Client.Create(ctx, "<id>", &components.ClientInput{
         ClientName: authlete.Pointer("My Client"),
         ClientIDAlias: authlete.Pointer("my-client"),
-        ClientIDAliasEnabled: authlete.Pointer(true),
         ClientType: components.ClientTypeConfidential.ToPointer(),
         ApplicationType: components.ApplicationTypeWeb.ToPointer(),
-        Developer: authlete.Pointer("john"),
         GrantTypes: []components.GrantType{
             components.GrantTypeAuthorizationCode,
             components.GrantTypeRefreshToken,
@@ -243,6 +241,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -276,11 +275,9 @@ func main() {
     res, err := s.Client.Update(ctx, "<id>", "<id>", &components.ClientInput{
         ClientName: authlete.Pointer("My updated client"),
         ClientIDAlias: authlete.Pointer("my-client"),
-        ClientIDAliasEnabled: authlete.Pointer(true),
         ClientType: components.ClientTypeConfidential.ToPointer(),
         ApplicationType: components.ApplicationTypeWeb.ToPointer(),
         TLSClientCertificateBoundAccessTokens: authlete.Pointer(false),
-        Developer: authlete.Pointer("john"),
         GrantTypes: []components.GrantType{
             components.GrantTypeAuthorizationCode,
             components.GrantTypeRefreshToken,
@@ -347,6 +344,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -420,6 +418,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -476,5 +475,6 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |

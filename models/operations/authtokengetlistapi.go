@@ -61,6 +61,7 @@ func (a *AuthTokenGetListAPIRequest) GetEnd() *int {
 type AuthTokenGetListAPIResponse struct {
 	HTTPMeta             components.HTTPMetadata `json:"-"`
 	TokenGetListResponse *components.TokenGetListResponse
+	Headers              map[string][]string
 }
 
 func (a AuthTokenGetListAPIResponse) MarshalJSON() ([]byte, error) {
@@ -86,4 +87,11 @@ func (a *AuthTokenGetListAPIResponse) GetTokenGetListResponse() *components.Toke
 		return nil
 	}
 	return a.TokenGetListResponse
+}
+
+func (a *AuthTokenGetListAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

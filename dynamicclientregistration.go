@@ -14,6 +14,7 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/authlete/authlete-go-sdk/retry"
 	"net/http"
+	"time"
 )
 
 type DynamicClientRegistration struct {
@@ -31,9 +32,7 @@ func newDynamicClientRegistration(rootSDK *Authlete, sdkConfig config.SDKConfigu
 }
 
 // Register Client
-// Register a client. This API is supposed to be used to implement a client registration endpoint that
-// complies with [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591) (OAuth 2.0 Dynamic Client
-// Registration Protocol).
+// Register a client. This API is supposed to be used to implement a client registration endpoint that complies with [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591) (OAuth 2.0 Dynamic Client Registration Protocol).
 func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID string, body operations.ClientRegistrationAPIRequestBody, opts ...operations.Option) (*operations.ClientRegistrationAPIResponse, error) {
 	request := operations.ClientRegistrationAPIRequest{
 		ServiceID: serviceID,
@@ -81,6 +80,11 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -110,6 +114,16 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -118,11 +132,8 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -181,7 +192,7 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -239,7 +250,34 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -264,7 +302,7 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -304,9 +342,7 @@ func (s *DynamicClientRegistration) Register(ctx context.Context, serviceID stri
 }
 
 // Get Client
-// Get a dynamically registered client. This API is supposed to be used to implement a client registration
-// management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592)
-// (OAuth 2.0 Dynamic Registration Management).
+// Get a dynamically registered client. This API is supposed to be used to implement a client registration management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592) (OAuth 2.0 Dynamic Registration Management).
 func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, body operations.ClientRegistrationGetAPIRequestBody, opts ...operations.Option) (*operations.ClientRegistrationGetAPIResponse, error) {
 	request := operations.ClientRegistrationGetAPIRequest{
 		ServiceID: serviceID,
@@ -354,6 +390,11 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -383,6 +424,16 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -391,11 +442,8 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -454,7 +502,7 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -512,7 +560,34 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -537,7 +612,7 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -577,9 +652,7 @@ func (s *DynamicClientRegistration) Get(ctx context.Context, serviceID string, b
 }
 
 // Update Client
-// Update a dynamically registered client. This API is supposed to be used to implement a client
-// registration management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592)
-// (OAuth 2.0 Dynamic Registration Management).
+// Update a dynamically registered client. This API is supposed to be used to implement a client registration management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592) (OAuth 2.0 Dynamic Registration Management).
 func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string, body operations.ClientRegistrationUpdateAPIRequestBody, opts ...operations.Option) (*operations.ClientRegistrationUpdateAPIResponse, error) {
 	request := operations.ClientRegistrationUpdateAPIRequest{
 		ServiceID: serviceID,
@@ -627,6 +700,11 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -656,6 +734,16 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -664,11 +752,8 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -727,7 +812,7 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -785,7 +870,34 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -810,7 +922,7 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -850,9 +962,7 @@ func (s *DynamicClientRegistration) Update(ctx context.Context, serviceID string
 }
 
 // Delete Client
-// Delete a dynamically registered client. This API is supposed to be used to implement a client
-// registration management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592)
-// (OAuth 2.0 Dynamic Registration Management).
+// Delete a dynamically registered client. This API is supposed to be used to implement a client registration management endpoint that complies with [RFC 7592](https://datatracker.ietf.org/doc/html/rfc7592) (OAuth 2.0 Dynamic Registration Management).
 func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string, body operations.ClientRegistrationDeleteAPIRequestBody, opts ...operations.Option) (*operations.ClientRegistrationDeleteAPIResponse, error) {
 	request := operations.ClientRegistrationDeleteAPIRequest{
 		ServiceID: serviceID,
@@ -900,6 +1010,11 @@ func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -929,6 +1044,16 @@ func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -937,11 +1062,8 @@ func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -1000,7 +1122,7 @@ func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1058,7 +1180,34 @@ func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1083,7 +1232,7 @@ func (s *DynamicClientRegistration) Delete(ctx context.Context, serviceID string
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{

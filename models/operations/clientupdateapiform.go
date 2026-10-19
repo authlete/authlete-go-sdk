@@ -50,6 +50,7 @@ func (c *ClientUpdateAPIFormRequest) GetBody() map[string]any {
 type ClientUpdateAPIFormResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	Client   *components.Client
+	Headers  map[string][]string
 }
 
 func (c ClientUpdateAPIFormResponse) MarshalJSON() ([]byte, error) {
@@ -75,4 +76,11 @@ func (c *ClientUpdateAPIFormResponse) GetClient() *components.Client {
 		return nil
 	}
 	return c.Client
+}
+
+func (c *ClientUpdateAPIFormResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

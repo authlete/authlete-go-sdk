@@ -31,6 +31,7 @@ type HskDeleteAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// HSK deleted successfully
 	HskDeleteResponse *components.HskDeleteResponse
+	Headers           map[string][]string
 }
 
 func (h HskDeleteAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (h *HskDeleteAPIResponse) GetHskDeleteResponse() *components.HskDeleteRespo
 		return nil
 	}
 	return h.HskDeleteResponse
+}
+
+func (h *HskDeleteAPIResponse) GetHeaders() map[string][]string {
+	if h == nil {
+		return map[string][]string{}
+	}
+	return h.Headers
 }

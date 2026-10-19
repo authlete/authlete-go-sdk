@@ -61,6 +61,7 @@ func (c *ClientAuthorizationGetListBySubjectAPIRequest) GetEnd() *int {
 type ClientAuthorizationGetListBySubjectAPIResponse struct {
 	HTTPMeta                           components.HTTPMetadata `json:"-"`
 	ClientAuthorizationGetListResponse *components.ClientAuthorizationGetListResponse
+	Headers                            map[string][]string
 }
 
 func (c ClientAuthorizationGetListBySubjectAPIResponse) MarshalJSON() ([]byte, error) {
@@ -86,4 +87,11 @@ func (c *ClientAuthorizationGetListBySubjectAPIResponse) GetClientAuthorizationG
 		return nil
 	}
 	return c.ClientAuthorizationGetListResponse
+}
+
+func (c *ClientAuthorizationGetListBySubjectAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

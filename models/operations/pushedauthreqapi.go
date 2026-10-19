@@ -30,6 +30,7 @@ func (p *PushedAuthReqAPIRequest) GetBody() components.PushedAuthorizationReques
 type PushedAuthReqAPIResponse struct {
 	HTTPMeta                    components.HTTPMetadata `json:"-"`
 	PushedAuthorizationResponse *components.PushedAuthorizationResponse
+	Headers                     map[string][]string
 }
 
 func (p PushedAuthReqAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (p *PushedAuthReqAPIResponse) GetPushedAuthorizationResponse() *components.
 		return nil
 	}
 	return p.PushedAuthorizationResponse
+}
+
+func (p *PushedAuthReqAPIResponse) GetHeaders() map[string][]string {
+	if p == nil {
+		return map[string][]string{}
+	}
+	return p.Headers
 }

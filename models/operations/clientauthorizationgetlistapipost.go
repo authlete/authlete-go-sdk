@@ -30,6 +30,7 @@ func (c *ClientAuthorizationGetListAPIPostRequest) GetBody() components.ClientAu
 type ClientAuthorizationGetListAPIPostResponse struct {
 	HTTPMeta                           components.HTTPMetadata `json:"-"`
 	ClientAuthorizationGetListResponse *components.ClientAuthorizationGetListResponse
+	Headers                            map[string][]string
 }
 
 func (c ClientAuthorizationGetListAPIPostResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (c *ClientAuthorizationGetListAPIPostResponse) GetClientAuthorizationGetLis
 		return nil
 	}
 	return c.ClientAuthorizationGetListResponse
+}
+
+func (c *ClientAuthorizationGetListAPIPostResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

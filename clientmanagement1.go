@@ -14,16 +14,17 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/authlete/authlete-go-sdk/retry"
 	"net/http"
+	"time"
 )
 
-type ClientManagement struct {
+type ClientManagement1 struct {
 	rootSDK          *Authlete
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newClientManagement(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *ClientManagement {
-	return &ClientManagement{
+func newClientManagement1(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *ClientManagement1 {
+	return &ClientManagement1{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
@@ -32,7 +33,7 @@ func newClientManagement(rootSDK *Authlete, sdkConfig config.SDKConfiguration, h
 
 // UpdateLockFlag - Update Client Lock
 // Lock and unlock a client
-func (s *ClientManagement) UpdateLockFlag(ctx context.Context, serviceID string, clientIdentifier string, body *components.ClientFlagUpdateRequest, opts ...operations.Option) (*operations.ClientFlagUpdateAPIResponse, error) {
+func (s *ClientManagement1) UpdateLockFlag(ctx context.Context, serviceID string, clientIdentifier string, body *components.ClientFlagUpdateRequest, opts ...operations.Option) (*operations.ClientFlagUpdateAPIResponse, error) {
 	request := operations.ClientFlagUpdateAPIRequest{
 		ServiceID:        serviceID,
 		ClientIdentifier: clientIdentifier,
@@ -80,6 +81,11 @@ func (s *ClientManagement) UpdateLockFlag(ctx context.Context, serviceID string,
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -109,6 +115,16 @@ func (s *ClientManagement) UpdateLockFlag(ctx context.Context, serviceID string,
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -117,11 +133,8 @@ func (s *ClientManagement) UpdateLockFlag(ctx context.Context, serviceID string,
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -180,7 +193,7 @@ func (s *ClientManagement) UpdateLockFlag(ctx context.Context, serviceID string,
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -238,7 +251,34 @@ func (s *ClientManagement) UpdateLockFlag(ctx context.Context, serviceID string,
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -263,7 +303,7 @@ func (s *ClientManagement) UpdateLockFlag(ctx context.Context, serviceID string,
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -303,11 +343,10 @@ func (s *ClientManagement) UpdateLockFlag(ctx context.Context, serviceID string,
 }
 
 // RefreshSecret - Rotate Client Secret
-// Refresh the client secret of a client. A new value of the client secret will be generated by the
-// Authlete server.
+// Refresh the client secret of a client. A new value of the client secret will be generated by the Authlete server.
 //
 // If you want to specify a new value, use `/api/client/secret/update` API.
-func (s *ClientManagement) RefreshSecret(ctx context.Context, serviceID string, clientIdentifier string, opts ...operations.Option) (*operations.ClientSecretRefreshAPIResponse, error) {
+func (s *ClientManagement1) RefreshSecret(ctx context.Context, serviceID string, clientIdentifier string, opts ...operations.Option) (*operations.ClientSecretRefreshAPIResponse, error) {
 	request := operations.ClientSecretRefreshAPIRequest{
 		ServiceID:        serviceID,
 		ClientIdentifier: clientIdentifier,
@@ -350,6 +389,11 @@ func (s *ClientManagement) RefreshSecret(ctx context.Context, serviceID string, 
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -376,6 +420,16 @@ func (s *ClientManagement) RefreshSecret(ctx context.Context, serviceID string, 
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -384,11 +438,8 @@ func (s *ClientManagement) RefreshSecret(ctx context.Context, serviceID string, 
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -447,7 +498,7 @@ func (s *ClientManagement) RefreshSecret(ctx context.Context, serviceID string, 
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -505,7 +556,34 @@ func (s *ClientManagement) RefreshSecret(ctx context.Context, serviceID string, 
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -530,7 +608,7 @@ func (s *ClientManagement) RefreshSecret(ctx context.Context, serviceID string, 
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -572,9 +650,8 @@ func (s *ClientManagement) RefreshSecret(ctx context.Context, serviceID string, 
 // UpdateSecret - Update Client Secret
 // Update the client secret of a client.
 //
-// If you want to have the Authlete server generate a new value of the client secret, use `/api/client/secret/refresh`
-// API.
-func (s *ClientManagement) UpdateSecret(ctx context.Context, serviceID string, clientIdentifier string, body components.ClientSecretUpdateRequest, opts ...operations.Option) (*operations.ClientSecretUpdateAPIResponse, error) {
+// If you want to have the Authlete server generate a new value of the client secret, use `/api/client/secret/refresh` API.
+func (s *ClientManagement1) UpdateSecret(ctx context.Context, serviceID string, clientIdentifier string, body components.ClientSecretUpdateRequest, opts ...operations.Option) (*operations.ClientSecretUpdateAPIResponse, error) {
 	request := operations.ClientSecretUpdateAPIRequest{
 		ServiceID:        serviceID,
 		ClientIdentifier: clientIdentifier,
@@ -622,6 +699,11 @@ func (s *ClientManagement) UpdateSecret(ctx context.Context, serviceID string, c
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -651,6 +733,16 @@ func (s *ClientManagement) UpdateSecret(ctx context.Context, serviceID string, c
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -659,11 +751,8 @@ func (s *ClientManagement) UpdateSecret(ctx context.Context, serviceID string, c
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -722,7 +811,7 @@ func (s *ClientManagement) UpdateSecret(ctx context.Context, serviceID string, c
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -780,7 +869,34 @@ func (s *ClientManagement) UpdateSecret(ctx context.Context, serviceID string, c
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -805,7 +921,7 @@ func (s *ClientManagement) UpdateSecret(ctx context.Context, serviceID string, c
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -848,7 +964,7 @@ func (s *ClientManagement) UpdateSecret(ctx context.Context, serviceID string, c
 // Get a list of client applications that an end-user has authorized.
 //
 // The subject parameter is required and can be provided as a query parameter.
-func (s *ClientManagement) ListAuthorizedApplications(ctx context.Context, request operations.ClientAuthorizationGetListAPIRequest, opts ...operations.Option) (*operations.ClientAuthorizationGetListAPIResponse, error) {
+func (s *ClientManagement1) ListAuthorizedApplications(ctx context.Context, request operations.ClientAuthorizationGetListAPIRequest, opts ...operations.Option) (*operations.ClientAuthorizationGetListAPIResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -886,6 +1002,11 @@ func (s *ClientManagement) ListAuthorizedApplications(ctx context.Context, reque
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -916,6 +1037,16 @@ func (s *ClientManagement) ListAuthorizedApplications(ctx context.Context, reque
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -924,11 +1055,8 @@ func (s *ClientManagement) ListAuthorizedApplications(ctx context.Context, reque
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -987,7 +1115,7 @@ func (s *ClientManagement) ListAuthorizedApplications(ctx context.Context, reque
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1045,7 +1173,34 @@ func (s *ClientManagement) ListAuthorizedApplications(ctx context.Context, reque
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1070,7 +1225,7 @@ func (s *ClientManagement) ListAuthorizedApplications(ctx context.Context, reque
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1113,7 +1268,7 @@ func (s *ClientManagement) ListAuthorizedApplications(ctx context.Context, reque
 // Get a list of client applications that an end-user has authorized.
 //
 // The subject parameter is required.
-func (s *ClientManagement) ListAuthorizedApplicationsWithBody(ctx context.Context, serviceID string, body components.ClientAuthorizationGetListRequest, opts ...operations.Option) (*operations.ClientAuthorizationGetListAPIPostResponse, error) {
+func (s *ClientManagement1) ListAuthorizedApplicationsWithBody(ctx context.Context, serviceID string, body components.ClientAuthorizationGetListRequest, opts ...operations.Option) (*operations.ClientAuthorizationGetListAPIPostResponse, error) {
 	request := operations.ClientAuthorizationGetListAPIPostRequest{
 		ServiceID: serviceID,
 		Body:      body,
@@ -1160,6 +1315,11 @@ func (s *ClientManagement) ListAuthorizedApplicationsWithBody(ctx context.Contex
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -1189,6 +1349,16 @@ func (s *ClientManagement) ListAuthorizedApplicationsWithBody(ctx context.Contex
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -1197,11 +1367,8 @@ func (s *ClientManagement) ListAuthorizedApplicationsWithBody(ctx context.Contex
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -1260,7 +1427,7 @@ func (s *ClientManagement) ListAuthorizedApplicationsWithBody(ctx context.Contex
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1318,7 +1485,34 @@ func (s *ClientManagement) ListAuthorizedApplicationsWithBody(ctx context.Contex
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1343,7 +1537,7 @@ func (s *ClientManagement) ListAuthorizedApplicationsWithBody(ctx context.Contex
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1383,9 +1577,8 @@ func (s *ClientManagement) ListAuthorizedApplicationsWithBody(ctx context.Contex
 }
 
 // ListAuthorizations - Get Authorized Applications (by Subject)
-// Get a list of client applications that an end-user has authorized.
-// In this variant, the subject is provided in the path.
-func (s *ClientManagement) ListAuthorizations(ctx context.Context, request operations.ClientAuthorizationGetListBySubjectAPIRequest, opts ...operations.Option) (*operations.ClientAuthorizationGetListBySubjectAPIResponse, error) {
+// Get a list of client applications that an end-user has authorized. In this variant, the subject is provided in the path.
+func (s *ClientManagement1) ListAuthorizations(ctx context.Context, request operations.ClientAuthorizationGetListBySubjectAPIRequest, opts ...operations.Option) (*operations.ClientAuthorizationGetListBySubjectAPIResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -1423,6 +1616,11 @@ func (s *ClientManagement) ListAuthorizations(ctx context.Context, request opera
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -1453,6 +1651,16 @@ func (s *ClientManagement) ListAuthorizations(ctx context.Context, request opera
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -1461,11 +1669,8 @@ func (s *ClientManagement) ListAuthorizations(ctx context.Context, request opera
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -1524,7 +1729,7 @@ func (s *ClientManagement) ListAuthorizations(ctx context.Context, request opera
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1582,7 +1787,34 @@ func (s *ClientManagement) ListAuthorizations(ctx context.Context, request opera
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1607,7 +1839,7 @@ func (s *ClientManagement) ListAuthorizations(ctx context.Context, request opera
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1648,7 +1880,7 @@ func (s *ClientManagement) ListAuthorizations(ctx context.Context, request opera
 
 // UpdateAuthorizations - Update Client Tokens
 // Update attributes of all existing access tokens given to a client application.
-func (s *ClientManagement) UpdateAuthorizations(ctx context.Context, serviceID string, clientID string, body *components.ClientAuthorizationUpdateRequest, opts ...operations.Option) (*operations.ClientAuthorizationUpdateAPIResponse, error) {
+func (s *ClientManagement1) UpdateAuthorizations(ctx context.Context, serviceID string, clientID string, body *components.ClientAuthorizationUpdateRequest, opts ...operations.Option) (*operations.ClientAuthorizationUpdateAPIResponse, error) {
 	request := operations.ClientAuthorizationUpdateAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -1696,6 +1928,11 @@ func (s *ClientManagement) UpdateAuthorizations(ctx context.Context, serviceID s
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -1725,6 +1962,16 @@ func (s *ClientManagement) UpdateAuthorizations(ctx context.Context, serviceID s
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -1733,11 +1980,8 @@ func (s *ClientManagement) UpdateAuthorizations(ctx context.Context, serviceID s
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -1796,7 +2040,7 @@ func (s *ClientManagement) UpdateAuthorizations(ctx context.Context, serviceID s
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "404", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -1854,7 +2098,34 @@ func (s *ClientManagement) UpdateAuthorizations(ctx context.Context, serviceID s
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1879,7 +2150,7 @@ func (s *ClientManagement) UpdateAuthorizations(ctx context.Context, serviceID s
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -1924,7 +2195,7 @@ func (s *ClientManagement) UpdateAuthorizations(ctx context.Context, serviceID s
 // Delete all existing access tokens issued to a client application by an end-user.
 //
 // The subject parameter is required and must be provided as a query parameter.
-func (s *ClientManagement) DeleteClientTokens(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientAuthorizationDeleteAPIResponse, error) {
+func (s *ClientManagement1) DeleteClientTokens(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientAuthorizationDeleteAPIResponse, error) {
 	request := operations.ClientAuthorizationDeleteAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -1968,6 +2239,11 @@ func (s *ClientManagement) DeleteClientTokens(ctx context.Context, serviceID str
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -1998,6 +2274,16 @@ func (s *ClientManagement) DeleteClientTokens(ctx context.Context, serviceID str
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -2006,11 +2292,8 @@ func (s *ClientManagement) DeleteClientTokens(ctx context.Context, serviceID str
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -2069,7 +2352,7 @@ func (s *ClientManagement) DeleteClientTokens(ctx context.Context, serviceID str
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -2127,7 +2410,34 @@ func (s *ClientManagement) DeleteClientTokens(ctx context.Context, serviceID str
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -2152,7 +2462,7 @@ func (s *ClientManagement) DeleteClientTokens(ctx context.Context, serviceID str
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -2195,7 +2505,7 @@ func (s *ClientManagement) DeleteClientTokens(ctx context.Context, serviceID str
 // Delete all existing access tokens issued to a client application by an end-user.
 //
 // The subject parameter is required.
-func (s *ClientManagement) RevokeClientTokens(ctx context.Context, serviceID string, clientID string, body operations.ClientAuthorizationDeleteAPIPostRequestBody, opts ...operations.Option) (*operations.ClientAuthorizationDeleteAPIPostResponse, error) {
+func (s *ClientManagement1) RevokeClientTokens(ctx context.Context, serviceID string, clientID string, body operations.ClientAuthorizationDeleteAPIPostRequestBody, opts ...operations.Option) (*operations.ClientAuthorizationDeleteAPIPostResponse, error) {
 	request := operations.ClientAuthorizationDeleteAPIPostRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -2243,6 +2553,11 @@ func (s *ClientManagement) RevokeClientTokens(ctx context.Context, serviceID str
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -2272,6 +2587,16 @@ func (s *ClientManagement) RevokeClientTokens(ctx context.Context, serviceID str
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -2280,11 +2605,8 @@ func (s *ClientManagement) RevokeClientTokens(ctx context.Context, serviceID str
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -2387,6 +2709,33 @@ func (s *ClientManagement) RevokeClientTokens(ctx context.Context, serviceID str
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode >= 400 && httpRes.StatusCode < 500:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -2412,9 +2761,8 @@ func (s *ClientManagement) RevokeClientTokens(ctx context.Context, serviceID str
 }
 
 // DeleteAuthorizations - Delete Client Tokens (by Subject)
-// Delete all existing access tokens issued to a client application by an end-user.
-// In this variant, the subject is provided in the path.
-func (s *ClientManagement) DeleteAuthorizations(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientAuthorizationDeleteBySubjectAPIResponse, error) {
+// Delete all existing access tokens issued to a client application by an end-user. In this variant, the subject is provided in the path.
+func (s *ClientManagement1) DeleteAuthorizations(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientAuthorizationDeleteBySubjectAPIResponse, error) {
 	request := operations.ClientAuthorizationDeleteBySubjectAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -2458,6 +2806,11 @@ func (s *ClientManagement) DeleteAuthorizations(ctx context.Context, serviceID s
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -2484,6 +2837,16 @@ func (s *ClientManagement) DeleteAuthorizations(ctx context.Context, serviceID s
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -2492,11 +2855,8 @@ func (s *ClientManagement) DeleteAuthorizations(ctx context.Context, serviceID s
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -2555,7 +2915,7 @@ func (s *ClientManagement) DeleteAuthorizations(ctx context.Context, serviceID s
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -2613,7 +2973,34 @@ func (s *ClientManagement) DeleteAuthorizations(ctx context.Context, serviceID s
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -2638,7 +3025,7 @@ func (s *ClientManagement) DeleteAuthorizations(ctx context.Context, serviceID s
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -2679,7 +3066,7 @@ func (s *ClientManagement) DeleteAuthorizations(ctx context.Context, serviceID s
 
 // GetGrantedScopesForClient - Get Granted Scopes
 // Get the set of scopes that a user has granted to a client application.
-func (s *ClientManagement) GetGrantedScopesForClient(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientGrantedScopesGetAPIResponse, error) {
+func (s *ClientManagement1) GetGrantedScopesForClient(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientGrantedScopesGetAPIResponse, error) {
 	request := operations.ClientGrantedScopesGetAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -2723,6 +3110,11 @@ func (s *ClientManagement) GetGrantedScopesForClient(ctx context.Context, servic
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -2753,6 +3145,16 @@ func (s *ClientManagement) GetGrantedScopesForClient(ctx context.Context, servic
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -2761,11 +3163,8 @@ func (s *ClientManagement) GetGrantedScopesForClient(ctx context.Context, servic
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -2824,7 +3223,7 @@ func (s *ClientManagement) GetGrantedScopesForClient(ctx context.Context, servic
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -2882,7 +3281,34 @@ func (s *ClientManagement) GetGrantedScopesForClient(ctx context.Context, servic
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -2907,7 +3333,7 @@ func (s *ClientManagement) GetGrantedScopesForClient(ctx context.Context, servic
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -2950,7 +3376,7 @@ func (s *ClientManagement) GetGrantedScopesForClient(ctx context.Context, servic
 // Get the set of scopes that a user has granted to a client application.
 //
 // The subject parameter is required.
-func (s *ClientManagement) CreateGrantedScopes(ctx context.Context, serviceID string, clientID string, body operations.ClientGrantedScopesGetAPIPostRequestBody, opts ...operations.Option) (*operations.ClientGrantedScopesGetAPIPostResponse, error) {
+func (s *ClientManagement1) CreateGrantedScopes(ctx context.Context, serviceID string, clientID string, body operations.ClientGrantedScopesGetAPIPostRequestBody, opts ...operations.Option) (*operations.ClientGrantedScopesGetAPIPostResponse, error) {
 	request := operations.ClientGrantedScopesGetAPIPostRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -2998,6 +3424,11 @@ func (s *ClientManagement) CreateGrantedScopes(ctx context.Context, serviceID st
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -3027,6 +3458,16 @@ func (s *ClientManagement) CreateGrantedScopes(ctx context.Context, serviceID st
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -3035,11 +3476,8 @@ func (s *ClientManagement) CreateGrantedScopes(ctx context.Context, serviceID st
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -3142,6 +3580,33 @@ func (s *ClientManagement) CreateGrantedScopes(ctx context.Context, serviceID st
 			}
 			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode >= 400 && httpRes.StatusCode < 500:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {
@@ -3167,9 +3632,8 @@ func (s *ClientManagement) CreateGrantedScopes(ctx context.Context, serviceID st
 }
 
 // GetGrantedScopes - Get Granted Scopes (by Subject)
-// Get the set of scopes that a user has granted to a client application.
-// In this variant, the subject is provided in the path.
-func (s *ClientManagement) GetGrantedScopes(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientGrantedScopesGetBySubjectAPIResponse, error) {
+// Get the set of scopes that a user has granted to a client application. In this variant, the subject is provided in the path.
+func (s *ClientManagement1) GetGrantedScopes(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientGrantedScopesGetBySubjectAPIResponse, error) {
 	request := operations.ClientGrantedScopesGetBySubjectAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -3213,6 +3677,11 @@ func (s *ClientManagement) GetGrantedScopes(ctx context.Context, serviceID strin
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -3239,6 +3708,16 @@ func (s *ClientManagement) GetGrantedScopes(ctx context.Context, serviceID strin
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -3247,11 +3726,8 @@ func (s *ClientManagement) GetGrantedScopes(ctx context.Context, serviceID strin
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -3310,7 +3786,7 @@ func (s *ClientManagement) GetGrantedScopes(ctx context.Context, serviceID strin
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -3368,7 +3844,34 @@ func (s *ClientManagement) GetGrantedScopes(ctx context.Context, serviceID strin
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -3393,7 +3896,7 @@ func (s *ClientManagement) GetGrantedScopes(ctx context.Context, serviceID strin
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -3435,10 +3938,8 @@ func (s *ClientManagement) GetGrantedScopes(ctx context.Context, serviceID strin
 // DeleteGrantedScopesForClient - Delete Granted Scopes
 // Delete the set of scopes that an end-user has granted to a client application.
 //
-// Even if records about granted scopes are deleted by calling this API, existing access tokens are
-// not deleted and scopes of existing access tokens are not changed.
-// The subject parameter is required and must be provided as a query parameter.
-func (s *ClientManagement) DeleteGrantedScopesForClient(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientGrantedScopesDeleteAPIResponse, error) {
+// Even if records about granted scopes are deleted by calling this API, existing access tokens are not deleted and scopes of existing access tokens are not changed. The subject parameter is required and must be provided as a query parameter.
+func (s *ClientManagement1) DeleteGrantedScopesForClient(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientGrantedScopesDeleteAPIResponse, error) {
 	request := operations.ClientGrantedScopesDeleteAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -3482,6 +3983,11 @@ func (s *ClientManagement) DeleteGrantedScopesForClient(ctx context.Context, ser
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -3512,6 +4018,16 @@ func (s *ClientManagement) DeleteGrantedScopesForClient(ctx context.Context, ser
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -3520,11 +4036,8 @@ func (s *ClientManagement) DeleteGrantedScopesForClient(ctx context.Context, ser
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -3583,7 +4096,7 @@ func (s *ClientManagement) DeleteGrantedScopesForClient(ctx context.Context, ser
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -3641,7 +4154,34 @@ func (s *ClientManagement) DeleteGrantedScopesForClient(ctx context.Context, ser
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -3666,7 +4206,7 @@ func (s *ClientManagement) DeleteGrantedScopesForClient(ctx context.Context, ser
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -3706,9 +4246,8 @@ func (s *ClientManagement) DeleteGrantedScopesForClient(ctx context.Context, ser
 }
 
 // DeleteGrantedScopes - Delete Granted Scopes (by Subject)
-// Delete the set of scopes that an end-user has granted to a client application.
-// In this variant, the subject is provided in the path.
-func (s *ClientManagement) DeleteGrantedScopes(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientGrantedScopesDeleteBySubjectAPIResponse, error) {
+// Delete the set of scopes that an end-user has granted to a client application. In this variant, the subject is provided in the path.
+func (s *ClientManagement1) DeleteGrantedScopes(ctx context.Context, serviceID string, clientID string, subject string, opts ...operations.Option) (*operations.ClientGrantedScopesDeleteBySubjectAPIResponse, error) {
 	request := operations.ClientGrantedScopesDeleteBySubjectAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -3752,6 +4291,11 @@ func (s *ClientManagement) DeleteGrantedScopes(ctx context.Context, serviceID st
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -3778,6 +4322,16 @@ func (s *ClientManagement) DeleteGrantedScopes(ctx context.Context, serviceID st
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -3786,11 +4340,8 @@ func (s *ClientManagement) DeleteGrantedScopes(ctx context.Context, serviceID st
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -3849,7 +4400,7 @@ func (s *ClientManagement) DeleteGrantedScopes(ctx context.Context, serviceID st
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -3907,7 +4458,34 @@ func (s *ClientManagement) DeleteGrantedScopes(ctx context.Context, serviceID st
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -3932,7 +4510,7 @@ func (s *ClientManagement) DeleteGrantedScopes(ctx context.Context, serviceID st
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -3973,7 +4551,7 @@ func (s *ClientManagement) DeleteGrantedScopes(ctx context.Context, serviceID st
 
 // GetRequestableScopes - Get Requestable Scopes
 // Get the requestable scopes per client
-func (s *ClientManagement) GetRequestableScopes(ctx context.Context, serviceID string, clientID string, opts ...operations.Option) (*operations.ClientExtensionRequestablesScopesGetAPIResponse, error) {
+func (s *ClientManagement1) GetRequestableScopes(ctx context.Context, serviceID string, clientID string, opts ...operations.Option) (*operations.ClientExtensionRequestablesScopesGetAPIResponse, error) {
 	request := operations.ClientExtensionRequestablesScopesGetAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -4016,6 +4594,11 @@ func (s *ClientManagement) GetRequestableScopes(ctx context.Context, serviceID s
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -4042,6 +4625,16 @@ func (s *ClientManagement) GetRequestableScopes(ctx context.Context, serviceID s
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -4050,11 +4643,8 @@ func (s *ClientManagement) GetRequestableScopes(ctx context.Context, serviceID s
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -4113,7 +4703,7 @@ func (s *ClientManagement) GetRequestableScopes(ctx context.Context, serviceID s
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -4171,7 +4761,34 @@ func (s *ClientManagement) GetRequestableScopes(ctx context.Context, serviceID s
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -4196,7 +4813,7 @@ func (s *ClientManagement) GetRequestableScopes(ctx context.Context, serviceID s
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -4237,7 +4854,7 @@ func (s *ClientManagement) GetRequestableScopes(ctx context.Context, serviceID s
 
 // UpdateRequestableScopesWithBody - Update Requestable Scopes
 // Update requestable scopes of a client
-func (s *ClientManagement) UpdateRequestableScopesWithBody(ctx context.Context, serviceID string, clientID string, body components.ClientExtensionRequestableScopesUpdateRequest, opts ...operations.Option) (*operations.ClientExtensionRequestablesScopesUpdateAPIPostResponse, error) {
+func (s *ClientManagement1) UpdateRequestableScopesWithBody(ctx context.Context, serviceID string, clientID string, body components.ClientExtensionRequestableScopesUpdateRequest, opts ...operations.Option) (*operations.ClientExtensionRequestablesScopesUpdateAPIPostResponse, error) {
 	request := operations.ClientExtensionRequestablesScopesUpdateAPIPostRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -4285,6 +4902,11 @@ func (s *ClientManagement) UpdateRequestableScopesWithBody(ctx context.Context, 
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -4314,6 +4936,16 @@ func (s *ClientManagement) UpdateRequestableScopesWithBody(ctx context.Context, 
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -4322,11 +4954,8 @@ func (s *ClientManagement) UpdateRequestableScopesWithBody(ctx context.Context, 
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -4385,7 +5014,7 @@ func (s *ClientManagement) UpdateRequestableScopesWithBody(ctx context.Context, 
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -4443,7 +5072,34 @@ func (s *ClientManagement) UpdateRequestableScopesWithBody(ctx context.Context, 
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -4468,7 +5124,7 @@ func (s *ClientManagement) UpdateRequestableScopesWithBody(ctx context.Context, 
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -4509,7 +5165,7 @@ func (s *ClientManagement) UpdateRequestableScopesWithBody(ctx context.Context, 
 
 // UpdateRequestableScopes - Update Requestable Scopes
 // Update requestable scopes of a client
-func (s *ClientManagement) UpdateRequestableScopes(ctx context.Context, serviceID string, clientID string, body components.ClientExtensionRequestableScopesUpdateRequest, opts ...operations.Option) (*operations.ClientExtensionRequestablesScopesUpdateAPIResponse, error) {
+func (s *ClientManagement1) UpdateRequestableScopes(ctx context.Context, serviceID string, clientID string, body components.ClientExtensionRequestableScopesUpdateRequest, opts ...operations.Option) (*operations.ClientExtensionRequestablesScopesUpdateAPIResponse, error) {
 	request := operations.ClientExtensionRequestablesScopesUpdateAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -4557,6 +5213,11 @@ func (s *ClientManagement) UpdateRequestableScopes(ctx context.Context, serviceI
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -4586,6 +5247,16 @@ func (s *ClientManagement) UpdateRequestableScopes(ctx context.Context, serviceI
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -4594,11 +5265,8 @@ func (s *ClientManagement) UpdateRequestableScopes(ctx context.Context, serviceI
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -4657,7 +5325,7 @@ func (s *ClientManagement) UpdateRequestableScopes(ctx context.Context, serviceI
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -4715,7 +5383,34 @@ func (s *ClientManagement) UpdateRequestableScopes(ctx context.Context, serviceI
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -4740,7 +5435,7 @@ func (s *ClientManagement) UpdateRequestableScopes(ctx context.Context, serviceI
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -4781,7 +5476,7 @@ func (s *ClientManagement) UpdateRequestableScopes(ctx context.Context, serviceI
 
 // DeleteRequestableScopes - Delete Requestable Scopes
 // Delete requestable scopes of a client
-func (s *ClientManagement) DeleteRequestableScopes(ctx context.Context, serviceID string, clientID string, opts ...operations.Option) (*operations.ClientExtensionRequestablesScopesDeleteAPIResponse, error) {
+func (s *ClientManagement1) DeleteRequestableScopes(ctx context.Context, serviceID string, clientID string, opts ...operations.Option) (*operations.ClientExtensionRequestablesScopesDeleteAPIResponse, error) {
 	request := operations.ClientExtensionRequestablesScopesDeleteAPIRequest{
 		ServiceID: serviceID,
 		ClientID:  clientID,
@@ -4824,6 +5519,11 @@ func (s *ClientManagement) DeleteRequestableScopes(ctx context.Context, serviceI
 		timeout = s.sdkConfiguration.Timeout
 	}
 
+	if timeout == nil {
+		defaultTimeout := time.Duration(5000 * time.Millisecond)
+		timeout = &defaultTimeout
+	}
+
 	if timeout != nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, *timeout)
@@ -4850,6 +5550,16 @@ func (s *ClientManagement) DeleteRequestableScopes(ctx context.Context, serviceI
 	if retryConfig == nil {
 		if globalRetryConfig != nil {
 			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     16000,
+					Exponent:        2,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
 		}
 	}
 
@@ -4858,11 +5568,8 @@ func (s *ClientManagement) DeleteRequestableScopes(ctx context.Context, serviceI
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"5XX",
 				"429",
-				"500",
-				"502",
-				"503",
-				"504",
 			},
 		}, func() (*http.Response, error) {
 			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
@@ -4921,7 +5628,7 @@ func (s *ClientManagement) DeleteRequestableScopes(ctx context.Context, serviceI
 
 			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
 			return nil, err
-		} else if utils.MatchStatusCodes([]string{"400", "401", "403", "4XX", "500", "5XX"}, httpRes.StatusCode) {
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
 			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
 			if err != nil {
 				return nil, err
@@ -4960,7 +5667,34 @@ func (s *ClientManagement) DeleteRequestableScopes(ctx context.Context, serviceI
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
 				return nil, err
+			}
+			return nil, apierrors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 429:
+		res.Headers = httpRes.Header
+
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out apierrors.ResultError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{
@@ -4985,7 +5719,7 @@ func (s *ClientManagement) DeleteRequestableScopes(ctx context.Context, serviceI
 
 			var out apierrors.ResultError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
+				return nil, apierrors.NewResponseValidationError("response did not match the declared error schema", httpRes.StatusCode, string(rawBody), httpRes, err)
 			}
 
 			out.HTTPMeta = components.HTTPMetadata{

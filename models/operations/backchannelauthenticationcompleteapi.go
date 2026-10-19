@@ -31,6 +31,7 @@ type BackchannelAuthenticationCompleteAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Backchannel authentication completed successfully
 	BackchannelAuthenticationCompleteResponse *components.BackchannelAuthenticationCompleteResponse
+	Headers                                   map[string][]string
 }
 
 func (b BackchannelAuthenticationCompleteAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (b *BackchannelAuthenticationCompleteAPIResponse) GetBackchannelAuthenticat
 		return nil
 	}
 	return b.BackchannelAuthenticationCompleteResponse
+}
+
+func (b *BackchannelAuthenticationCompleteAPIResponse) GetHeaders() map[string][]string {
+	if b == nil {
+		return map[string][]string{}
+	}
+	return b.Headers
 }

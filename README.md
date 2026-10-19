@@ -12,9 +12,7 @@ Developer-friendly & type-safe Go SDK specifically catered to leverage *authlete
 <!-- Start Summary [summary] -->
 ## Summary
 
-Authlete API: Welcome to the **Authlete API documentation**. Authlete is an **API-first service** where every aspect of the 
-platform is configurable via API. This documentation will help you authenticate and integrate with Authlete to 
-build powerful OAuth 2.0 and OpenID Connect servers.
+Authlete API: Welcome to the **Authlete API documentation**. Authlete is an **API-first service** where every aspect of the platform is configurable via API. This documentation will help you authenticate and integrate with Authlete to build powerful OAuth 2.0 and OpenID Connect servers.
 
 At a high level, the Authlete API is grouped into two categories:
 
@@ -58,8 +56,7 @@ Authlete supports two types of access tokens:
 3. Click **Create Token** and select org-level permissions
 4. Copy the generated token
 
-> ⚠️ **Important Note**: Tokens inherit the permissions of the account that creates them. Service tokens can only 
-> access their specific service, while organization tokens can access all services within your org.
+> ⚠️ **Important Note**: Tokens inherit the permissions of the account that creates them. Service tokens can only access their specific service, while organization tokens can access all services within your org.
 
 ### Token Security Best Practices
 
@@ -103,6 +100,7 @@ If you have any questions or need assistance, our team is here to help:
   * [SDK Example Usage](#sdk-example-usage)
   * [Authentication](#authentication-1)
   * [Available Resources and Operations](#available-resources-and-operations)
+  * [Pagination](#pagination)
   * [Retries](#retries)
   * [Error Handling](#error-handling)
   * [Server Selection](#server-selection)
@@ -203,6 +201,11 @@ func main() {
 <details open>
 <summary>Available methods</summary>
 
+### [Audit](docs/sdks/audit/README.md)
+
+* [Get](docs/sdks/audit/README.md#get) - Get Audit Logs
+* [GetTypes](docs/sdks/audit/README.md#gettypes) - Get Audit Log Event Types
+
 ### [Authorization](docs/sdks/authorization/README.md)
 
 * [ProcessRequest](docs/sdks/authorization/README.md#processrequest) - Process Authorization Request
@@ -213,6 +216,10 @@ func main() {
 
 * [GetTicketInfo](docs/sdks/authorizationmanagement/README.md#getticketinfo) - Get Ticket Information
 * [UpdateTicket](docs/sdks/authorizationmanagement/README.md#updateticket) - Update Ticket Information
+
+### [BackChannelLogout](docs/sdks/backchannellogout/README.md)
+
+* [BackchannelLogoutTokenAPI](docs/sdks/backchannellogout/README.md#backchannellogouttokenapi) - Backchannel Logout Token Issuing
 
 ### [Ciba](docs/sdks/ciba/README.md)
 
@@ -230,27 +237,32 @@ func main() {
 * [UpdateForm](docs/sdks/client/README.md#updateform) - Update Client
 * [Delete](docs/sdks/client/README.md#delete) - Delete Client ⚡
 
-#### [Client.Management](docs/sdks/clientmanagement/README.md)
+#### [Client.Management](docs/sdks/clientmanagement1/README.md)
 
-* [UpdateLockFlag](docs/sdks/clientmanagement/README.md#updatelockflag) - Update Client Lock
-* [RefreshSecret](docs/sdks/clientmanagement/README.md#refreshsecret) - Rotate Client Secret
-* [UpdateSecret](docs/sdks/clientmanagement/README.md#updatesecret) - Update Client Secret
-* [ListAuthorizedApplications](docs/sdks/clientmanagement/README.md#listauthorizedapplications) - Get Authorized Applications
-* [ListAuthorizedApplicationsWithBody](docs/sdks/clientmanagement/README.md#listauthorizedapplicationswithbody) - Get Authorized Applications
-* [ListAuthorizations](docs/sdks/clientmanagement/README.md#listauthorizations) - Get Authorized Applications (by Subject)
-* [UpdateAuthorizations](docs/sdks/clientmanagement/README.md#updateauthorizations) - Update Client Tokens
-* [DeleteClientTokens](docs/sdks/clientmanagement/README.md#deleteclienttokens) - Delete Client Tokens
-* [RevokeClientTokens](docs/sdks/clientmanagement/README.md#revokeclienttokens) - Delete Client Tokens
-* [DeleteAuthorizations](docs/sdks/clientmanagement/README.md#deleteauthorizations) - Delete Client Tokens (by Subject)
-* [GetGrantedScopesForClient](docs/sdks/clientmanagement/README.md#getgrantedscopesforclient) - Get Granted Scopes
-* [CreateGrantedScopes](docs/sdks/clientmanagement/README.md#creategrantedscopes) - Get Granted Scopes
-* [GetGrantedScopes](docs/sdks/clientmanagement/README.md#getgrantedscopes) - Get Granted Scopes (by Subject)
-* [DeleteGrantedScopesForClient](docs/sdks/clientmanagement/README.md#deletegrantedscopesforclient) - Delete Granted Scopes
-* [DeleteGrantedScopes](docs/sdks/clientmanagement/README.md#deletegrantedscopes) - Delete Granted Scopes (by Subject)
-* [GetRequestableScopes](docs/sdks/clientmanagement/README.md#getrequestablescopes) - Get Requestable Scopes
-* [UpdateRequestableScopesWithBody](docs/sdks/clientmanagement/README.md#updaterequestablescopeswithbody) - Update Requestable Scopes
-* [UpdateRequestableScopes](docs/sdks/clientmanagement/README.md#updaterequestablescopes) - Update Requestable Scopes
-* [DeleteRequestableScopes](docs/sdks/clientmanagement/README.md#deleterequestablescopes) - Delete Requestable Scopes
+* [UpdateLockFlag](docs/sdks/clientmanagement1/README.md#updatelockflag) - Update Client Lock
+* [RefreshSecret](docs/sdks/clientmanagement1/README.md#refreshsecret) - Rotate Client Secret
+* [UpdateSecret](docs/sdks/clientmanagement1/README.md#updatesecret) - Update Client Secret
+* [ListAuthorizedApplications](docs/sdks/clientmanagement1/README.md#listauthorizedapplications) - Get Authorized Applications
+* [ListAuthorizedApplicationsWithBody](docs/sdks/clientmanagement1/README.md#listauthorizedapplicationswithbody) - Get Authorized Applications
+* [ListAuthorizations](docs/sdks/clientmanagement1/README.md#listauthorizations) - Get Authorized Applications (by Subject)
+* [UpdateAuthorizations](docs/sdks/clientmanagement1/README.md#updateauthorizations) - Update Client Tokens
+* [DeleteClientTokens](docs/sdks/clientmanagement1/README.md#deleteclienttokens) - Delete Client Tokens
+* [RevokeClientTokens](docs/sdks/clientmanagement1/README.md#revokeclienttokens) - Delete Client Tokens
+* [DeleteAuthorizations](docs/sdks/clientmanagement1/README.md#deleteauthorizations) - Delete Client Tokens (by Subject)
+* [GetGrantedScopesForClient](docs/sdks/clientmanagement1/README.md#getgrantedscopesforclient) - Get Granted Scopes
+* [CreateGrantedScopes](docs/sdks/clientmanagement1/README.md#creategrantedscopes) - Get Granted Scopes
+* [GetGrantedScopes](docs/sdks/clientmanagement1/README.md#getgrantedscopes) - Get Granted Scopes (by Subject)
+* [DeleteGrantedScopesForClient](docs/sdks/clientmanagement1/README.md#deletegrantedscopesforclient) - Delete Granted Scopes
+* [DeleteGrantedScopes](docs/sdks/clientmanagement1/README.md#deletegrantedscopes) - Delete Granted Scopes (by Subject)
+* [GetRequestableScopes](docs/sdks/clientmanagement1/README.md#getrequestablescopes) - Get Requestable Scopes
+* [UpdateRequestableScopesWithBody](docs/sdks/clientmanagement1/README.md#updaterequestablescopeswithbody) - Update Requestable Scopes
+* [UpdateRequestableScopes](docs/sdks/clientmanagement1/README.md#updaterequestablescopes) - Update Requestable Scopes
+* [DeleteRequestableScopes](docs/sdks/clientmanagement1/README.md#deleterequestablescopes) - Delete Requestable Scopes
+
+### [ClientManagement](docs/sdks/clientmanagement2/README.md)
+
+* [ClientCursorListAPI](docs/sdks/clientmanagement2/README.md#clientcursorlistapi) - List Clients (Cursor Pagination)
+* [ClientSearchAPI](docs/sdks/clientmanagement2/README.md#clientsearchapi) - Search Clients
 
 ### [DeviceFlow](docs/sdks/deviceflow/README.md)
 
@@ -309,6 +321,8 @@ func main() {
 * [List](docs/sdks/service/README.md#list) - List Services
 * [Update](docs/sdks/service/README.md#update) - Update Service
 * [Delete](docs/sdks/service/README.md#delete) - Delete Service ⚡
+* [Create](docs/sdks/service/README.md#create) - Create Service (IDP)
+* [Remove](docs/sdks/service/README.md#remove) - Remove Service (IDP) ⚡
 * [GetConfiguration](docs/sdks/service/README.md#getconfiguration) - Get Service Configuration
 
 ### [Token](docs/sdks/token/README.md)
@@ -347,6 +361,60 @@ func main() {
 
 </details>
 <!-- End Available Resources and Operations [operations] -->
+
+<!-- Start Pagination [pagination] -->
+## Pagination
+
+Some of the endpoints in this SDK support pagination. To use pagination, you make your SDK calls as usual, but the
+returned response object will have a `Next` method that can be called to pull down the next group of results. If the
+return value of `Next` is `nil`, then there are no more pages to be fetched.
+
+Here's an example of one such pagination call:
+```go
+package main
+
+import (
+	"context"
+	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
+	"log"
+	"os"
+)
+
+func main() {
+	ctx := context.Background()
+
+	s := authlete.New(
+		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
+	)
+
+	res, err := s.Audit.Get(ctx, operations.AuditEntriesGetIdpAPIRequest{
+		Types: []string{
+			"service.create",
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	if res.AuditEntriesGetResponse != nil {
+		for {
+			// handle items
+
+			res, err = res.Next()
+
+			if err != nil {
+				// handle error
+			}
+
+			if res == nil {
+				break
+			}
+		}
+	}
+}
+
+```
+<!-- End Pagination [pagination] -->
 
 <!-- Start Retries [retries] -->
 ## Retries
@@ -448,6 +516,7 @@ For example, the `Get` function may return the following errors:
 | Error Type            | Status Code   | Content Type     |
 | --------------------- | ------------- | ---------------- |
 | apierrors.ResultError | 400, 401, 403 | application/json |
+| apierrors.ResultError | 429           | application/json |
 | apierrors.ResultError | 500           | application/json |
 | apierrors.APIError    | 4XX, 5XX      | \*/\*            |
 
@@ -474,6 +543,12 @@ func main() {
 
 	res, err := s.Service.Get(ctx, "<id>")
 	if err != nil {
+
+		var e *apierrors.ResultError
+		if errors.As(err, &e) {
+			// handle error
+			log.Fatal(e.Error())
+		}
 
 		var e *apierrors.ResultError
 		if errors.As(err, &e) {
@@ -565,6 +640,47 @@ func main() {
 	)
 
 	res, err := s.Service.Get(ctx, "<id>")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if res.Service != nil {
+		// handle response
+	}
+}
+
+```
+
+### Override Server URL Per-Operation
+
+The server URL can also be overridden on a per-operation basis, provided a server list was specified for the operation. For example:
+```go
+package main
+
+import (
+	"context"
+	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
+	"github.com/authlete/authlete-go-sdk/optionalnullable"
+	"log"
+	"os"
+)
+
+func main() {
+	ctx := context.Background()
+
+	s := authlete.New(
+		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
+	)
+
+	res, err := s.Service.Create(ctx, components.ServiceCreateIdpRequest{
+		APIServerID:    authlete.Pointer[int64](76281),
+		OrganizationID: 123456789012345,
+		Service: &components.ServiceInput{
+			ServiceName: optionalnullable.From(authlete.Pointer("My service")),
+			Issuer:      optionalnullable.From(authlete.Pointer("https://my-service.example.com")),
+		},
+	}, operations.WithServerURL("https://login.authlete.com"))
 	if err != nil {
 		log.Fatal(err)
 	}

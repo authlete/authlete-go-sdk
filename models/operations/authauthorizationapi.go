@@ -31,6 +31,7 @@ type AuthAuthorizationAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Authorization request processed successfully
 	AuthorizationResponse *components.AuthorizationResponse
+	Headers               map[string][]string
 }
 
 func (a AuthAuthorizationAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (a *AuthAuthorizationAPIResponse) GetAuthorizationResponse() *components.Au
 		return nil
 	}
 	return a.AuthorizationResponse
+}
+
+func (a *AuthAuthorizationAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

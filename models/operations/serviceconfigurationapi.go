@@ -40,7 +40,8 @@ func (s *ServiceConfigurationAPIRequest) GetPatch() *string {
 type ServiceConfigurationAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Service configuration retrieved successfully
-	Object map[string]any
+	Object  map[string]any
+	Headers map[string][]string
 }
 
 func (s ServiceConfigurationAPIResponse) MarshalJSON() ([]byte, error) {
@@ -66,4 +67,11 @@ func (s *ServiceConfigurationAPIResponse) GetObject() map[string]any {
 		return nil
 	}
 	return s.Object
+}
+
+func (s *ServiceConfigurationAPIResponse) GetHeaders() map[string][]string {
+	if s == nil {
+		return map[string][]string{}
+	}
+	return s.Headers
 }

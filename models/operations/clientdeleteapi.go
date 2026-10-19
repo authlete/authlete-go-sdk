@@ -29,6 +29,7 @@ func (c *ClientDeleteAPIRequest) GetClientID() string {
 
 type ClientDeleteAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
+	Headers  map[string][]string
 }
 
 func (c *ClientDeleteAPIResponse) GetHTTPMeta() components.HTTPMetadata {
@@ -36,4 +37,11 @@ func (c *ClientDeleteAPIResponse) GetHTTPMeta() components.HTTPMetadata {
 		return components.HTTPMetadata{}
 	}
 	return c.HTTPMeta
+}
+
+func (c *ClientDeleteAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

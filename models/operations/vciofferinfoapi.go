@@ -31,6 +31,7 @@ type VciOfferInfoAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Credential offer info retrieved successfully
 	VciOfferInfoResponse *components.VciOfferInfoResponse
+	Headers              map[string][]string
 }
 
 func (v VciOfferInfoAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (v *VciOfferInfoAPIResponse) GetVciOfferInfoResponse() *components.VciOffer
 		return nil
 	}
 	return v.VciOfferInfoResponse
+}
+
+func (v *VciOfferInfoAPIResponse) GetHeaders() map[string][]string {
+	if v == nil {
+		return map[string][]string{}
+	}
+	return v.Headers
 }

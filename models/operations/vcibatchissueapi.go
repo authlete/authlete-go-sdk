@@ -31,6 +31,7 @@ type VciBatchIssueAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Batch credential issuance completed successfully
 	VciBatchIssueResponse *components.VciBatchIssueResponse
+	Headers               map[string][]string
 }
 
 func (v VciBatchIssueAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (v *VciBatchIssueAPIResponse) GetVciBatchIssueResponse() *components.VciBat
 		return nil
 	}
 	return v.VciBatchIssueResponse
+}
+
+func (v *VciBatchIssueAPIResponse) GetHeaders() map[string][]string {
+	if v == nil {
+		return map[string][]string{}
+	}
+	return v.Headers
 }

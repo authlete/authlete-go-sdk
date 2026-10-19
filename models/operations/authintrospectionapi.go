@@ -30,6 +30,7 @@ func (a *AuthIntrospectionAPIRequest) GetBody() components.IntrospectionRequest 
 type AuthIntrospectionAPIResponse struct {
 	HTTPMeta              components.HTTPMetadata `json:"-"`
 	IntrospectionResponse *components.IntrospectionResponse
+	Headers               map[string][]string
 }
 
 func (a AuthIntrospectionAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (a *AuthIntrospectionAPIResponse) GetIntrospectionResponse() *components.In
 		return nil
 	}
 	return a.IntrospectionResponse
+}
+
+func (a *AuthIntrospectionAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

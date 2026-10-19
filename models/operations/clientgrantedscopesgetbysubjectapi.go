@@ -43,6 +43,7 @@ type ClientGrantedScopesGetBySubjectAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Successfully retrieved granted scopes
 	ClientAuthorizationDeleteResponse *components.ClientAuthorizationDeleteResponse
+	Headers                           map[string][]string
 }
 
 func (c ClientGrantedScopesGetBySubjectAPIResponse) MarshalJSON() ([]byte, error) {
@@ -68,4 +69,11 @@ func (c *ClientGrantedScopesGetBySubjectAPIResponse) GetClientAuthorizationDelet
 		return nil
 	}
 	return c.ClientAuthorizationDeleteResponse
+}
+
+func (c *ClientGrantedScopesGetBySubjectAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

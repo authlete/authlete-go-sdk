@@ -4,6 +4,7 @@ package components
 
 import (
 	"github.com/authlete/authlete-go-sdk/internal/utils"
+	"github.com/authlete/authlete-go-sdk/optionalnullable"
 )
 
 type Scope struct {
@@ -16,7 +17,7 @@ type Scope struct {
 	// The descriptions about this scope in multiple languages.
 	Descriptions []TaggedValue `json:"descriptions,omitzero"`
 	// The attributes of the scope.
-	Attributes []Pair `json:"attributes,omitzero"`
+	Attributes optionalnullable.OptionalNullable[[]Pair] `json:"attributes,omitzero"`
 }
 
 func (s Scope) MarshalJSON() ([]byte, error) {
@@ -58,7 +59,7 @@ func (s *Scope) GetDescriptions() []TaggedValue {
 	return s.Descriptions
 }
 
-func (s *Scope) GetAttributes() []Pair {
+func (s *Scope) GetAttributes() optionalnullable.OptionalNullable[[]Pair] {
 	if s == nil {
 		return nil
 	}

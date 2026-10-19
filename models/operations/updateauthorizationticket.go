@@ -31,6 +31,7 @@ type UpdateAuthorizationTicketResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Authorization ticket updated successfully
 	AuthorizationTicketUpdateResponse *components.AuthorizationTicketUpdateResponse
+	Headers                           map[string][]string
 }
 
 func (u UpdateAuthorizationTicketResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (u *UpdateAuthorizationTicketResponse) GetAuthorizationTicketUpdateResponse
 		return nil
 	}
 	return u.AuthorizationTicketUpdateResponse
+}
+
+func (u *UpdateAuthorizationTicketResponse) GetHeaders() map[string][]string {
+	if u == nil {
+		return map[string][]string{}
+	}
+	return u.Headers
 }

@@ -31,6 +31,7 @@ type NativeSsoAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Native SSO processing completed successfully
 	NativeSsoResponse *components.NativeSsoResponse
+	Headers           map[string][]string
 }
 
 func (n NativeSsoAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (n *NativeSsoAPIResponse) GetNativeSsoResponse() *components.NativeSsoRespo
 		return nil
 	}
 	return n.NativeSsoResponse
+}
+
+func (n *NativeSsoAPIResponse) GetHeaders() map[string][]string {
+	if n == nil {
+		return map[string][]string{}
+	}
+	return n.Headers
 }

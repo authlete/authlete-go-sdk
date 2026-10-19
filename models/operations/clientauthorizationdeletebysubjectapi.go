@@ -42,6 +42,7 @@ func (c *ClientAuthorizationDeleteBySubjectAPIRequest) GetSubject() string {
 type ClientAuthorizationDeleteBySubjectAPIResponse struct {
 	HTTPMeta                          components.HTTPMetadata `json:"-"`
 	ClientAuthorizationDeleteResponse *components.ClientAuthorizationDeleteResponse
+	Headers                           map[string][]string
 }
 
 func (c ClientAuthorizationDeleteBySubjectAPIResponse) MarshalJSON() ([]byte, error) {
@@ -67,4 +68,11 @@ func (c *ClientAuthorizationDeleteBySubjectAPIResponse) GetClientAuthorizationDe
 		return nil
 	}
 	return c.ClientAuthorizationDeleteResponse
+}
+
+func (c *ClientAuthorizationDeleteBySubjectAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

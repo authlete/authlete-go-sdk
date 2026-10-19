@@ -31,6 +31,7 @@ type AuthTokenAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Token operation completed successfully
 	TokenResponse *components.TokenResponse
+	Headers       map[string][]string
 }
 
 func (a AuthTokenAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (a *AuthTokenAPIResponse) GetTokenResponse() *components.TokenResponse {
 		return nil
 	}
 	return a.TokenResponse
+}
+
+func (a *AuthTokenAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

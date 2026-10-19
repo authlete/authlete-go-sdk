@@ -10,9 +10,7 @@
 
 ## Authorization
 
-This API parses request parameters of a [device authorization request](https://datatracker.ietf.org/doc/html/rfc8628#section-3.1)
-and returns necessary data for the authorization server implementation to process the device authorization
-request further.
+This API parses request parameters of a [device authorization request](https://datatracker.ietf.org/doc/html/rfc8628#section-3.1) and returns necessary data for the authorization server implementation to process the device authorization request further.
 
 
 ### Example Usage
@@ -68,6 +66,7 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
@@ -127,14 +126,13 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |
 
 ## Complete
 
-This API returns information about what action the authorization server should take after it receives
-the result of end-user's decision about whether the end-user has approved or rejected a client
-application's request.
+This API returns information about what action the authorization server should take after it receives the result of end-user's decision about whether the end-user has approved or rejected a client application's request.
 
 
 ### Example Usage
@@ -190,5 +188,6 @@ func main() {
 | Error Type            | Status Code           | Content Type          |
 | --------------------- | --------------------- | --------------------- |
 | apierrors.ResultError | 400, 401, 403         | application/json      |
+| apierrors.ResultError | 429                   | application/json      |
 | apierrors.ResultError | 500                   | application/json      |
 | apierrors.APIError    | 4XX, 5XX              | \*/\*                 |

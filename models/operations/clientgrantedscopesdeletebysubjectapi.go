@@ -42,6 +42,7 @@ func (c *ClientGrantedScopesDeleteBySubjectAPIRequest) GetSubject() string {
 type ClientGrantedScopesDeleteBySubjectAPIResponse struct {
 	HTTPMeta                          components.HTTPMetadata `json:"-"`
 	ClientGrantedScopesDeleteResponse *components.ClientGrantedScopesDeleteResponse
+	Headers                           map[string][]string
 }
 
 func (c ClientGrantedScopesDeleteBySubjectAPIResponse) MarshalJSON() ([]byte, error) {
@@ -67,4 +68,11 @@ func (c *ClientGrantedScopesDeleteBySubjectAPIResponse) GetClientGrantedScopesDe
 		return nil
 	}
 	return c.ClientGrantedScopesDeleteResponse
+}
+
+func (c *ClientGrantedScopesDeleteBySubjectAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

@@ -23,6 +23,7 @@ type HskGetListAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// HSK list retrieved successfully
 	HskGetListResponse *components.HskGetListResponse
+	Headers            map[string][]string
 }
 
 func (h HskGetListAPIResponse) MarshalJSON() ([]byte, error) {
@@ -48,4 +49,11 @@ func (h *HskGetListAPIResponse) GetHskGetListResponse() *components.HskGetListRe
 		return nil
 	}
 	return h.HskGetListResponse
+}
+
+func (h *HskGetListAPIResponse) GetHeaders() map[string][]string {
+	if h == nil {
+		return map[string][]string{}
+	}
+	return h.Headers
 }

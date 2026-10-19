@@ -41,7 +41,8 @@ func (c *ClientCreateAPIRequest) GetBody() *components.ClientInput {
 type ClientCreateAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Client created successfully (legacy compatibility)
-	Client *components.Client
+	Client  *components.Client
+	Headers map[string][]string
 }
 
 func (c ClientCreateAPIResponse) MarshalJSON() ([]byte, error) {
@@ -67,4 +68,11 @@ func (c *ClientCreateAPIResponse) GetClient() *components.Client {
 		return nil
 	}
 	return c.Client
+}
+
+func (c *ClientCreateAPIResponse) GetHeaders() map[string][]string {
+	if c == nil {
+		return map[string][]string{}
+	}
+	return c.Headers
 }

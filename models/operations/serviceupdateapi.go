@@ -41,6 +41,7 @@ func (s *ServiceUpdateAPIRequest) GetBody() *components.ServiceInput {
 type ServiceUpdateAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	Service  *components.Service
+	Headers  map[string][]string
 }
 
 func (s ServiceUpdateAPIResponse) MarshalJSON() ([]byte, error) {
@@ -66,4 +67,11 @@ func (s *ServiceUpdateAPIResponse) GetService() *components.Service {
 		return nil
 	}
 	return s.Service
+}
+
+func (s *ServiceUpdateAPIResponse) GetHeaders() map[string][]string {
+	if s == nil {
+		return map[string][]string{}
+	}
+	return s.Headers
 }

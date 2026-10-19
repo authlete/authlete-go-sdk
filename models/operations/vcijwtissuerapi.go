@@ -30,6 +30,7 @@ func (v *VciJwtissuerAPIRequest) GetBody() components.VciJwtissuerRequest {
 type VciJwtissuerAPIResponse struct {
 	HTTPMeta             components.HTTPMetadata `json:"-"`
 	VciJwtissuerResponse *components.VciJwtissuerResponse
+	Headers              map[string][]string
 }
 
 func (v VciJwtissuerAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (v *VciJwtissuerAPIResponse) GetVciJwtissuerResponse() *components.VciJwtis
 		return nil
 	}
 	return v.VciJwtissuerResponse
+}
+
+func (v *VciJwtissuerAPIResponse) GetHeaders() map[string][]string {
+	if v == nil {
+		return map[string][]string{}
+	}
+	return v.Headers
 }

@@ -65,14 +65,14 @@ func setupOIDCService(
 	openidName := "openid"
 	defaultEntry := false
 	_, err := mgmt.Service.Update(ctx, svcID, &components.ServiceInput{
-		Issuer:                ptr(oidcIssuer),
-		Jwks:                  ptr(jwks),
-		IDTokenSignatureKeyID: ptr(kid),
-		TokenEndpoint:         tokenEndpoint,
+		Issuer:                setValue(oidcIssuer),
+		Jwks:                  setValue(jwks),
+		IDTokenSignatureKeyID: setValue(kid),
+		TokenEndpoint:         setUnlessNil(tokenEndpoint),
 		AccessTokenDuration:   ptr(tokenDurationSeconds),
-		SupportedScopes: []components.Scope{
+		SupportedScopes: setValue([]components.Scope{
 			{Name: &openidName, DefaultEntry: &defaultEntry},
-		},
+		}),
 	})
 	require.NoError(t, err, "OIDC service setup failed")
 }

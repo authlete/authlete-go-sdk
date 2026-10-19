@@ -2,10 +2,7 @@
 
 package components
 
-// VciMetadataResponseAction - The next action that the implementation of the credential issuer
-// metadata endpoint (`/.well-known/openid-credential-issuer`)
-// should take after getting a response from Authlete's
-// `/vci/metadata` API.
+// VciMetadataResponseAction - The next action that the implementation of the credential issuer metadata endpoint (`/.well-known/openid-credential-issuer`) should take after getting a response from Authlete's `/vci/metadata` API.
 type VciMetadataResponseAction string
 
 const (
@@ -34,14 +31,10 @@ type VciMetadataResponse struct {
 	ResultCode *string `json:"resultCode,omitzero"`
 	// A short message which explains the result of the API call.
 	ResultMessage *string `json:"resultMessage,omitzero"`
-	// The next action that the implementation of the credential issuer
-	// metadata endpoint (`/.well-known/openid-credential-issuer`)
-	// should take after getting a response from Authlete's
-	// `/vci/metadata` API.
+	// The next action that the implementation of the credential issuer metadata endpoint (`/.well-known/openid-credential-issuer`) should take after getting a response from Authlete's `/vci/metadata` API.
 	//
 	Action *VciMetadataResponseAction `json:"action,omitzero"`
-	// Get the content that the implementation of the credential issuer
-	// metadata endpoint should use when it constructs a response.
+	// Get the content that the implementation of the credential issuer metadata endpoint should use when it constructs a response.
 	//
 	ResponseContent *string `json:"responseContent,omitzero"`
 }

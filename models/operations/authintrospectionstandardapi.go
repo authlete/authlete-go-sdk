@@ -31,6 +31,7 @@ type AuthIntrospectionStandardAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Token introspection completed successfully
 	StandardIntrospectionResponse *components.StandardIntrospectionResponse
+	Headers                       map[string][]string
 }
 
 func (a AuthIntrospectionStandardAPIResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (a *AuthIntrospectionStandardAPIResponse) GetStandardIntrospectionResponse(
 		return nil
 	}
 	return a.StandardIntrospectionResponse
+}
+
+func (a *AuthIntrospectionStandardAPIResponse) GetHeaders() map[string][]string {
+	if a == nil {
+		return map[string][]string{}
+	}
+	return a.Headers
 }

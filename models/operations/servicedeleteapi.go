@@ -20,6 +20,7 @@ func (s *ServiceDeleteAPIRequest) GetServiceID() string {
 
 type ServiceDeleteAPIResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
+	Headers  map[string][]string
 }
 
 func (s *ServiceDeleteAPIResponse) GetHTTPMeta() components.HTTPMetadata {
@@ -27,4 +28,11 @@ func (s *ServiceDeleteAPIResponse) GetHTTPMeta() components.HTTPMetadata {
 		return components.HTTPMetadata{}
 	}
 	return s.HTTPMeta
+}
+
+func (s *ServiceDeleteAPIResponse) GetHeaders() map[string][]string {
+	if s == nil {
+		return map[string][]string{}
+	}
+	return s.Headers
 }

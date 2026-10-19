@@ -1,8 +1,6 @@
 # ClientAuthMethod
 
-The client authentication method that the client application declares that it uses at the token
-endpoint. This property corresponds to `token_endpoint_auth_method` in [OpenID Connect Dynamic
-Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
+The client authentication method that the client application declares that it uses at the token endpoint. This property corresponds to `token_endpoint_auth_method` in [OpenID Connect Dynamic Client Registration 1.0, 2. Client Metadata](https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata).
 
 
 ## Example Usage
@@ -31,3 +29,4 @@ custom := components.ClientAuthMethod("custom_value")
 | `ClientAuthMethodTLSClientAuth`           | TLS_CLIENT_AUTH                           |
 | `ClientAuthMethodSelfSignedTLSClientAuth` | SELF_SIGNED_TLS_CLIENT_AUTH               |
 | `ClientAuthMethodAttestJwtClientAuth`     | ATTEST_JWT_CLIENT_AUTH                    |
+| `ClientAuthMethodSpiffeJwt`               | SPIFFE_JWT                                |

@@ -30,6 +30,7 @@ func (d *DeviceCompleteAPIRequest) GetBody() components.DeviceCompleteRequest {
 type DeviceCompleteAPIResponse struct {
 	HTTPMeta               components.HTTPMetadata `json:"-"`
 	DeviceCompleteResponse *components.DeviceCompleteResponse
+	Headers                map[string][]string
 }
 
 func (d DeviceCompleteAPIResponse) MarshalJSON() ([]byte, error) {
@@ -55,4 +56,11 @@ func (d *DeviceCompleteAPIResponse) GetDeviceCompleteResponse() *components.Devi
 		return nil
 	}
 	return d.DeviceCompleteResponse
+}
+
+func (d *DeviceCompleteAPIResponse) GetHeaders() map[string][]string {
+	if d == nil {
+		return map[string][]string{}
+	}
+	return d.Headers
 }
