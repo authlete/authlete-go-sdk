@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,7 +20,7 @@ func TestOIDCParFlow(t *testing.T) {
 
 	clientID, clientSecret := createTestClient(t, mgmtClient, serviceID)
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Client.Delete(context.Background(), serviceID, clientID)
+		_, _ = mgmtClient.Client.Delete(context.Background(), operations.ClientDeleteAPIRequest{ClientID: clientID})
 	})
 
 	t.Run("OidcParFlow", func(t *testing.T) {
@@ -27,14 +28,14 @@ func TestOIDCParFlow(t *testing.T) {
 		encodedRedirect := url.QueryEscape(redirectURI)
 
 		// Step 1: PAR with openid scope and nonce.
-		parResp, err := sdkClient.PushedAuthorization.Create(ctx, serviceID, components.PushedAuthorizationRequest{
+		parResp, err := sdkClient.PushedAuthorization.Create(ctx, operations.PushedAuthReqAPIRequest{Body: components.PushedAuthorizationRequest{
 			Parameters: fmt.Sprintf(
 				"response_type=code&client_id=%s&redirect_uri=%s&scope=openid&nonce=%s&state=%s",
 				clientID, encodedRedirect, nonce, testState,
 			),
 			ClientID:     ptr(clientID),
 			ClientSecret: ptr(clientSecret),
-		})
+		}})
 		require.NoError(t, err, "PAR create failed")
 		require.NotNil(t, parResp.PushedAuthorizationResponse)
 		par := parResp.PushedAuthorizationResponse
@@ -44,10 +45,10 @@ func TestOIDCParFlow(t *testing.T) {
 		require.NotNil(t, par.RequestURI)
 
 		// Step 2: Authorization request using request_uri.
-		authResp, err := sdkClient.Authorization.ProcessRequest(ctx, serviceID, components.AuthorizationRequest{
+		authResp, err := sdkClient.Authorization.ProcessRequest(ctx, operations.AuthAuthorizationAPIRequest{Body: components.AuthorizationRequest{
 			Parameters: fmt.Sprintf("client_id=%s&request_uri=%s",
 				clientID, url.QueryEscape(*par.RequestURI)),
-		})
+		}})
 		require.NoError(t, err, "authorization request failed")
 		require.NotNil(t, authResp.AuthorizationResponse)
 		auth := authResp.AuthorizationResponse
@@ -56,10 +57,10 @@ func TestOIDCParFlow(t *testing.T) {
 		require.NotNil(t, auth.Ticket)
 
 		// Step 3: Issue authorization code.
-		issueResp, err := sdkClient.Authorization.Issue(ctx, serviceID, components.AuthorizationIssueRequest{
+		issueResp, err := sdkClient.Authorization.Issue(ctx, operations.AuthAuthorizationIssueAPIRequest{Body: components.AuthorizationIssueRequest{
 			Ticket:  *auth.Ticket,
 			Subject: subject,
-		})
+		}})
 		require.NoError(t, err, "authorization issue failed")
 		require.NotNil(t, issueResp.AuthorizationIssueResponse)
 		issue := issueResp.AuthorizationIssueResponse
@@ -68,14 +69,14 @@ func TestOIDCParFlow(t *testing.T) {
 		require.NotNil(t, issue.AuthorizationCode)
 
 		// Step 4: Token exchange.
-		tokenResp, err := sdkClient.Token.Process(ctx, serviceID, components.TokenRequest{
+		tokenResp, err := sdkClient.Token.Process(ctx, operations.AuthTokenAPIRequest{Body: components.TokenRequest{
 			Parameters: fmt.Sprintf(
 				"grant_type=authorization_code&code=%s&redirect_uri=%s",
 				*issue.AuthorizationCode, encodedRedirect,
 			),
 			ClientID:     ptr(clientID),
 			ClientSecret: ptr(clientSecret),
-		})
+		}})
 		require.NoError(t, err, "token request failed")
 		require.NotNil(t, tokenResp.TokenResponse)
 		tok := tokenResp.TokenResponse

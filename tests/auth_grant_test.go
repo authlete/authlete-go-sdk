@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/stretchr/testify/require"
 )
 
@@ -16,24 +17,24 @@ func TestAuthorizationCodeFlow(t *testing.T) {
 	sdkClient := createSDKClient(serviceToken)
 
 	// Configure service with a known access token duration.
-	_, err := mgmtClient.Service.Update(ctx, serviceID, &components.ServiceInput{
+	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 		AccessTokenDuration: ptr(tokenDurationSeconds),
-	})
+	}})
 	require.NoError(t, err, "failed to update service")
 
 	// Create a test client and schedule cleanup.
 	clientID, clientSecret := createTestClient(t, mgmtClient, serviceID)
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Client.Delete(context.Background(), serviceID, clientID)
+		_, _ = mgmtClient.Client.Delete(context.Background(), operations.ClientDeleteAPIRequest{ClientID: clientID})
 	})
 
 	// --- Step 1: Authorization Request ---
 	params := fmt.Sprintf("response_type=code&client_id=%s&redirect_uri=%s&state=%s",
 		clientID, url.QueryEscape(redirectURI), testState)
 
-	authResp, err := sdkClient.Authorization.ProcessRequest(ctx, serviceID, components.AuthorizationRequest{
+	authResp, err := sdkClient.Authorization.ProcessRequest(ctx, operations.AuthAuthorizationAPIRequest{Body: components.AuthorizationRequest{
 		Parameters: params,
-	})
+	}})
 	require.NoError(t, err, "authorization request failed")
 	require.NotNil(t, authResp.AuthorizationResponse, "authorization response must not be nil")
 
@@ -44,10 +45,10 @@ func TestAuthorizationCodeFlow(t *testing.T) {
 	require.NotNil(t, authResult.Ticket, "authorization ticket must not be nil")
 
 	// --- Step 2: Authorization Issue (simulate user consent) ---
-	issueResp, err := sdkClient.Authorization.Issue(ctx, serviceID, components.AuthorizationIssueRequest{
+	issueResp, err := sdkClient.Authorization.Issue(ctx, operations.AuthAuthorizationIssueAPIRequest{Body: components.AuthorizationIssueRequest{
 		Ticket:  *authResult.Ticket,
 		Subject: subject,
-	})
+	}})
 	require.NoError(t, err, "authorization issue failed")
 	require.NotNil(t, issueResp.AuthorizationIssueResponse, "authorization issue response must not be nil")
 
@@ -64,11 +65,11 @@ func TestAuthorizationCodeFlow(t *testing.T) {
 	tokenParams := fmt.Sprintf("grant_type=authorization_code&code=%s&redirect_uri=%s",
 		*issueResult.AuthorizationCode, url.QueryEscape(redirectURI))
 
-	tokenResp, err := sdkClient.Token.Process(ctx, serviceID, components.TokenRequest{
+	tokenResp, err := sdkClient.Token.Process(ctx, operations.AuthTokenAPIRequest{Body: components.TokenRequest{
 		Parameters:   tokenParams,
 		ClientID:     ptr(clientID),
 		ClientSecret: ptr(clientSecret),
-	})
+	}})
 	require.NoError(t, err, "token request failed")
 	require.NotNil(t, tokenResp.TokenResponse, "token response must not be nil")
 
@@ -84,11 +85,11 @@ func TestAuthorizationCodeFlow(t *testing.T) {
 	// --- Step 5: Revocation ---
 	revocationParams := fmt.Sprintf("token=%s", *tokenResult.AccessToken)
 
-	revokeResp, err := sdkClient.Revocation.Process(ctx, serviceID, components.RevocationRequest{
+	revokeResp, err := sdkClient.Revocation.Process(ctx, operations.AuthRevocationAPIRequest{Body: components.RevocationRequest{
 		Parameters:   revocationParams,
 		ClientID:     ptr(clientID),
 		ClientSecret: ptr(clientSecret),
-	})
+	}})
 	require.NoError(t, err, "revocation request failed")
 	require.NotNil(t, revokeResp.RevocationResponse, "revocation response must not be nil")
 	require.NotNil(t, revokeResp.RevocationResponse.Action, "revocation action must not be nil")

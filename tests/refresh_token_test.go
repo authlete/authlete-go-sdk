@@ -8,6 +8,7 @@ import (
 
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,12 +23,12 @@ func doAuthCodeFlow(
 	t.Helper()
 	encodedRedirect := url.QueryEscape(redirectURI)
 
-	authResp, err := sdk.Authorization.ProcessRequest(ctx, svcID, components.AuthorizationRequest{
+	authResp, err := sdk.Authorization.ProcessRequest(ctx, operations.AuthAuthorizationAPIRequest{ServiceID: &svcID, Body: components.AuthorizationRequest{
 		Parameters: fmt.Sprintf(
 			"response_type=code&client_id=%s&redirect_uri=%s&state=%s",
 			clientID, encodedRedirect, testState,
 		),
-	})
+	}})
 	require.NoError(t, err, "authorization request failed")
 	require.NotNil(t, authResp.AuthorizationResponse)
 	auth := authResp.AuthorizationResponse
@@ -36,10 +37,10 @@ func doAuthCodeFlow(
 		"expected INTERACTION, got %s", *auth.Action)
 	require.NotNil(t, auth.Ticket)
 
-	issueResp, err := sdk.Authorization.Issue(ctx, svcID, components.AuthorizationIssueRequest{
+	issueResp, err := sdk.Authorization.Issue(ctx, operations.AuthAuthorizationIssueAPIRequest{ServiceID: &svcID, Body: components.AuthorizationIssueRequest{
 		Ticket:  *auth.Ticket,
 		Subject: subject,
-	})
+	}})
 	require.NoError(t, err, "authorization issue failed")
 	require.NotNil(t, issueResp.AuthorizationIssueResponse)
 	issue := issueResp.AuthorizationIssueResponse
@@ -47,14 +48,14 @@ func doAuthCodeFlow(
 	require.Equal(t, components.AuthorizationIssueResponseActionLocation, *issue.Action)
 	require.NotNil(t, issue.AuthorizationCode)
 
-	tokenResp, err := sdk.Token.Process(ctx, svcID, components.TokenRequest{
+	tokenResp, err := sdk.Token.Process(ctx, operations.AuthTokenAPIRequest{ServiceID: &svcID, Body: components.TokenRequest{
 		Parameters: fmt.Sprintf(
 			"grant_type=authorization_code&code=%s&redirect_uri=%s",
 			*issue.AuthorizationCode, encodedRedirect,
 		),
 		ClientID:     ptr(clientID),
 		ClientSecret: ptr(clientSecret),
-	})
+	}})
 	require.NoError(t, err, "token request failed")
 	require.NotNil(t, tokenResp.TokenResponse)
 	tok := tokenResp.TokenResponse
@@ -72,19 +73,19 @@ func TestRefreshTokenFlow(t *testing.T) {
 	mgmtClient := createSDKClient(mgmtToken)
 	sdkClient := createSDKClient(serviceToken)
 
-	_, err := mgmtClient.Service.Update(ctx, serviceID, &components.ServiceInput{
+	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 		SupportedGrantTypes: setValue([]components.GrantType{
 			components.GrantTypeAuthorizationCode,
 			components.GrantTypeRefreshToken,
 		}),
 		AccessTokenDuration:  ptr(tokenDurationSeconds),
 		RefreshTokenDuration: ptr(tokenDurationSeconds),
-	})
+	}})
 	require.NoError(t, err, "failed to update service")
 
 	clientID, clientSecret := createTestClient(t, mgmtClient, serviceID)
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Client.Delete(context.Background(), serviceID, clientID)
+		_, _ = mgmtClient.Client.Delete(context.Background(), operations.ClientDeleteAPIRequest{ClientID: clientID})
 	})
 
 	t.Run("RefreshTokenIssued", func(t *testing.T) {
@@ -97,11 +98,11 @@ func TestRefreshTokenFlow(t *testing.T) {
 		tok := doAuthCodeFlow(t, ctx, sdkClient, serviceID, clientID, clientSecret)
 		require.NotNil(t, tok.RefreshToken)
 
-		refreshResp, err := sdkClient.Token.Process(ctx, serviceID, components.TokenRequest{
+		refreshResp, err := sdkClient.Token.Process(ctx, operations.AuthTokenAPIRequest{Body: components.TokenRequest{
 			Parameters:   fmt.Sprintf("grant_type=refresh_token&refresh_token=%s", *tok.RefreshToken),
 			ClientID:     ptr(clientID),
 			ClientSecret: ptr(clientSecret),
-		})
+		}})
 		require.NoError(t, err, "refresh token exchange failed")
 		require.NotNil(t, refreshResp.TokenResponse)
 		refreshed := refreshResp.TokenResponse
@@ -117,11 +118,11 @@ func TestRefreshTokenFlow(t *testing.T) {
 		tok := doAuthCodeFlow(t, ctx, sdkClient, serviceID, clientID, clientSecret)
 		require.NotNil(t, tok.RefreshToken)
 
-		revokeResp, err := sdkClient.Revocation.Process(ctx, serviceID, components.RevocationRequest{
+		revokeResp, err := sdkClient.Revocation.Process(ctx, operations.AuthRevocationAPIRequest{Body: components.RevocationRequest{
 			Parameters:   fmt.Sprintf("token=%s", *tok.RefreshToken),
 			ClientID:     ptr(clientID),
 			ClientSecret: ptr(clientSecret),
-		})
+		}})
 		require.NoError(t, err, "revocation request failed")
 		require.NotNil(t, revokeResp.RevocationResponse)
 		require.NotNil(t, revokeResp.RevocationResponse.Action)
@@ -138,29 +139,29 @@ func TestRefreshTokenNotSupported(t *testing.T) {
 	mgmtClient := createSDKClient(mgmtToken)
 	sdkClient := createSDKClient(serviceToken)
 
-	_, err := mgmtClient.Service.Update(ctx, serviceID, &components.ServiceInput{
+	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 		SupportedGrantTypes: setValue([]components.GrantType{
 			components.GrantTypeAuthorizationCode,
 		}),
 		AccessTokenDuration:  ptr(tokenDurationSeconds),
 		RefreshTokenDuration: ptr(tokenDurationSeconds),
-	})
+	}})
 	require.NoError(t, err, "failed to restrict supported grant types")
 
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Service.Update(context.Background(), serviceID, &components.ServiceInput{
+		_, _ = mgmtClient.Service.Update(context.Background(), operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 			SupportedGrantTypes: setValue([]components.GrantType{
 				components.GrantTypeAuthorizationCode,
 				components.GrantTypeRefreshToken,
 			}),
 			AccessTokenDuration:  ptr(tokenDurationSeconds),
 			RefreshTokenDuration: ptr(tokenDurationSeconds),
-		})
+		}})
 	})
 
 	clientID, clientSecret := createTestClient(t, mgmtClient, serviceID)
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Client.Delete(context.Background(), serviceID, clientID)
+		_, _ = mgmtClient.Client.Delete(context.Background(), operations.ClientDeleteAPIRequest{ClientID: clientID})
 	})
 
 	t.Run("RefreshTokenNotIssued", func(t *testing.T) {
@@ -170,11 +171,11 @@ func TestRefreshTokenNotSupported(t *testing.T) {
 	})
 
 	t.Run("RefreshTokenRejected", func(t *testing.T) {
-		tokenResp, err := sdkClient.Token.Process(ctx, serviceID, components.TokenRequest{
+		tokenResp, err := sdkClient.Token.Process(ctx, operations.AuthTokenAPIRequest{Body: components.TokenRequest{
 			Parameters:   "grant_type=refresh_token&refresh_token=dummy_token",
 			ClientID:     ptr(clientID),
 			ClientSecret: ptr(clientSecret),
-		})
+		}})
 		require.NoError(t, err, "token request failed")
 		require.NotNil(t, tokenResp.TokenResponse)
 		require.NotNil(t, tokenResp.TokenResponse.Action)
