@@ -5,14 +5,14 @@ management:
   docVersion: 3.0.16
   speakeasyVersion: 1.802.0
   generationVersion: 2.948.4
-  releaseVersion: 0.3.0
-  configChecksum: 7d5fbb16420617abff2ff498dd11bc58
+  releaseVersion: 0.3.1
+  configChecksum: f7b1e313df28e0d0d16416d43e13cc60
   repoURL: https://github.com/authlete/authlete-go-sdk.git
   installationURL: https://github.com/authlete/authlete-go-sdk
 persistentEdits:
-  generation_id: f69fb9f7-5906-49bf-92bf-7ec4a8fa3a69
-  pristine_commit_hash: e67cfb7bb6aae1adea3af32d7f797455d50b92b2
-  pristine_tree_hash: 69481fc542a0ca6bf0bc1ba5dacf6801e5ed42d8
+  generation_id: 5e661a5a-a118-4f7f-90ca-2fbc70616aa4
+  pristine_commit_hash: 212869a7ca365b9c63ba4ceb5e3478d9ea47bb9c
+  pristine_tree_hash: 43c997fd538a019b8ca6a51788f8969487f85943
 features:
   go:
     additionalDependencies: 0.1.0
@@ -68,8 +68,8 @@ trackedFiles:
     pristine_git_object: eb0c83aa47f65e300d994df5aae07a6e30dba809
   authlete.go:
     id: 52962fe756b1
-    last_write_checksum: sha1:cec63a6bc0664610740d78786f8e86eb62103ff5
-    pristine_git_object: 577ed873651cf8bd7919d4e82b4012d40fe2715e
+    last_write_checksum: sha1:ac7bc401808067aad1a6f0656e5f5ae2d176f4d7
+    pristine_git_object: 0730b2bc06a7347ae95323a4a643b88f4cd5ec82
   authorization.go:
     id: d201c3f05471
     last_write_checksum: sha1:3dc4f651637c6890a84f9414f3b34f8ac8d0afa3
