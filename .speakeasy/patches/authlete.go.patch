@@ -1,0 +1,13 @@
+diff --git a/authlete.go b/authlete.go
+index 0730b2b..9773019 100644
+--- a/authlete.go
++++ b/authlete.go
+@@ -250,6 +250,8 @@ func New(opts ...SDKOption) *Authlete {
+ 		opt(sdk)
+ 	}
+ 
++	registerAuthleteHooks(sdk) // hand-written, see idp.go
++
+ 	sdk.sdkConfiguration.FillGlobalsFromEnv()
+ 
+ 	if sdk.sdkConfiguration.Security == nil {
