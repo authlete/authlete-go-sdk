@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/authlete/authlete-go-sdk/internal/utils"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 )
 
 type SupportedSnse string
@@ -212,24 +211,24 @@ type Service struct {
 	// The sequential number of the service. The value of this property is assigned by Authlete.
 	Number *int `json:"number,omitzero"`
 	// The name of this service.
-	ServiceName optionalnullable.OptionalNullable[string] `json:"serviceName,omitzero"`
+	ServiceName *string `json:"serviceName,omitzero"`
 	// The issuer identifier of the service.
 	//
 	// A URL that starts with  https:// and has no query or fragment component.
 	//
 	// The value of this property is used as `iss` claim in an [ID token](https://openid.net/specs/openid-connect-core-1_0.html#IDToken) and `issuer` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	Issuer optionalnullable.OptionalNullable[string] `json:"issuer,omitzero"`
+	Issuer *string `json:"issuer,omitzero"`
 	// The description about the service.
-	Description optionalnullable.OptionalNullable[string] `json:"description,omitzero"`
+	Description *string `json:"description,omitzero"`
 	// The service ID used in Authlete API calls. The value of this property is assigned by Authlete.
 	APIKey *int64 `json:"apiKey,omitzero"`
 	// The API secret of this service. This value is assigned by Authlete and is used for service authentication in API calls.
 	//
-	APISecret optionalnullable.OptionalNullable[string] `json:"apiSecret,omitzero"`
+	APISecret *string `json:"apiSecret,omitzero"`
 	// The endpoint for batch token notifications. This endpoint is called when multiple tokens are issued or revoked in a batch operation.
 	//
-	TokenBatchNotificationEndpoint optionalnullable.OptionalNullable[string] `json:"tokenBatchNotificationEndpoint,omitzero"`
+	TokenBatchNotificationEndpoint *string `json:"tokenBatchNotificationEndpoint,omitzero"`
 	// The flag indicating whether the audience of client assertion JWTs must match the issuer identifier of this service.
 	//
 	ClientAssertionAudRestrictedToIssuer *bool `json:"clientAssertionAudRestrictedToIssuer,omitzero"`
@@ -241,25 +240,25 @@ type Service struct {
 	ClientsPerDeveloper *int `json:"clientsPerDeveloper,omitzero"`
 	// The endpoint for developer authentication callbacks. This is used when developers log into the developer portal.
 	//
-	DeveloperAuthenticationCallbackEndpoint optionalnullable.OptionalNullable[string] `json:"developerAuthenticationCallbackEndpoint,omitzero"`
+	DeveloperAuthenticationCallbackEndpoint *string `json:"developerAuthenticationCallbackEndpoint,omitzero"`
 	// The API key for basic authentication at the developer authentication callback endpoint.
 	//
-	DeveloperAuthenticationCallbackAPIKey optionalnullable.OptionalNullable[string] `json:"developerAuthenticationCallbackApiKey,omitzero"`
+	DeveloperAuthenticationCallbackAPIKey *string `json:"developerAuthenticationCallbackApiKey,omitzero"`
 	// The API secret for basic authentication at the developer authentication callback endpoint.
 	//
-	DeveloperAuthenticationCallbackAPISecret optionalnullable.OptionalNullable[string] `json:"developerAuthenticationCallbackApiSecret,omitzero"`
+	DeveloperAuthenticationCallbackAPISecret *string `json:"developerAuthenticationCallbackApiSecret,omitzero"`
 	// Social login services (SNS) that this service supports for end-user authentication.
 	//
-	SupportedSnses optionalnullable.OptionalNullable[[]SupportedSnse] `json:"supportedSnses,omitzero"`
+	SupportedSnses []SupportedSnse `json:"supportedSnses,omitzero"`
 	// The credentials for social login services (SNS) that are used for end-user authentication.
 	//
-	SnsCredentials optionalnullable.OptionalNullable[[]SnsCredentials] `json:"snsCredentials,omitzero"`
+	SnsCredentials []SnsCredentials `json:"snsCredentials,omitzero"`
 	// Social login services (SNS) that this service supports for developer authentication.
 	//
-	SupportedDeveloperSnses optionalnullable.OptionalNullable[[]SupportedDeveloperSnse] `json:"supportedDeveloperSnses,omitzero"`
+	SupportedDeveloperSnses []SupportedDeveloperSnse `json:"supportedDeveloperSnses,omitzero"`
 	// The credentials for social login services (SNS) that are used for developer authentication.
 	//
-	DeveloperSnsCredentials optionalnullable.OptionalNullable[[]SnsCredentials] `json:"developerSnsCredentials,omitzero"`
+	DeveloperSnsCredentials []SnsCredentials `json:"developerSnsCredentials,omitzero"`
 	// Deprecated. Always `true`.
 	ClientIDAliasEnabled *bool `json:"clientIdAliasEnabled,omitzero"`
 	// The `metadata` of the service. The content of the returned array depends on contexts. The predefined service metadata is listed in the following table.
@@ -268,7 +267,7 @@ type Service struct {
 	//   | --- | --- |
 	//   | `clientCount` | The number of client applications which belong to this service.  |
 	//
-	Metadata optionalnullable.OptionalNullable[[]Pair] `json:"metadata,omitzero"`
+	Metadata []Pair `json:"metadata,omitzero"`
 	// The time at which this service was created. The value is represented as milliseconds since the UNIX epoch (`1970-01-01`).
 	//
 	CreatedAt *int64 `json:"createdAt,omitzero"`
@@ -281,37 +280,37 @@ type Service struct {
 	//
 	// The user authentication at the authorization endpoint provided by Authlete is performed by making a `POST` request to this endpoint.
 	//
-	AuthenticationCallbackEndpoint optionalnullable.OptionalNullable[string] `json:"authenticationCallbackEndpoint,omitzero"`
+	AuthenticationCallbackEndpoint *string `json:"authenticationCallbackEndpoint,omitzero"`
 	// API key for basic authentication at the authentication callback endpoint.
 	//
 	// If the value is not empty, Authlete generates Authorization header for Basic authentication when making a request to the authentication callback endpoint.
 	//
-	AuthenticationCallbackAPIKey optionalnullable.OptionalNullable[string] `json:"authenticationCallbackApiKey,omitzero"`
+	AuthenticationCallbackAPIKey *string `json:"authenticationCallbackApiKey,omitzero"`
 	// API secret for `basic` authentication at the authentication callback endpoint.
-	AuthenticationCallbackAPISecret optionalnullable.OptionalNullable[string] `json:"authenticationCallbackApiSecret,omitzero"`
+	AuthenticationCallbackAPISecret *string `json:"authenticationCallbackApiSecret,omitzero"`
 	// Values of acrs (authentication context class references) that the service supports.
 	//
 	// The value of this property is used as `acr_values_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedAcrs optionalnullable.OptionalNullable[[]string] `json:"supportedAcrs,omitzero"`
+	SupportedAcrs []string `json:"supportedAcrs,omitzero"`
 	// Values of `grant_type` request parameter that the service supports.
 	//
 	// The value of this property is used as `grant_types_supported property` in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedGrantTypes optionalnullable.OptionalNullable[[]GrantType] `json:"supportedGrantTypes,omitzero"`
+	SupportedGrantTypes []GrantType `json:"supportedGrantTypes,omitzero"`
 	// Values of `response_type` request parameter that the service supports. Valid values are listed in Response Type.
 	//
 	// The value of this property is used as `response_types_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedResponseTypes optionalnullable.OptionalNullable[[]ResponseType] `json:"supportedResponseTypes,omitzero"`
+	SupportedResponseTypes []ResponseType `json:"supportedResponseTypes,omitzero"`
 	// The supported data types that can be used as values of the type field in `authorization_details`.
 	//
 	// This property corresponds to the `authorization_details_types_supported` metadata. See "OAuth 2.0 Rich Authorization Requests" (RAR) for details.
 	//
-	SupportedAuthorizationDetailsTypes optionalnullable.OptionalNullable[[]string] `json:"supportedAuthorizationDetailsTypes,omitzero"`
+	SupportedAuthorizationDetailsTypes []string `json:"supportedAuthorizationDetailsTypes,omitzero"`
 	// The profiles that this service supports.
 	//
-	SupportedServiceProfiles optionalnullable.OptionalNullable[[]ServiceProfile] `json:"supportedServiceProfiles,omitzero"`
+	SupportedServiceProfiles []ServiceProfile `json:"supportedServiceProfiles,omitzero"`
 	// The flag to indicate whether the `error_description` response parameter is omitted.
 	//
 	// According to [RFC 6749](https://tools.ietf.org/html/rfc6749), an authorization server may include the `error_description` response parameter in error responses.
@@ -332,7 +331,7 @@ type Service struct {
 	//
 	// The value of this property is used as `authorization_endpoint` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	AuthorizationEndpoint optionalnullable.OptionalNullable[string] `json:"authorizationEndpoint,omitzero"`
+	AuthorizationEndpoint *string `json:"authorizationEndpoint,omitzero"`
 	// Deprecated. The direct authorization endpoint was removed in Authlete 3.0.15, so this flag has no effect and is always returned as `false`.
 	//
 	//
@@ -344,12 +343,12 @@ type Service struct {
 	//
 	// The value of this property is used as `ui_locales_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedUILocales optionalnullable.OptionalNullable[[]string] `json:"supportedUiLocales,omitzero"`
+	SupportedUILocales []string `json:"supportedUiLocales,omitzero"`
 	// Values of `display` request parameter that service supports.
 	//
 	// The value of this property is used as `display_values_supported` property in the Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedDisplays optionalnullable.OptionalNullable[[]Display] `json:"supportedDisplays,omitzero"`
+	SupportedDisplays []Display `json:"supportedDisplays,omitzero"`
 	// The flag to indicate whether the use of Proof Key for Code Exchange (PKCE) is always required for authorization requests by Authorization Code Flow.
 	//
 	// If `true`, `code_challenge` request parameter is always required for authorization requests using Authorization Code Flow.
@@ -376,7 +375,7 @@ type Service struct {
 	//
 	// The value of this property is used as `token_endpoint` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	TokenEndpoint optionalnullable.OptionalNullable[string] `json:"tokenEndpoint,omitzero"`
+	TokenEndpoint *string `json:"tokenEndpoint,omitzero"`
 	// Deprecated. The direct token endpoint was removed in Authlete 3.0.15, so this flag has no effect and is always returned as `false`.
 	//
 	//
@@ -386,7 +385,7 @@ type Service struct {
 	//
 	// The value of this property is used as `token_endpoint_auth_methods_supports` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedTokenAuthMethods optionalnullable.OptionalNullable[[]ClientAuthMethod] `json:"supportedTokenAuthMethods,omitzero"`
+	SupportedTokenAuthMethods []ClientAuthMethod `json:"supportedTokenAuthMethods,omitzero"`
 	// The flag to indicate token requests from public clients without the `client_id` request parameter are allowed when the client can be guessed from `authorization_code` or `refresh_token`.
 	//
 	// This flag should not be set unless you have special reasons.
@@ -396,7 +395,7 @@ type Service struct {
 	//
 	// A URL that starts with `https://`. For example, `https://example.com/auth/revocation`.
 	//
-	RevocationEndpoint optionalnullable.OptionalNullable[string] `json:"revocationEndpoint,omitzero"`
+	RevocationEndpoint *string `json:"revocationEndpoint,omitzero"`
 	// Deprecated. The direct revocation endpoint was removed in Authlete 3.0.15, so this flag has no effect and is always returned as `false`.
 	//
 	//
@@ -404,9 +403,9 @@ type Service struct {
 	DirectRevocationEndpointEnabled *bool `json:"directRevocationEndpointEnabled,omitzero"`
 	// Client authentication methods supported at the revocation endpoint.
 	//
-	SupportedRevocationAuthMethods optionalnullable.OptionalNullable[[]ClientAuthMethod] `json:"supportedRevocationAuthMethods,omitzero"`
+	SupportedRevocationAuthMethods []ClientAuthMethod `json:"supportedRevocationAuthMethods,omitzero"`
 	// The URI of the introspection endpoint.
-	IntrospectionEndpoint optionalnullable.OptionalNullable[string] `json:"introspectionEndpoint,omitzero"`
+	IntrospectionEndpoint *string `json:"introspectionEndpoint,omitzero"`
 	// Deprecated. The direct introspection endpoint was removed in Authlete 3.0.15, so this flag has no effect and is always returned as `false`.
 	//
 	//
@@ -414,12 +413,12 @@ type Service struct {
 	DirectIntrospectionEndpointEnabled *bool `json:"directIntrospectionEndpointEnabled,omitzero"`
 	// Client authentication methods supported at the introspection endpoint.
 	//
-	SupportedIntrospectionAuthMethods optionalnullable.OptionalNullable[[]ClientAuthMethod] `json:"supportedIntrospectionAuthMethods,omitzero"`
+	SupportedIntrospectionAuthMethods []ClientAuthMethod `json:"supportedIntrospectionAuthMethods,omitzero"`
 	// The URI of the pushed authorization request endpoint.
 	//
 	// This property corresponds to the `pushed_authorization_request_endpoint` metadata defined in "[5. Authorization Server Metadata](https://tools.ietf.org/html/draft-lodderstedt-oauth-par#section-5)" of OAuth 2.0 Pushed Authorization Requests.
 	//
-	PushedAuthReqEndpoint optionalnullable.OptionalNullable[string] `json:"pushedAuthReqEndpoint,omitzero"`
+	PushedAuthReqEndpoint *string `json:"pushedAuthReqEndpoint,omitzero"`
 	// The duration of pushed authorization requests in seconds.
 	//
 	PushedAuthReqDuration *int64 `json:"pushedAuthReqDuration,omitzero"`
@@ -441,17 +440,17 @@ type Service struct {
 	MutualTLSValidatePkiCertChain *bool `json:"mutualTlsValidatePkiCertChain,omitzero"`
 	// The list of root certificates trusted by this service for PKI-based client mutual TLS authentication.
 	//
-	TrustedRootCertificates optionalnullable.OptionalNullable[[]string] `json:"trustedRootCertificates,omitzero"`
+	TrustedRootCertificates []string `json:"trustedRootCertificates,omitzero"`
 	// The MTLS endpoint aliases.
 	//
-	MtlsEndpointAliases optionalnullable.OptionalNullable[[]NamedURI] `json:"mtlsEndpointAliases,omitzero"`
+	MtlsEndpointAliases []NamedURI `json:"mtlsEndpointAliases,omitzero"`
 	// The access token type.
 	//
 	// This value is used as the value of `token_type` property in access token responses. If this service complies with [RFC 6750](https://tools.ietf.org/html/rfc6750), the value of this property should be `Bearer`.
 	//
 	// See [RFC 6749 (OAuth 2.0), 7.1. Access Token Types](https://tools.ietf.org/html/rfc6749#section-7.1) for details.
 	//
-	AccessTokenType optionalnullable.OptionalNullable[string] `json:"accessTokenType,omitzero"`
+	AccessTokenType *string `json:"accessTokenType,omitzero"`
 	// The flag to indicate whether this service supports issuing TLS client certificate bound access tokens.
 	//
 	TLSClientCertificateBoundAccessTokens *bool `json:"tlsClientCertificateBoundAccessTokens,omitzero"`
@@ -472,12 +471,12 @@ type Service struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	AccessTokenSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"accessTokenSignAlg,omitzero"`
+	AccessTokenSignAlg *JwsAlg `json:"accessTokenSignAlg,omitzero"`
 	// The key ID to identify a JWK used for signing access tokens.
 	//
 	// A JWK Set can be registered as a property of a service. A JWK Set can contain 0 or more JWKs. Authlete Server has to pick up one JWK for signing from the JWK Set when it generates a JWT-based access token. Authlete Server searches the registered JWK Set for a JWK which satisfies conditions for access token signature. If the number of JWK candidates which satisfy the conditions is 1, there is no problem. On the other hand, if there exist multiple candidates, a Key ID is needed to be specified so that Authlete Server can pick up one JWK from among the JWK candidates.
 	//
-	AccessTokenSignatureKeyID optionalnullable.OptionalNullable[string] `json:"accessTokenSignatureKeyId,omitzero"`
+	AccessTokenSignatureKeyID *string `json:"accessTokenSignatureKeyId,omitzero"`
 	// The duration of refresh tokens in seconds. The related specifications have no requirements on refresh token duration, but Authlete sets expiration for refresh tokens.
 	RefreshTokenDuration *int64 `json:"refreshTokenDuration,omitzero"`
 	// The flag to indicate whether the remaining duration of the used refresh token is taken over to the newly issued refresh token.
@@ -497,7 +496,7 @@ type Service struct {
 	RefreshTokenKept *bool `json:"refreshTokenKept,omitzero"`
 	// Scopes supported by the service.
 	//
-	SupportedScopes optionalnullable.OptionalNullable[[]Scope] `json:"supportedScopes,omitzero"`
+	SupportedScopes []Scope `json:"supportedScopes,omitzero"`
 	// The flag to indicate whether requests that request no scope are rejected or not.
 	//
 	ScopeRequired *bool `json:"scopeRequired,omitzero"`
@@ -513,15 +512,15 @@ type Service struct {
 	//
 	// The value of this property is used as `claim_types_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedClaimTypes optionalnullable.OptionalNullable[[]ClaimType] `json:"supportedClaimTypes,omitzero"`
+	SupportedClaimTypes []ClaimType `json:"supportedClaimTypes,omitzero"`
 	// Claim locales that the service supports. Each element is a language tag defined in [RFC 5646](https://tools.ietf.org/html/rfc5646). For example, `en-US` and `ja-JP`. See [OpenID Connect Core 1.0, 5.2. Languages and Scripts](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsLanguagesAndScripts) for details.
 	//
 	// The value of this property is used as `claims_locales_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedClaimLocales optionalnullable.OptionalNullable[[]string] `json:"supportedClaimLocales,omitzero"`
+	SupportedClaimLocales []string `json:"supportedClaimLocales,omitzero"`
 	// Claim names that the service supports. The standard claim names listed in [OpenID Connect Core 1.0, 5.1. Standard Claim](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims) should be supported. The following is the list of standard claims.
 	//
-	SupportedClaims optionalnullable.OptionalNullable[[]string] `json:"supportedClaims,omitzero"`
+	SupportedClaims []string `json:"supportedClaims,omitzero"`
 	// The flag indicating whether claims specified by shortcut scopes (e.g. `profile`) are included in the issued ID token only when no access token is issued.
 	//
 	ClaimShortcutRestrictive *bool `json:"claimShortcutRestrictive,omitzero"`
@@ -531,7 +530,7 @@ type Service struct {
 	//
 	// The value of this property is used as `jwks_uri` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	JwksURI optionalnullable.OptionalNullable[string] `json:"jwksUri,omitzero"`
+	JwksURI *string `json:"jwksUri,omitzero"`
 	// Deprecated. The direct JWKS endpoint was removed in Authlete 3.0.15, so this flag has no effect and is always returned as `false`.
 	//
 	//
@@ -541,21 +540,21 @@ type Service struct {
 	//
 	// If this property is not `null` in a `/service/create` request or a `/service/update` request, Authlete hosts the content in the database. This property must not be `null` and must contain pairs of public/private keys if the service wants to support asymmetric signatures for ID tokens and asymmetric encryption for request objects. See [OpenID Connect Core 1.0, 10. Signatures and Encryption](https://openid.net/specs/openid-connect-core-1_0.html#SigEnc) for details.
 	//
-	Jwks optionalnullable.OptionalNullable[string] `json:"jwks,omitzero"`
+	Jwks *string `json:"jwks,omitzero"`
 	// The key ID to identify a JWK used for ID token signature using an asymmetric key.
 	//
-	IDTokenSignatureKeyID optionalnullable.OptionalNullable[string] `json:"idTokenSignatureKeyId,omitzero"`
+	IDTokenSignatureKeyID *string `json:"idTokenSignatureKeyId,omitzero"`
 	// The key ID to identify a JWK used for user info signature using an asymmetric key.
 	//
-	UserInfoSignatureKeyID optionalnullable.OptionalNullable[string] `json:"userInfoSignatureKeyId,omitzero"`
+	UserInfoSignatureKeyID *string `json:"userInfoSignatureKeyId,omitzero"`
 	// The key ID to identify a JWK used for signing authorization responses using an asymmetric key.
 	//
-	AuthorizationSignatureKeyID optionalnullable.OptionalNullable[string] `json:"authorizationSignatureKeyId,omitzero"`
+	AuthorizationSignatureKeyID *string `json:"authorizationSignatureKeyId,omitzero"`
 	// The [user info endpoint](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo) of the service. A URL that starts with `https://`. For example, `https://example.com/auth/userinfo`.
 	//
 	// The value of this property is used as `userinfo_endpoint` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	UserInfoEndpoint optionalnullable.OptionalNullable[string] `json:"userInfoEndpoint,omitzero"`
+	UserInfoEndpoint *string `json:"userInfoEndpoint,omitzero"`
 	// Deprecated. The direct userinfo endpoint was removed in Authlete 3.0.15, so this flag has no effect and is always returned as `false`.
 	//
 	//
@@ -568,33 +567,33 @@ type Service struct {
 	//
 	// The value of this property is used as `registration_endpoint` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	RegistrationEndpoint optionalnullable.OptionalNullable[string] `json:"registrationEndpoint,omitzero"`
+	RegistrationEndpoint *string `json:"registrationEndpoint,omitzero"`
 	// The URI of the registration management endpoint. If dynamic client registration is supported, and this is set, this URI will be used as the basis of the client's management endpoint by appending `/clientid&#125;/` to it as a path element. If this is unset, the value of `registrationEndpoint` will be used as the URI base instead.
 	//
-	RegistrationManagementEndpoint optionalnullable.OptionalNullable[string] `json:"registrationManagementEndpoint,omitzero"`
+	RegistrationManagementEndpoint *string `json:"registrationManagementEndpoint,omitzero"`
 	// The URL of the "Policy" of the service.
 	//
 	// The value of this property is used as `op_policy_uri` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	PolicyURI optionalnullable.OptionalNullable[string] `json:"policyUri,omitzero"`
+	PolicyURI *string `json:"policyUri,omitzero"`
 	// The URL of the "Terms Of Service" of the service.
 	//
 	// The value of this property is used as `op_tos_uri` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	TosURI optionalnullable.OptionalNullable[string] `json:"tosUri,omitzero"`
+	TosURI *string `json:"tosUri,omitzero"`
 	// The URL of a page where documents for developers can be found.
 	//
 	// The value of this property is used as `service_documentation` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	ServiceDocumentation optionalnullable.OptionalNullable[string] `json:"serviceDocumentation,omitzero"`
+	ServiceDocumentation *string `json:"serviceDocumentation,omitzero"`
 	// The URI of backchannel authentication endpoint, which is defined in the specification of [CIBA (Client Initiated Backchannel Authentication)](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html).
 	//
-	BackchannelAuthenticationEndpoint optionalnullable.OptionalNullable[string] `json:"backchannelAuthenticationEndpoint,omitzero"`
+	BackchannelAuthenticationEndpoint *string `json:"backchannelAuthenticationEndpoint,omitzero"`
 	// The supported backchannel token delivery modes. This property corresponds to the `backchannel_token_delivery_modes_supported` metadata.
 	//
 	// Backchannel token delivery modes are defined in the specification of [CIBA (Client Initiated Backchannel Authentication)](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html).
 	//
-	SupportedBackchannelTokenDeliveryModes optionalnullable.OptionalNullable[[]DeliveryMode] `json:"supportedBackchannelTokenDeliveryModes,omitzero"`
+	SupportedBackchannelTokenDeliveryModes []DeliveryMode `json:"supportedBackchannelTokenDeliveryModes,omitzero"`
 	// The duration of backchannel authentication request IDs issued from the backchannel authentication endpoint in seconds. This is used as the value of the `expires_in` property in responses from the backchannel authentication endpoint.
 	//
 	BackchannelAuthReqIDDuration *int `json:"backchannelAuthReqIdDuration,omitzero"`
@@ -611,44 +610,44 @@ type Service struct {
 	//
 	// Device authorization endpoint is defined in the specification of OAuth 2.0 Device Authorization Grant.
 	//
-	DeviceAuthorizationEndpoint optionalnullable.OptionalNullable[string] `json:"deviceAuthorizationEndpoint,omitzero"`
+	DeviceAuthorizationEndpoint *string `json:"deviceAuthorizationEndpoint,omitzero"`
 	// The verification URI for the device flow. This URI is used as the value of the `verification_uri` parameter in responses from the device authorization endpoint.
 	//
-	DeviceVerificationURI optionalnullable.OptionalNullable[string] `json:"deviceVerificationUri,omitzero"`
+	DeviceVerificationURI *string `json:"deviceVerificationUri,omitzero"`
 	// The verification URI for the device flow with a placeholder for a user code. This URI is used to build the value of the `verification_uri_complete` parameter in responses from the device authorization endpoint.
 	//
-	DeviceVerificationURIComplete optionalnullable.OptionalNullable[string] `json:"deviceVerificationUriComplete,omitzero"`
+	DeviceVerificationURIComplete *string `json:"deviceVerificationUriComplete,omitzero"`
 	// The duration of device verification codes and end-user verification codes issued from the device authorization endpoint in seconds. This is used as the value of the `expires_in` property in responses from the device authorization endpoint.
 	//
 	DeviceFlowCodeDuration *int `json:"deviceFlowCodeDuration,omitzero"`
 	// The minimum interval between polling requests to the token endpoint from client applications in seconds in device flow. This is used as the value of the `interval` property in responses from the device authorization endpoint.
 	//
-	DeviceFlowPollingInterval *int                                               `json:"deviceFlowPollingInterval,omitzero"`
-	UserCodeCharset           optionalnullable.OptionalNullable[UserCodeCharset] `json:"userCodeCharset,omitzero"`
+	DeviceFlowPollingInterval *int             `json:"deviceFlowPollingInterval,omitzero"`
+	UserCodeCharset           *UserCodeCharset `json:"userCodeCharset,omitzero"`
 	// The length of end-user verification codes (`user_code`) for Device Flow.
 	//
 	UserCodeLength *int `json:"userCodeLength,omitzero"`
 	// Trust frameworks supported by this service. This corresponds to the `trust_frameworks_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedTrustFrameworks optionalnullable.OptionalNullable[[]string] `json:"supportedTrustFrameworks,omitzero"`
+	SupportedTrustFrameworks []string `json:"supportedTrustFrameworks,omitzero"`
 	// Evidence supported by this service. This corresponds to the `evidence_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedEvidence optionalnullable.OptionalNullable[[]string] `json:"supportedEvidence,omitzero"`
+	SupportedEvidence []string `json:"supportedEvidence,omitzero"`
 	// Identity documents supported by this service. This corresponds to the `id_documents_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedIdentityDocuments optionalnullable.OptionalNullable[[]string] `json:"supportedIdentityDocuments,omitzero"`
+	SupportedIdentityDocuments []string `json:"supportedIdentityDocuments,omitzero"`
 	// Verification methods supported by this service. This corresponds to the `id_documents_verification_methods_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedVerificationMethods optionalnullable.OptionalNullable[[]string] `json:"supportedVerificationMethods,omitzero"`
+	SupportedVerificationMethods []string `json:"supportedVerificationMethods,omitzero"`
 	// Verified claims supported by this service. This corresponds to the `claims_in_verified_claims_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedVerifiedClaims optionalnullable.OptionalNullable[[]string] `json:"supportedVerifiedClaims,omitzero"`
+	SupportedVerifiedClaims []string `json:"supportedVerifiedClaims,omitzero"`
 	// The verified claims validation schema set.
 	//
 	VerifiedClaimsValidationSchemaSet *VerifiedClaimsValidationSchema `json:"verifiedClaimsValidationSchemaSet,omitzero"`
 	// The attributes of this service.
 	//
-	Attributes optionalnullable.OptionalNullable[[]Pair] `json:"attributes,omitzero"`
+	Attributes []Pair `json:"attributes,omitzero"`
 	// The flag indicating whether the nbf claim in the request object is optional even when the authorization request is regarded as a FAPI-Part2 request.
 	//
 	NbfOptional *bool `json:"nbfOptional,omitzero"`
@@ -657,7 +656,7 @@ type Service struct {
 	IssSuppressed *bool `json:"issSuppressed,omitzero"`
 	// custom client metadata supported by this service.
 	//
-	SupportedCustomClientMetadata optionalnullable.OptionalNullable[[]string] `json:"supportedCustomClientMetadata,omitzero"`
+	SupportedCustomClientMetadata []string `json:"supportedCustomClientMetadata,omitzero"`
 	// The flag indicating whether the expiration date of an access token never exceeds that of the corresponding refresh token.
 	//
 	TokenExpirationLinked *bool `json:"tokenExpirationLinked,omitzero"`
@@ -681,10 +680,10 @@ type Service struct {
 	//
 	// This `hsks` property is output only, meaning that `hsks` in requests to `/api/service/create` API and `/api/service/update` API do not have any effect. The contents of this property is controlled only by `/api/hsk/*` APIs.
 	//
-	Hsks optionalnullable.OptionalNullable[[]Hsk] `json:"hsks,omitzero"`
+	Hsks []Hsk `json:"hsks,omitzero"`
 	// The URL of the grant management endpoint.
 	//
-	GrantManagementEndpoint optionalnullable.OptionalNullable[string] `json:"grantManagementEndpoint,omitzero"`
+	GrantManagementEndpoint *string `json:"grantManagementEndpoint,omitzero"`
 	// The flag indicating whether every authorization request (and any request serving as an authorization request such as CIBA backchannel authentication request and device authorization request) must include the `grant_management_action` request parameter.
 	//
 	GrantManagementActionRequired *bool `json:"grantManagementActionRequired,omitzero"`
@@ -704,10 +703,10 @@ type Service struct {
 	//
 	// The value of this property is used as `end_session_endpoint` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	EndSessionEndpoint optionalnullable.OptionalNullable[string] `json:"endSessionEndpoint,omitzero"`
+	EndSessionEndpoint *string `json:"endSessionEndpoint,omitzero"`
 	// The URL of the challenge endpoint, which is defined in OAuth 2.0 Attestation-Based Client Authentication.
 	//
-	ChallengeEndpoint optionalnullable.OptionalNullable[string] `json:"challengeEndpoint,omitzero"`
+	ChallengeEndpoint *string `json:"challengeEndpoint,omitzero"`
 	// The flag indicating whether the port number component of redirection URIs can be variable when the host component indicates loopback.
 	//
 	LoopbackRedirectionURIVariable *bool `json:"loopbackRedirectionUriVariable,omitzero"`
@@ -719,58 +718,58 @@ type Service struct {
 	AccessTokenForExternalAttachmentEmbedded *bool `json:"accessTokenForExternalAttachmentEmbedded,omitzero"`
 	// Identifiers of entities that can issue entity statements for this service. This property corresponds to the `authority_hints` property that appears in a self-signed entity statement that is defined in OpenID Connect Federation 1.0.
 	//
-	AuthorityHints optionalnullable.OptionalNullable[[]string] `json:"authorityHints,omitzero"`
+	AuthorityHints []string `json:"authorityHints,omitzero"`
 	// flag indicating whether this service supports OpenID Connect Federation 1
 	//
 	FederationEnabled *bool `json:"federationEnabled,omitzero"`
 	// JWK Set document containing keys that are used to sign (1) self-signed entity statement of this service and (2) the response from `signed_jwks_uri`.
 	//
-	FederationJwks optionalnullable.OptionalNullable[string] `json:"federationJwks,omitzero"`
+	FederationJwks *string `json:"federationJwks,omitzero"`
 	// A key ID to identify a JWK used to sign the entity configuration and the signed JWK Set.
 	//
-	FederationSignatureKeyID optionalnullable.OptionalNullable[string] `json:"federationSignatureKeyId,omitzero"`
+	FederationSignatureKeyID *string `json:"federationSignatureKeyId,omitzero"`
 	// The duration of the entity configuration in seconds.
 	//
 	FederationConfigurationDuration *int64 `json:"federationConfigurationDuration,omitzero"`
 	// The URI of the federation registration endpoint. This property corresponds to the `federation_registration_endpoint` server metadata that is defined in OpenID Connect Federation 1.0.
 	//
-	FederationRegistrationEndpoint optionalnullable.OptionalNullable[string] `json:"federationRegistrationEndpoint,omitzero"`
+	FederationRegistrationEndpoint *string `json:"federationRegistrationEndpoint,omitzero"`
 	// The human-readable name representing the organization that operates this service. This property corresponds to the `organization_name` server metadata that is defined in OpenID Connect Federation 1.0.
 	//
-	OrganizationName optionalnullable.OptionalNullable[string] `json:"organizationName,omitzero"`
+	OrganizationName *string `json:"organizationName,omitzero"`
 	// The transformed claims predefined by this service in JSON format. This property corresponds to the `transformed_claims_predefined` server metadata.
 	//
-	PredefinedTransformedClaims optionalnullable.OptionalNullable[string] `json:"predefinedTransformedClaims,omitzero"`
+	PredefinedTransformedClaims *string `json:"predefinedTransformedClaims,omitzero"`
 	// flag indicating whether refresh token requests with the same refresh token can be made multiple times in quick succession and they can obtain the same renewed refresh token within the short period.
 	//
 	RefreshTokenIdempotent *bool `json:"refreshTokenIdempotent,omitzero"`
 	// The URI of the endpoint that returns this service's JWK Set document in the JWT format. This property corresponds to the `signed_jwks_uri` server metadata defined in OpenID Connect Federation 1.0.
 	//
-	SignedJwksURI optionalnullable.OptionalNullable[string] `json:"signedJwksUri,omitzero"`
+	SignedJwksURI *string `json:"signedJwksUri,omitzero"`
 	// Supported attachment types. This property corresponds to the &#123;@code attachments_supported&#125; server metadata which was added by the third implementer's draft of OpenID Connect for Identity Assurance 1.0.
 	//
-	SupportedAttachments optionalnullable.OptionalNullable[[]AttachmentType] `json:"supportedAttachments,omitzero"`
+	SupportedAttachments []AttachmentType `json:"supportedAttachments,omitzero"`
 	// Supported algorithms used to compute digest values of external attachments. This property corresponds to the `digest_algorithms_supported` server metadata which was added by the third implementer's draft of OpenID Connect for Identity Assurance 1.0.
 	//
-	SupportedDigestAlgorithms optionalnullable.OptionalNullable[[]string] `json:"supportedDigestAlgorithms,omitzero"`
+	SupportedDigestAlgorithms []string `json:"supportedDigestAlgorithms,omitzero"`
 	// Document types supported by this service. This property corresponds to the `documents_supported` server metadata.
 	//
-	SupportedDocuments optionalnullable.OptionalNullable[[]string] `json:"supportedDocuments,omitzero"`
+	SupportedDocuments []string `json:"supportedDocuments,omitzero"`
 	// validation and verification processes supported by this service. This property corresponds to the `documents_methods_supported` server metadata.
 	//
 	// The third implementer's draft of [OpenID Connect for Identity Assurance 1.0](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html) renamed the `id_documents_verification_methods_supported` server metadata to `documents_methods_supported`.
 	//
-	SupportedDocumentsMethods optionalnullable.OptionalNullable[[]string] `json:"supportedDocumentsMethods,omitzero"`
+	SupportedDocumentsMethods []string `json:"supportedDocumentsMethods,omitzero"`
 	// Document validation methods supported by this service. This property corresponds to the `documents_validation_methods_supported` server metadata which was added by the third implementer's draft of
 	//
-	SupportedDocumentsValidationMethods optionalnullable.OptionalNullable[[]string] `json:"supportedDocumentsValidationMethods,omitzero"`
+	SupportedDocumentsValidationMethods []string `json:"supportedDocumentsValidationMethods,omitzero"`
 	// Document verification methods supported by this service. This property corresponds to the `documents_verification_methods_supported` server metadata which was added by the third implementer's draft of [OpenID Connect for Identity Assurance 1.0](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html)
 	//
-	SupportedDocumentsVerificationMethods optionalnullable.OptionalNullable[[]string] `json:"supportedDocumentsVerificationMethods,omitzero"`
+	SupportedDocumentsVerificationMethods []string `json:"supportedDocumentsVerificationMethods,omitzero"`
 	// Electronic record types supported by this service. This property corresponds to the `electronic_records_supported` server metadata which was added by the third implementer's draft of [OpenID Connect for Identity Assurance 1.0](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html)
 	//
-	SupportedElectronicRecords       optionalnullable.OptionalNullable[[]string]                 `json:"supportedElectronicRecords,omitzero"`
-	SupportedClientRegistrationTypes optionalnullable.OptionalNullable[[]ClientRegistrationType] `json:"supportedClientRegistrationTypes,omitzero"`
+	SupportedElectronicRecords       []string                 `json:"supportedElectronicRecords,omitzero"`
+	SupportedClientRegistrationTypes []ClientRegistrationType `json:"supportedClientRegistrationTypes,omitzero"`
 	// The flag indicating whether to prohibit unidentifiable clients from making token exchange requests.
 	//
 	TokenExchangeByIdentifiableClientsOnly *bool `json:"tokenExchangeByIdentifiableClientsOnly,omitzero"`
@@ -802,7 +801,7 @@ type Service struct {
 	//
 	// If this property is empty, client registration fails regardless of whether its type is `automatic` or `explicit`. It means that OpenID Connect Federation 1.0 does not work.
 	//
-	TrustAnchors optionalnullable.OptionalNullable[[]TrustAnchor] `json:"trustAnchors,omitzero"`
+	TrustAnchors []TrustAnchor `json:"trustAnchors,omitzero"`
 	// The flag indicating whether the openid scope should be dropped from scopes list assigned to access token issued when a refresh token grant is used.
 	//
 	OpenidDroppedOnRefreshWithoutOfflineAccess *bool `json:"openidDroppedOnRefreshWithoutOfflineAccess,omitzero"`
@@ -813,7 +812,7 @@ type Service struct {
 	IDTokenDroppedOnIssueWithoutOpenid *bool `json:"idTokenDroppedOnIssueWithoutOpenid,omitzero"`
 	// Supported document check methods. This property corresponds to the `documents_check_methods_supported` server metadata which was added by the fourth implementer's draft of OpenID Connect for Identity Assurance 1.0.
 	//
-	SupportedDocumentsCheckMethods optionalnullable.OptionalNullable[[]string] `json:"supportedDocumentsCheckMethods,omitzero"`
+	SupportedDocumentsCheckMethods []string `json:"supportedDocumentsCheckMethods,omitzero"`
 	// The flag indicating whether this service signs responses from the resource server.
 	//
 	RsResponseSigned *bool `json:"rsResponseSigned,omitzero"`
@@ -828,7 +827,7 @@ type Service struct {
 	VerifiableCredentialsEnabled *bool `json:"verifiableCredentialsEnabled,omitzero"`
 	// The URL at which the JWK Set document of the credential issuer is exposed.
 	//
-	CredentialJwksURI optionalnullable.OptionalNullable[string] `json:"credentialJwksUri,omitzero"`
+	CredentialJwksURI *string `json:"credentialJwksUri,omitzero"`
 	// The default duration of credential offers in seconds.
 	//
 	CredentialOfferDuration *int64 `json:"credentialOfferDuration,omitzero"`
@@ -843,36 +842,36 @@ type Service struct {
 	CredentialTransactionDuration *int64 `json:"credentialTransactionDuration,omitzero"`
 	// The key ID of the key for signing introspection responses.
 	//
-	IntrospectionSignatureKeyID optionalnullable.OptionalNullable[string] `json:"introspectionSignatureKeyId,omitzero"`
+	IntrospectionSignatureKeyID *string `json:"introspectionSignatureKeyId,omitzero"`
 	// The key ID of the key for signing introspection responses.
 	//
-	ResourceSignatureKeyID optionalnullable.OptionalNullable[string] `json:"resourceSignatureKeyId,omitzero"`
+	ResourceSignatureKeyID *string `json:"resourceSignatureKeyId,omitzero"`
 	// The default length of user PINs.
 	//
 	UserPinLength *int `json:"userPinLength,omitzero"`
 	// The supported `prompt` values.
 	//
-	SupportedPromptValues optionalnullable.OptionalNullable[[]Prompt] `json:"supportedPromptValues,omitzero"`
+	SupportedPromptValues []Prompt `json:"supportedPromptValues,omitzero"`
 	// The flag indicating whether to enable the feature of ID token reissuance in the refresh token flow.
 	//
 	IDTokenReissuable *bool `json:"idTokenReissuable,omitzero"`
 	// The JWK Set document containing private keys that are used to sign verifiable credentials.
 	//
-	CredentialJwks optionalnullable.OptionalNullable[string] `json:"credentialJwks,omitzero"`
+	CredentialJwks *string `json:"credentialJwks,omitzero"`
 	// FAPI modes for this service.
 	//
 	// When the value of this property is not `null`, Authlete always processes requests to this service based on the specified FAPI modes if the FAPI feature is enabled in Authlete and the FAPI profile is supported by this service.
 	//
 	// For instance, when this property is set to an array containing `FAPI1_ADVANCED` only, Authlete always processes requests to this service based on "Financial-grade API Security Profile 1.0 - Part 2: Advanced" if the FAPI feature is enabled in Authlete and the FAPI profile is supported by this service.
 	//
-	FapiModes optionalnullable.OptionalNullable[[]FapiMode] `json:"fapiModes,omitzero"`
+	FapiModes []FapiMode `json:"fapiModes,omitzero"`
 	// The default duration of verifiable credentials in seconds.
 	//
-	CredentialDuration       *int64                                                      `json:"credentialDuration,omitzero"`
-	CredentialIssuerMetadata optionalnullable.OptionalNullable[CredentialIssuerMetadata] `json:"credentialIssuerMetadata,omitzero"`
+	CredentialDuration       *int64                    `json:"credentialDuration,omitzero"`
+	CredentialIssuerMetadata *CredentialIssuerMetadata `json:"credentialIssuerMetadata,omitzero"`
 	// The type of the `aud` claim in ID tokens.
 	//
-	IDTokenAudType optionalnullable.OptionalNullable[string] `json:"idTokenAudType,omitzero"`
+	IDTokenAudType *string `json:"idTokenAudType,omitzero"`
 	// Flag that enables the [OpenID Connect Native SSO for Mobile Apps 1.0](https://openid.net/specs/openid-connect-native-sso-1_0.html) specification (“Native SSO”). When this property is **not** `true`, Native SSO specific parameters are ignored or treated as errors. For example:
 	//
 	// * The `device_sso` scope has no special meaning (Authlete does not embed the `sid` claim in ID tokens).
@@ -890,7 +889,7 @@ type Service struct {
 	//
 	// Choose the value that matches the OID4VCI behaviour your service should expose. See the OID4VCI documentation for details.
 	//
-	Oid4vciVersion optionalnullable.OptionalNullable[string] `json:"oid4vciVersion,omitzero"`
+	Oid4vciVersion *string `json:"oid4vciVersion,omitzero"`
 	// Flag that controls whether the CIMD metadata policy is applied to client metadata obtained through the Client ID Metadata Document (CIMD) mechanism.
 	//
 	CimdMetadataPolicyEnabled *bool `json:"cimdMetadataPolicyEnabled,omitzero"`
@@ -902,7 +901,7 @@ type Service struct {
 	CimdAllowlistEnabled *bool `json:"cimdAllowlistEnabled,omitzero"`
 	// The allowlist of CIMD endpoints (hosts/URIs) that may be used when retrieving client metadata via Client ID Metadata Documents.
 	//
-	CimdAllowlist optionalnullable.OptionalNullable[[]string] `json:"cimdAllowlist,omitzero"`
+	CimdAllowlist []string `json:"cimdAllowlist,omitzero"`
 	// If `true`, CIMD retrieval is always attempted for clients, regardless of other conditions.
 	//
 	CimdAlwaysRetrieved *bool `json:"cimdAlwaysRetrieved,omitzero"`
@@ -914,7 +913,7 @@ type Service struct {
 	CimdQueryPermitted *bool `json:"cimdQueryPermitted,omitzero"`
 	// The metadata policy applied to client metadata obtained through the CIMD mechanism. The value must follow the metadata policy grammar defined in [OpenID Federation 1.0 §6.1 Metadata Policy](https://openid.net/specs/openid-federation-1_0.html#name-metadata-policy).
 	//
-	CimdMetadataPolicy optionalnullable.OptionalNullable[string] `json:"cimdMetadataPolicy,omitzero"`
+	CimdMetadataPolicy *string `json:"cimdMetadataPolicy,omitzero"`
 	// When `true`, client ID aliases starting with `https://` or `http://` are prohibited.
 	//
 	HTTPAliasProhibited *bool `json:"httpAliasProhibited,omitzero"`
@@ -935,10 +934,10 @@ type Service struct {
 	KeyAttesterRootsOnly *bool `json:"keyAttesterRootsOnly,omitzero"`
 	// The trusted root certificates (PEM-encoded X.509) for validating the x5c chain in Client Attestation JWTs.
 	//
-	ClientAttesterRoots optionalnullable.OptionalNullable[[]string] `json:"clientAttesterRoots,omitzero"`
+	ClientAttesterRoots []string `json:"clientAttesterRoots,omitzero"`
 	// The trusted root certificates (PEM-encoded X.509) for validating the x5c chain in Key Attestation JWTs.
 	//
-	KeyAttesterRoots optionalnullable.OptionalNullable[[]string] `json:"keyAttesterRoots,omitzero"`
+	KeyAttesterRoots []string `json:"keyAttesterRoots,omitzero"`
 	// The flag indicating whether this service supports OpenID Connect Back-Channel Logout 1.0.
 	//
 	BackchannelLogoutSupported *bool `json:"backchannelLogoutSupported,omitzero"`
@@ -947,7 +946,7 @@ type Service struct {
 	BackchannelLogoutSessionSupported *bool `json:"backchannelLogoutSessionSupported,omitzero"`
 	// The HAIP version to comply with. Valid values for this property are as follows: `"1.0"`. If this property is set, requests to this service undergo additional validation based on the specified version of the [HAIP](https://openid.net/specs/openid4vc-high-assurance-interoperability-profile-1_0.html) specification.
 	//
-	HaipVersion optionalnullable.OptionalNullable[string] `json:"haipVersion,omitzero"`
+	HaipVersion *string `json:"haipVersion,omitzero"`
 }
 
 func (s Service) MarshalJSON() ([]byte, error) {
@@ -968,21 +967,21 @@ func (s *Service) GetNumber() *int {
 	return s.Number
 }
 
-func (s *Service) GetServiceName() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetServiceName() *string {
 	if s == nil {
 		return nil
 	}
 	return s.ServiceName
 }
 
-func (s *Service) GetIssuer() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetIssuer() *string {
 	if s == nil {
 		return nil
 	}
 	return s.Issuer
 }
 
-func (s *Service) GetDescription() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetDescription() *string {
 	if s == nil {
 		return nil
 	}
@@ -996,14 +995,14 @@ func (s *Service) GetAPIKey() *int64 {
 	return s.APIKey
 }
 
-func (s *Service) GetAPISecret() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetAPISecret() *string {
 	if s == nil {
 		return nil
 	}
 	return s.APISecret
 }
 
-func (s *Service) GetTokenBatchNotificationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetTokenBatchNotificationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1031,49 +1030,49 @@ func (s *Service) GetClientsPerDeveloper() *int {
 	return s.ClientsPerDeveloper
 }
 
-func (s *Service) GetDeveloperAuthenticationCallbackEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetDeveloperAuthenticationCallbackEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.DeveloperAuthenticationCallbackEndpoint
 }
 
-func (s *Service) GetDeveloperAuthenticationCallbackAPIKey() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetDeveloperAuthenticationCallbackAPIKey() *string {
 	if s == nil {
 		return nil
 	}
 	return s.DeveloperAuthenticationCallbackAPIKey
 }
 
-func (s *Service) GetDeveloperAuthenticationCallbackAPISecret() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetDeveloperAuthenticationCallbackAPISecret() *string {
 	if s == nil {
 		return nil
 	}
 	return s.DeveloperAuthenticationCallbackAPISecret
 }
 
-func (s *Service) GetSupportedSnses() optionalnullable.OptionalNullable[[]SupportedSnse] {
+func (s *Service) GetSupportedSnses() []SupportedSnse {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedSnses
 }
 
-func (s *Service) GetSnsCredentials() optionalnullable.OptionalNullable[[]SnsCredentials] {
+func (s *Service) GetSnsCredentials() []SnsCredentials {
 	if s == nil {
 		return nil
 	}
 	return s.SnsCredentials
 }
 
-func (s *Service) GetSupportedDeveloperSnses() optionalnullable.OptionalNullable[[]SupportedDeveloperSnse] {
+func (s *Service) GetSupportedDeveloperSnses() []SupportedDeveloperSnse {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDeveloperSnses
 }
 
-func (s *Service) GetDeveloperSnsCredentials() optionalnullable.OptionalNullable[[]SnsCredentials] {
+func (s *Service) GetDeveloperSnsCredentials() []SnsCredentials {
 	if s == nil {
 		return nil
 	}
@@ -1087,7 +1086,7 @@ func (s *Service) GetClientIDAliasEnabled() *bool {
 	return s.ClientIDAliasEnabled
 }
 
-func (s *Service) GetMetadata() optionalnullable.OptionalNullable[[]Pair] {
+func (s *Service) GetMetadata() []Pair {
 	if s == nil {
 		return nil
 	}
@@ -1108,56 +1107,56 @@ func (s *Service) GetModifiedAt() *int64 {
 	return s.ModifiedAt
 }
 
-func (s *Service) GetAuthenticationCallbackEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetAuthenticationCallbackEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthenticationCallbackEndpoint
 }
 
-func (s *Service) GetAuthenticationCallbackAPIKey() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetAuthenticationCallbackAPIKey() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthenticationCallbackAPIKey
 }
 
-func (s *Service) GetAuthenticationCallbackAPISecret() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetAuthenticationCallbackAPISecret() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthenticationCallbackAPISecret
 }
 
-func (s *Service) GetSupportedAcrs() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedAcrs() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedAcrs
 }
 
-func (s *Service) GetSupportedGrantTypes() optionalnullable.OptionalNullable[[]GrantType] {
+func (s *Service) GetSupportedGrantTypes() []GrantType {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedGrantTypes
 }
 
-func (s *Service) GetSupportedResponseTypes() optionalnullable.OptionalNullable[[]ResponseType] {
+func (s *Service) GetSupportedResponseTypes() []ResponseType {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedResponseTypes
 }
 
-func (s *Service) GetSupportedAuthorizationDetailsTypes() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedAuthorizationDetailsTypes() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedAuthorizationDetailsTypes
 }
 
-func (s *Service) GetSupportedServiceProfiles() optionalnullable.OptionalNullable[[]ServiceProfile] {
+func (s *Service) GetSupportedServiceProfiles() []ServiceProfile {
 	if s == nil {
 		return nil
 	}
@@ -1178,7 +1177,7 @@ func (s *Service) GetErrorURIOmitted() *bool {
 	return s.ErrorURIOmitted
 }
 
-func (s *Service) GetAuthorizationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetAuthorizationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1192,14 +1191,14 @@ func (s *Service) GetDirectAuthorizationEndpointEnabled() *bool {
 	return s.DirectAuthorizationEndpointEnabled
 }
 
-func (s *Service) GetSupportedUILocales() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedUILocales() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedUILocales
 }
 
-func (s *Service) GetSupportedDisplays() optionalnullable.OptionalNullable[[]Display] {
+func (s *Service) GetSupportedDisplays() []Display {
 	if s == nil {
 		return nil
 	}
@@ -1234,7 +1233,7 @@ func (s *Service) GetAuthorizationCodeDuration() *int64 {
 	return s.AuthorizationCodeDuration
 }
 
-func (s *Service) GetTokenEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetTokenEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1248,7 +1247,7 @@ func (s *Service) GetDirectTokenEndpointEnabled() *bool {
 	return s.DirectTokenEndpointEnabled
 }
 
-func (s *Service) GetSupportedTokenAuthMethods() optionalnullable.OptionalNullable[[]ClientAuthMethod] {
+func (s *Service) GetSupportedTokenAuthMethods() []ClientAuthMethod {
 	if s == nil {
 		return nil
 	}
@@ -1262,7 +1261,7 @@ func (s *Service) GetMissingClientIDAllowed() *bool {
 	return s.MissingClientIDAllowed
 }
 
-func (s *Service) GetRevocationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetRevocationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1276,14 +1275,14 @@ func (s *Service) GetDirectRevocationEndpointEnabled() *bool {
 	return s.DirectRevocationEndpointEnabled
 }
 
-func (s *Service) GetSupportedRevocationAuthMethods() optionalnullable.OptionalNullable[[]ClientAuthMethod] {
+func (s *Service) GetSupportedRevocationAuthMethods() []ClientAuthMethod {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedRevocationAuthMethods
 }
 
-func (s *Service) GetIntrospectionEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetIntrospectionEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1297,14 +1296,14 @@ func (s *Service) GetDirectIntrospectionEndpointEnabled() *bool {
 	return s.DirectIntrospectionEndpointEnabled
 }
 
-func (s *Service) GetSupportedIntrospectionAuthMethods() optionalnullable.OptionalNullable[[]ClientAuthMethod] {
+func (s *Service) GetSupportedIntrospectionAuthMethods() []ClientAuthMethod {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedIntrospectionAuthMethods
 }
 
-func (s *Service) GetPushedAuthReqEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetPushedAuthReqEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1346,21 +1345,21 @@ func (s *Service) GetMutualTLSValidatePkiCertChain() *bool {
 	return s.MutualTLSValidatePkiCertChain
 }
 
-func (s *Service) GetTrustedRootCertificates() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetTrustedRootCertificates() []string {
 	if s == nil {
 		return nil
 	}
 	return s.TrustedRootCertificates
 }
 
-func (s *Service) GetMtlsEndpointAliases() optionalnullable.OptionalNullable[[]NamedURI] {
+func (s *Service) GetMtlsEndpointAliases() []NamedURI {
 	if s == nil {
 		return nil
 	}
 	return s.MtlsEndpointAliases
 }
 
-func (s *Service) GetAccessTokenType() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetAccessTokenType() *string {
 	if s == nil {
 		return nil
 	}
@@ -1388,14 +1387,14 @@ func (s *Service) GetSingleAccessTokenPerSubject() *bool {
 	return s.SingleAccessTokenPerSubject
 }
 
-func (s *Service) GetAccessTokenSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (s *Service) GetAccessTokenSignAlg() *JwsAlg {
 	if s == nil {
 		return nil
 	}
 	return s.AccessTokenSignAlg
 }
 
-func (s *Service) GetAccessTokenSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetAccessTokenSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
@@ -1430,7 +1429,7 @@ func (s *Service) GetRefreshTokenKept() *bool {
 	return s.RefreshTokenKept
 }
 
-func (s *Service) GetSupportedScopes() optionalnullable.OptionalNullable[[]Scope] {
+func (s *Service) GetSupportedScopes() []Scope {
 	if s == nil {
 		return nil
 	}
@@ -1458,21 +1457,21 @@ func (s *Service) GetAllowableClockSkew() *int {
 	return s.AllowableClockSkew
 }
 
-func (s *Service) GetSupportedClaimTypes() optionalnullable.OptionalNullable[[]ClaimType] {
+func (s *Service) GetSupportedClaimTypes() []ClaimType {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedClaimTypes
 }
 
-func (s *Service) GetSupportedClaimLocales() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedClaimLocales() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedClaimLocales
 }
 
-func (s *Service) GetSupportedClaims() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedClaims() []string {
 	if s == nil {
 		return nil
 	}
@@ -1486,7 +1485,7 @@ func (s *Service) GetClaimShortcutRestrictive() *bool {
 	return s.ClaimShortcutRestrictive
 }
 
-func (s *Service) GetJwksURI() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetJwksURI() *string {
 	if s == nil {
 		return nil
 	}
@@ -1500,35 +1499,35 @@ func (s *Service) GetDirectJwksEndpointEnabled() *bool {
 	return s.DirectJwksEndpointEnabled
 }
 
-func (s *Service) GetJwks() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetJwks() *string {
 	if s == nil {
 		return nil
 	}
 	return s.Jwks
 }
 
-func (s *Service) GetIDTokenSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetIDTokenSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.IDTokenSignatureKeyID
 }
 
-func (s *Service) GetUserInfoSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetUserInfoSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.UserInfoSignatureKeyID
 }
 
-func (s *Service) GetAuthorizationSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetAuthorizationSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthorizationSignatureKeyID
 }
 
-func (s *Service) GetUserInfoEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetUserInfoEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1549,49 +1548,49 @@ func (s *Service) GetDynamicRegistrationSupported() *bool {
 	return s.DynamicRegistrationSupported
 }
 
-func (s *Service) GetRegistrationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetRegistrationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.RegistrationEndpoint
 }
 
-func (s *Service) GetRegistrationManagementEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetRegistrationManagementEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.RegistrationManagementEndpoint
 }
 
-func (s *Service) GetPolicyURI() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetPolicyURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.PolicyURI
 }
 
-func (s *Service) GetTosURI() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetTosURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.TosURI
 }
 
-func (s *Service) GetServiceDocumentation() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetServiceDocumentation() *string {
 	if s == nil {
 		return nil
 	}
 	return s.ServiceDocumentation
 }
 
-func (s *Service) GetBackchannelAuthenticationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetBackchannelAuthenticationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.BackchannelAuthenticationEndpoint
 }
 
-func (s *Service) GetSupportedBackchannelTokenDeliveryModes() optionalnullable.OptionalNullable[[]DeliveryMode] {
+func (s *Service) GetSupportedBackchannelTokenDeliveryModes() []DeliveryMode {
 	if s == nil {
 		return nil
 	}
@@ -1626,21 +1625,21 @@ func (s *Service) GetBackchannelBindingMessageRequiredInFapi() *bool {
 	return s.BackchannelBindingMessageRequiredInFapi
 }
 
-func (s *Service) GetDeviceAuthorizationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetDeviceAuthorizationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.DeviceAuthorizationEndpoint
 }
 
-func (s *Service) GetDeviceVerificationURI() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetDeviceVerificationURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.DeviceVerificationURI
 }
 
-func (s *Service) GetDeviceVerificationURIComplete() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetDeviceVerificationURIComplete() *string {
 	if s == nil {
 		return nil
 	}
@@ -1661,7 +1660,7 @@ func (s *Service) GetDeviceFlowPollingInterval() *int {
 	return s.DeviceFlowPollingInterval
 }
 
-func (s *Service) GetUserCodeCharset() optionalnullable.OptionalNullable[UserCodeCharset] {
+func (s *Service) GetUserCodeCharset() *UserCodeCharset {
 	if s == nil {
 		return nil
 	}
@@ -1675,35 +1674,35 @@ func (s *Service) GetUserCodeLength() *int {
 	return s.UserCodeLength
 }
 
-func (s *Service) GetSupportedTrustFrameworks() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedTrustFrameworks() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedTrustFrameworks
 }
 
-func (s *Service) GetSupportedEvidence() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedEvidence() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedEvidence
 }
 
-func (s *Service) GetSupportedIdentityDocuments() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedIdentityDocuments() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedIdentityDocuments
 }
 
-func (s *Service) GetSupportedVerificationMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedVerificationMethods() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedVerificationMethods
 }
 
-func (s *Service) GetSupportedVerifiedClaims() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedVerifiedClaims() []string {
 	if s == nil {
 		return nil
 	}
@@ -1717,7 +1716,7 @@ func (s *Service) GetVerifiedClaimsValidationSchemaSet() *VerifiedClaimsValidati
 	return s.VerifiedClaimsValidationSchemaSet
 }
 
-func (s *Service) GetAttributes() optionalnullable.OptionalNullable[[]Pair] {
+func (s *Service) GetAttributes() []Pair {
 	if s == nil {
 		return nil
 	}
@@ -1738,7 +1737,7 @@ func (s *Service) GetIssSuppressed() *bool {
 	return s.IssSuppressed
 }
 
-func (s *Service) GetSupportedCustomClientMetadata() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedCustomClientMetadata() []string {
 	if s == nil {
 		return nil
 	}
@@ -1780,14 +1779,14 @@ func (s *Service) GetHsmEnabled() *bool {
 	return s.HsmEnabled
 }
 
-func (s *Service) GetHsks() optionalnullable.OptionalNullable[[]Hsk] {
+func (s *Service) GetHsks() []Hsk {
 	if s == nil {
 		return nil
 	}
 	return s.Hsks
 }
 
-func (s *Service) GetGrantManagementEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetGrantManagementEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1815,14 +1814,14 @@ func (s *Service) GetDcrScopeUsedAsRequestable() *bool {
 	return s.DcrScopeUsedAsRequestable
 }
 
-func (s *Service) GetEndSessionEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetEndSessionEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.EndSessionEndpoint
 }
 
-func (s *Service) GetChallengeEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetChallengeEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -1850,7 +1849,7 @@ func (s *Service) GetAccessTokenForExternalAttachmentEmbedded() *bool {
 	return s.AccessTokenForExternalAttachmentEmbedded
 }
 
-func (s *Service) GetAuthorityHints() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetAuthorityHints() []string {
 	if s == nil {
 		return nil
 	}
@@ -1864,14 +1863,14 @@ func (s *Service) GetFederationEnabled() *bool {
 	return s.FederationEnabled
 }
 
-func (s *Service) GetFederationJwks() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetFederationJwks() *string {
 	if s == nil {
 		return nil
 	}
 	return s.FederationJwks
 }
 
-func (s *Service) GetFederationSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetFederationSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
@@ -1885,21 +1884,21 @@ func (s *Service) GetFederationConfigurationDuration() *int64 {
 	return s.FederationConfigurationDuration
 }
 
-func (s *Service) GetFederationRegistrationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetFederationRegistrationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.FederationRegistrationEndpoint
 }
 
-func (s *Service) GetOrganizationName() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetOrganizationName() *string {
 	if s == nil {
 		return nil
 	}
 	return s.OrganizationName
 }
 
-func (s *Service) GetPredefinedTransformedClaims() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetPredefinedTransformedClaims() *string {
 	if s == nil {
 		return nil
 	}
@@ -1913,63 +1912,63 @@ func (s *Service) GetRefreshTokenIdempotent() *bool {
 	return s.RefreshTokenIdempotent
 }
 
-func (s *Service) GetSignedJwksURI() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetSignedJwksURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.SignedJwksURI
 }
 
-func (s *Service) GetSupportedAttachments() optionalnullable.OptionalNullable[[]AttachmentType] {
+func (s *Service) GetSupportedAttachments() []AttachmentType {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedAttachments
 }
 
-func (s *Service) GetSupportedDigestAlgorithms() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedDigestAlgorithms() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDigestAlgorithms
 }
 
-func (s *Service) GetSupportedDocuments() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedDocuments() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDocuments
 }
 
-func (s *Service) GetSupportedDocumentsMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedDocumentsMethods() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDocumentsMethods
 }
 
-func (s *Service) GetSupportedDocumentsValidationMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedDocumentsValidationMethods() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDocumentsValidationMethods
 }
 
-func (s *Service) GetSupportedDocumentsVerificationMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedDocumentsVerificationMethods() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDocumentsVerificationMethods
 }
 
-func (s *Service) GetSupportedElectronicRecords() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedElectronicRecords() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedElectronicRecords
 }
 
-func (s *Service) GetSupportedClientRegistrationTypes() optionalnullable.OptionalNullable[[]ClientRegistrationType] {
+func (s *Service) GetSupportedClientRegistrationTypes() []ClientRegistrationType {
 	if s == nil {
 		return nil
 	}
@@ -2039,7 +2038,7 @@ func (s *Service) GetDcrDuplicateSoftwareIDBlocked() *bool {
 	return s.DcrDuplicateSoftwareIDBlocked
 }
 
-func (s *Service) GetTrustAnchors() optionalnullable.OptionalNullable[[]TrustAnchor] {
+func (s *Service) GetTrustAnchors() []TrustAnchor {
 	if s == nil {
 		return nil
 	}
@@ -2060,7 +2059,7 @@ func (s *Service) GetIDTokenDroppedOnIssueWithoutOpenid() *bool {
 	return s.IDTokenDroppedOnIssueWithoutOpenid
 }
 
-func (s *Service) GetSupportedDocumentsCheckMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetSupportedDocumentsCheckMethods() []string {
 	if s == nil {
 		return nil
 	}
@@ -2095,7 +2094,7 @@ func (s *Service) GetVerifiableCredentialsEnabled() *bool {
 	return s.VerifiableCredentialsEnabled
 }
 
-func (s *Service) GetCredentialJwksURI() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetCredentialJwksURI() *string {
 	if s == nil {
 		return nil
 	}
@@ -2130,14 +2129,14 @@ func (s *Service) GetCredentialTransactionDuration() *int64 {
 	return s.CredentialTransactionDuration
 }
 
-func (s *Service) GetIntrospectionSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetIntrospectionSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.IntrospectionSignatureKeyID
 }
 
-func (s *Service) GetResourceSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetResourceSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
@@ -2151,7 +2150,7 @@ func (s *Service) GetUserPinLength() *int {
 	return s.UserPinLength
 }
 
-func (s *Service) GetSupportedPromptValues() optionalnullable.OptionalNullable[[]Prompt] {
+func (s *Service) GetSupportedPromptValues() []Prompt {
 	if s == nil {
 		return nil
 	}
@@ -2165,14 +2164,14 @@ func (s *Service) GetIDTokenReissuable() *bool {
 	return s.IDTokenReissuable
 }
 
-func (s *Service) GetCredentialJwks() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetCredentialJwks() *string {
 	if s == nil {
 		return nil
 	}
 	return s.CredentialJwks
 }
 
-func (s *Service) GetFapiModes() optionalnullable.OptionalNullable[[]FapiMode] {
+func (s *Service) GetFapiModes() []FapiMode {
 	if s == nil {
 		return nil
 	}
@@ -2186,14 +2185,14 @@ func (s *Service) GetCredentialDuration() *int64 {
 	return s.CredentialDuration
 }
 
-func (s *Service) GetCredentialIssuerMetadata() optionalnullable.OptionalNullable[CredentialIssuerMetadata] {
+func (s *Service) GetCredentialIssuerMetadata() *CredentialIssuerMetadata {
 	if s == nil {
 		return nil
 	}
 	return s.CredentialIssuerMetadata
 }
 
-func (s *Service) GetIDTokenAudType() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetIDTokenAudType() *string {
 	if s == nil {
 		return nil
 	}
@@ -2207,7 +2206,7 @@ func (s *Service) GetNativeSsoSupported() *bool {
 	return s.NativeSsoSupported
 }
 
-func (s *Service) GetOid4vciVersion() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetOid4vciVersion() *string {
 	if s == nil {
 		return nil
 	}
@@ -2235,7 +2234,7 @@ func (s *Service) GetCimdAllowlistEnabled() *bool {
 	return s.CimdAllowlistEnabled
 }
 
-func (s *Service) GetCimdAllowlist() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetCimdAllowlist() []string {
 	if s == nil {
 		return nil
 	}
@@ -2263,7 +2262,7 @@ func (s *Service) GetCimdQueryPermitted() *bool {
 	return s.CimdQueryPermitted
 }
 
-func (s *Service) GetCimdMetadataPolicy() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetCimdMetadataPolicy() *string {
 	if s == nil {
 		return nil
 	}
@@ -2312,14 +2311,14 @@ func (s *Service) GetKeyAttesterRootsOnly() *bool {
 	return s.KeyAttesterRootsOnly
 }
 
-func (s *Service) GetClientAttesterRoots() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetClientAttesterRoots() []string {
 	if s == nil {
 		return nil
 	}
 	return s.ClientAttesterRoots
 }
 
-func (s *Service) GetKeyAttesterRoots() optionalnullable.OptionalNullable[[]string] {
+func (s *Service) GetKeyAttesterRoots() []string {
 	if s == nil {
 		return nil
 	}
@@ -2340,7 +2339,7 @@ func (s *Service) GetBackchannelLogoutSessionSupported() *bool {
 	return s.BackchannelLogoutSessionSupported
 }
 
-func (s *Service) GetHaipVersion() optionalnullable.OptionalNullable[string] {
+func (s *Service) GetHaipVersion() *string {
 	if s == nil {
 		return nil
 	}
@@ -2349,16 +2348,16 @@ func (s *Service) GetHaipVersion() optionalnullable.OptionalNullable[string] {
 
 type ServiceInput struct {
 	// The name of this service.
-	ServiceName optionalnullable.OptionalNullable[string] `json:"serviceName,omitzero" form:"name=serviceName"`
+	ServiceName *string `json:"serviceName,omitzero" form:"name=serviceName"`
 	// The issuer identifier of the service.
 	//
 	// A URL that starts with  https:// and has no query or fragment component.
 	//
 	// The value of this property is used as `iss` claim in an [ID token](https://openid.net/specs/openid-connect-core-1_0.html#IDToken) and `issuer` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	Issuer optionalnullable.OptionalNullable[string] `json:"issuer,omitzero" form:"name=issuer"`
+	Issuer *string `json:"issuer,omitzero" form:"name=issuer"`
 	// The description about the service.
-	Description optionalnullable.OptionalNullable[string] `json:"description,omitzero" form:"name=description"`
+	Description *string `json:"description,omitzero" form:"name=description"`
 	// The flag indicating whether the audience of client assertion JWTs must match the issuer identifier of this service.
 	//
 	ClientAssertionAudRestrictedToIssuer *bool `json:"clientAssertionAudRestrictedToIssuer,omitzero" form:"name=clientAssertionAudRestrictedToIssuer"`
@@ -2367,52 +2366,52 @@ type ServiceInput struct {
 	ClientsPerDeveloper *int `json:"clientsPerDeveloper,omitzero" form:"name=clientsPerDeveloper"`
 	// The credentials for social login services (SNS) that are used for end-user authentication.
 	//
-	SnsCredentials optionalnullable.OptionalNullable[[]SnsCredentials] `json:"snsCredentials,omitzero" form:"name=snsCredentials,json"`
+	SnsCredentials []SnsCredentials `json:"snsCredentials,omitzero" form:"name=snsCredentials,json"`
 	// Social login services (SNS) that this service supports for developer authentication.
 	//
-	SupportedDeveloperSnses optionalnullable.OptionalNullable[[]SupportedDeveloperSnse] `json:"supportedDeveloperSnses,omitzero" form:"name=supportedDeveloperSnses"`
+	SupportedDeveloperSnses []SupportedDeveloperSnse `json:"supportedDeveloperSnses,omitzero" form:"name=supportedDeveloperSnses"`
 	// The credentials for social login services (SNS) that are used for developer authentication.
 	//
-	DeveloperSnsCredentials optionalnullable.OptionalNullable[[]SnsCredentials] `json:"developerSnsCredentials,omitzero" form:"name=developerSnsCredentials,json"`
+	DeveloperSnsCredentials []SnsCredentials `json:"developerSnsCredentials,omitzero" form:"name=developerSnsCredentials,json"`
 	// The `metadata` of the service. The content of the returned array depends on contexts. The predefined service metadata is listed in the following table.
 	//
 	//   | Key | Description |
 	//   | --- | --- |
 	//   | `clientCount` | The number of client applications which belong to this service.  |
 	//
-	Metadata optionalnullable.OptionalNullable[[]Pair] `json:"metadata,omitzero" form:"name=metadata,json"`
+	Metadata []Pair `json:"metadata,omitzero" form:"name=metadata,json"`
 	// A Web API endpoint for user authentication which is to be prepared on the service side.
 	//
 	// The endpoint must be implemented if you do not implement the UI at the authorization endpoint but use the one provided by Authlete.
 	//
 	// The user authentication at the authorization endpoint provided by Authlete is performed by making a `POST` request to this endpoint.
 	//
-	AuthenticationCallbackEndpoint optionalnullable.OptionalNullable[string] `json:"authenticationCallbackEndpoint,omitzero" form:"name=authenticationCallbackEndpoint"`
+	AuthenticationCallbackEndpoint *string `json:"authenticationCallbackEndpoint,omitzero" form:"name=authenticationCallbackEndpoint"`
 	// API key for basic authentication at the authentication callback endpoint.
 	//
 	// If the value is not empty, Authlete generates Authorization header for Basic authentication when making a request to the authentication callback endpoint.
 	//
-	AuthenticationCallbackAPIKey optionalnullable.OptionalNullable[string] `json:"authenticationCallbackApiKey,omitzero" form:"name=authenticationCallbackApiKey"`
+	AuthenticationCallbackAPIKey *string `json:"authenticationCallbackApiKey,omitzero" form:"name=authenticationCallbackApiKey"`
 	// API secret for `basic` authentication at the authentication callback endpoint.
-	AuthenticationCallbackAPISecret optionalnullable.OptionalNullable[string] `json:"authenticationCallbackApiSecret,omitzero" form:"name=authenticationCallbackApiSecret"`
+	AuthenticationCallbackAPISecret *string `json:"authenticationCallbackApiSecret,omitzero" form:"name=authenticationCallbackApiSecret"`
 	// Values of `grant_type` request parameter that the service supports.
 	//
 	// The value of this property is used as `grant_types_supported property` in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedGrantTypes optionalnullable.OptionalNullable[[]GrantType] `json:"supportedGrantTypes,omitzero" form:"name=supportedGrantTypes"`
+	SupportedGrantTypes []GrantType `json:"supportedGrantTypes,omitzero" form:"name=supportedGrantTypes"`
 	// Values of `response_type` request parameter that the service supports. Valid values are listed in Response Type.
 	//
 	// The value of this property is used as `response_types_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedResponseTypes optionalnullable.OptionalNullable[[]ResponseType] `json:"supportedResponseTypes,omitzero" form:"name=supportedResponseTypes"`
+	SupportedResponseTypes []ResponseType `json:"supportedResponseTypes,omitzero" form:"name=supportedResponseTypes"`
 	// The supported data types that can be used as values of the type field in `authorization_details`.
 	//
 	// This property corresponds to the `authorization_details_types_supported` metadata. See "OAuth 2.0 Rich Authorization Requests" (RAR) for details.
 	//
-	SupportedAuthorizationDetailsTypes optionalnullable.OptionalNullable[[]string] `json:"supportedAuthorizationDetailsTypes,omitzero" form:"name=supportedAuthorizationDetailsTypes"`
+	SupportedAuthorizationDetailsTypes []string `json:"supportedAuthorizationDetailsTypes,omitzero" form:"name=supportedAuthorizationDetailsTypes"`
 	// The profiles that this service supports.
 	//
-	SupportedServiceProfiles optionalnullable.OptionalNullable[[]ServiceProfile] `json:"supportedServiceProfiles,omitzero" form:"name=supportedServiceProfiles"`
+	SupportedServiceProfiles []ServiceProfile `json:"supportedServiceProfiles,omitzero" form:"name=supportedServiceProfiles"`
 	// The flag to indicate whether the `error_description` response parameter is omitted.
 	//
 	// According to [RFC 6749](https://tools.ietf.org/html/rfc6749), an authorization server may include the `error_description` response parameter in error responses.
@@ -2433,19 +2432,19 @@ type ServiceInput struct {
 	//
 	// The value of this property is used as `authorization_endpoint` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	AuthorizationEndpoint optionalnullable.OptionalNullable[string] `json:"authorizationEndpoint,omitzero" form:"name=authorizationEndpoint"`
+	AuthorizationEndpoint *string `json:"authorizationEndpoint,omitzero" form:"name=authorizationEndpoint"`
 	// UI locales that the service supports.
 	//
 	// Each element is a language tag defined in [RFC 5646](https://tools.ietf.org/html/rfc5646). For example, `en-US` and `ja-JP`.
 	//
 	// The value of this property is used as `ui_locales_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedUILocales optionalnullable.OptionalNullable[[]string] `json:"supportedUiLocales,omitzero" form:"name=supportedUiLocales"`
+	SupportedUILocales []string `json:"supportedUiLocales,omitzero" form:"name=supportedUiLocales"`
 	// Values of `display` request parameter that service supports.
 	//
 	// The value of this property is used as `display_values_supported` property in the Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedDisplays optionalnullable.OptionalNullable[[]Display] `json:"supportedDisplays,omitzero" form:"name=supportedDisplays"`
+	SupportedDisplays []Display `json:"supportedDisplays,omitzero" form:"name=supportedDisplays"`
 	// The flag to indicate whether the use of Proof Key for Code Exchange (PKCE) is always required for authorization requests by Authorization Code Flow.
 	//
 	// If `true`, `code_challenge` request parameter is always required for authorization requests using Authorization Code Flow.
@@ -2472,12 +2471,12 @@ type ServiceInput struct {
 	//
 	// The value of this property is used as `token_endpoint` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	TokenEndpoint optionalnullable.OptionalNullable[string] `json:"tokenEndpoint,omitzero" form:"name=tokenEndpoint"`
+	TokenEndpoint *string `json:"tokenEndpoint,omitzero" form:"name=tokenEndpoint"`
 	// Client authentication methods supported by the token endpoint of the service.
 	//
 	// The value of this property is used as `token_endpoint_auth_methods_supports` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedTokenAuthMethods optionalnullable.OptionalNullable[[]ClientAuthMethod] `json:"supportedTokenAuthMethods,omitzero" form:"name=supportedTokenAuthMethods"`
+	SupportedTokenAuthMethods []ClientAuthMethod `json:"supportedTokenAuthMethods,omitzero" form:"name=supportedTokenAuthMethods"`
 	// The flag to indicate token requests from public clients without the `client_id` request parameter are allowed when the client can be guessed from `authorization_code` or `refresh_token`.
 	//
 	// This flag should not be set unless you have special reasons.
@@ -2487,20 +2486,20 @@ type ServiceInput struct {
 	//
 	// A URL that starts with `https://`. For example, `https://example.com/auth/revocation`.
 	//
-	RevocationEndpoint optionalnullable.OptionalNullable[string] `json:"revocationEndpoint,omitzero" form:"name=revocationEndpoint"`
+	RevocationEndpoint *string `json:"revocationEndpoint,omitzero" form:"name=revocationEndpoint"`
 	// Client authentication methods supported at the revocation endpoint.
 	//
-	SupportedRevocationAuthMethods optionalnullable.OptionalNullable[[]ClientAuthMethod] `json:"supportedRevocationAuthMethods,omitzero" form:"name=supportedRevocationAuthMethods"`
+	SupportedRevocationAuthMethods []ClientAuthMethod `json:"supportedRevocationAuthMethods,omitzero" form:"name=supportedRevocationAuthMethods"`
 	// The URI of the introspection endpoint.
-	IntrospectionEndpoint optionalnullable.OptionalNullable[string] `json:"introspectionEndpoint,omitzero" form:"name=introspectionEndpoint"`
+	IntrospectionEndpoint *string `json:"introspectionEndpoint,omitzero" form:"name=introspectionEndpoint"`
 	// Client authentication methods supported at the introspection endpoint.
 	//
-	SupportedIntrospectionAuthMethods optionalnullable.OptionalNullable[[]ClientAuthMethod] `json:"supportedIntrospectionAuthMethods,omitzero" form:"name=supportedIntrospectionAuthMethods"`
+	SupportedIntrospectionAuthMethods []ClientAuthMethod `json:"supportedIntrospectionAuthMethods,omitzero" form:"name=supportedIntrospectionAuthMethods"`
 	// The URI of the pushed authorization request endpoint.
 	//
 	// This property corresponds to the `pushed_authorization_request_endpoint` metadata defined in "[5. Authorization Server Metadata](https://tools.ietf.org/html/draft-lodderstedt-oauth-par#section-5)" of OAuth 2.0 Pushed Authorization Requests.
 	//
-	PushedAuthReqEndpoint optionalnullable.OptionalNullable[string] `json:"pushedAuthReqEndpoint,omitzero" form:"name=pushedAuthReqEndpoint"`
+	PushedAuthReqEndpoint *string `json:"pushedAuthReqEndpoint,omitzero" form:"name=pushedAuthReqEndpoint"`
 	// The duration of pushed authorization requests in seconds.
 	//
 	PushedAuthReqDuration *int64 `json:"pushedAuthReqDuration,omitzero" form:"name=pushedAuthReqDuration"`
@@ -2522,17 +2521,17 @@ type ServiceInput struct {
 	MutualTLSValidatePkiCertChain *bool `json:"mutualTlsValidatePkiCertChain,omitzero" form:"name=mutualTlsValidatePkiCertChain"`
 	// The list of root certificates trusted by this service for PKI-based client mutual TLS authentication.
 	//
-	TrustedRootCertificates optionalnullable.OptionalNullable[[]string] `json:"trustedRootCertificates,omitzero" form:"name=trustedRootCertificates"`
+	TrustedRootCertificates []string `json:"trustedRootCertificates,omitzero" form:"name=trustedRootCertificates"`
 	// The MTLS endpoint aliases.
 	//
-	MtlsEndpointAliases optionalnullable.OptionalNullable[[]NamedURI] `json:"mtlsEndpointAliases,omitzero" form:"name=mtlsEndpointAliases,json"`
+	MtlsEndpointAliases []NamedURI `json:"mtlsEndpointAliases,omitzero" form:"name=mtlsEndpointAliases,json"`
 	// The access token type.
 	//
 	// This value is used as the value of `token_type` property in access token responses. If this service complies with [RFC 6750](https://tools.ietf.org/html/rfc6750), the value of this property should be `Bearer`.
 	//
 	// See [RFC 6749 (OAuth 2.0), 7.1. Access Token Types](https://tools.ietf.org/html/rfc6749#section-7.1) for details.
 	//
-	AccessTokenType optionalnullable.OptionalNullable[string] `json:"accessTokenType,omitzero" form:"name=accessTokenType"`
+	AccessTokenType *string `json:"accessTokenType,omitzero" form:"name=accessTokenType"`
 	// The flag to indicate whether this service supports issuing TLS client certificate bound access tokens.
 	//
 	TLSClientCertificateBoundAccessTokens *bool `json:"tlsClientCertificateBoundAccessTokens,omitzero" form:"name=tlsClientCertificateBoundAccessTokens"`
@@ -2553,12 +2552,12 @@ type ServiceInput struct {
 	//   - as client authorizationSignAlg value, it represents the signature algorithm used when [creating a JARM response](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/enabling-jarm).
 	//   - or as client requestSignAlg value, it specifies which is the expected signature used by [client on a Request Object](https://kb.authlete.com/en/s/oauth-and-openid-connect/a/request-objects).
 	//
-	AccessTokenSignAlg optionalnullable.OptionalNullable[JwsAlg] `json:"accessTokenSignAlg,omitzero" form:"name=accessTokenSignAlg"`
+	AccessTokenSignAlg *JwsAlg `json:"accessTokenSignAlg,omitzero" form:"name=accessTokenSignAlg"`
 	// The key ID to identify a JWK used for signing access tokens.
 	//
 	// A JWK Set can be registered as a property of a service. A JWK Set can contain 0 or more JWKs. Authlete Server has to pick up one JWK for signing from the JWK Set when it generates a JWT-based access token. Authlete Server searches the registered JWK Set for a JWK which satisfies conditions for access token signature. If the number of JWK candidates which satisfy the conditions is 1, there is no problem. On the other hand, if there exist multiple candidates, a Key ID is needed to be specified so that Authlete Server can pick up one JWK from among the JWK candidates.
 	//
-	AccessTokenSignatureKeyID optionalnullable.OptionalNullable[string] `json:"accessTokenSignatureKeyId,omitzero" form:"name=accessTokenSignatureKeyId"`
+	AccessTokenSignatureKeyID *string `json:"accessTokenSignatureKeyId,omitzero" form:"name=accessTokenSignatureKeyId"`
 	// The duration of refresh tokens in seconds. The related specifications have no requirements on refresh token duration, but Authlete sets expiration for refresh tokens.
 	RefreshTokenDuration *int64 `json:"refreshTokenDuration,omitzero" form:"name=refreshTokenDuration"`
 	// The flag to indicate whether the remaining duration of the used refresh token is taken over to the newly issued refresh token.
@@ -2578,7 +2577,7 @@ type ServiceInput struct {
 	RefreshTokenKept *bool `json:"refreshTokenKept,omitzero" form:"name=refreshTokenKept"`
 	// Scopes supported by the service.
 	//
-	SupportedScopes optionalnullable.OptionalNullable[[]Scope] `json:"supportedScopes,omitzero" form:"name=supportedScopes,json"`
+	SupportedScopes []Scope `json:"supportedScopes,omitzero" form:"name=supportedScopes,json"`
 	// The flag to indicate whether requests that request no scope are rejected or not.
 	//
 	ScopeRequired *bool `json:"scopeRequired,omitzero" form:"name=scopeRequired"`
@@ -2594,15 +2593,15 @@ type ServiceInput struct {
 	//
 	// The value of this property is used as `claim_types_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedClaimTypes optionalnullable.OptionalNullable[[]ClaimType] `json:"supportedClaimTypes,omitzero" form:"name=supportedClaimTypes"`
+	SupportedClaimTypes []ClaimType `json:"supportedClaimTypes,omitzero" form:"name=supportedClaimTypes"`
 	// Claim locales that the service supports. Each element is a language tag defined in [RFC 5646](https://tools.ietf.org/html/rfc5646). For example, `en-US` and `ja-JP`. See [OpenID Connect Core 1.0, 5.2. Languages and Scripts](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsLanguagesAndScripts) for details.
 	//
 	// The value of this property is used as `claims_locales_supported` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	SupportedClaimLocales optionalnullable.OptionalNullable[[]string] `json:"supportedClaimLocales,omitzero" form:"name=supportedClaimLocales"`
+	SupportedClaimLocales []string `json:"supportedClaimLocales,omitzero" form:"name=supportedClaimLocales"`
 	// Claim names that the service supports. The standard claim names listed in [OpenID Connect Core 1.0, 5.1. Standard Claim](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims) should be supported. The following is the list of standard claims.
 	//
-	SupportedClaims optionalnullable.OptionalNullable[[]string] `json:"supportedClaims,omitzero" form:"name=supportedClaims"`
+	SupportedClaims []string `json:"supportedClaims,omitzero" form:"name=supportedClaims"`
 	// The flag indicating whether claims specified by shortcut scopes (e.g. `profile`) are included in the issued ID token only when no access token is issued.
 	//
 	ClaimShortcutRestrictive *bool `json:"claimShortcutRestrictive,omitzero" form:"name=claimShortcutRestrictive"`
@@ -2612,26 +2611,26 @@ type ServiceInput struct {
 	//
 	// The value of this property is used as `jwks_uri` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	JwksURI optionalnullable.OptionalNullable[string] `json:"jwksUri,omitzero" form:"name=jwksUri"`
+	JwksURI *string `json:"jwksUri,omitzero" form:"name=jwksUri"`
 	// The content of the service's [JSON Web Key Set](https://tools.ietf.org/html/rfc7517) document.
 	//
 	// If this property is not `null` in a `/service/create` request or a `/service/update` request, Authlete hosts the content in the database. This property must not be `null` and must contain pairs of public/private keys if the service wants to support asymmetric signatures for ID tokens and asymmetric encryption for request objects. See [OpenID Connect Core 1.0, 10. Signatures and Encryption](https://openid.net/specs/openid-connect-core-1_0.html#SigEnc) for details.
 	//
-	Jwks optionalnullable.OptionalNullable[string] `json:"jwks,omitzero" form:"name=jwks"`
+	Jwks *string `json:"jwks,omitzero" form:"name=jwks"`
 	// The key ID to identify a JWK used for ID token signature using an asymmetric key.
 	//
-	IDTokenSignatureKeyID optionalnullable.OptionalNullable[string] `json:"idTokenSignatureKeyId,omitzero" form:"name=idTokenSignatureKeyId"`
+	IDTokenSignatureKeyID *string `json:"idTokenSignatureKeyId,omitzero" form:"name=idTokenSignatureKeyId"`
 	// The key ID to identify a JWK used for user info signature using an asymmetric key.
 	//
-	UserInfoSignatureKeyID optionalnullable.OptionalNullable[string] `json:"userInfoSignatureKeyId,omitzero" form:"name=userInfoSignatureKeyId"`
+	UserInfoSignatureKeyID *string `json:"userInfoSignatureKeyId,omitzero" form:"name=userInfoSignatureKeyId"`
 	// The key ID to identify a JWK used for signing authorization responses using an asymmetric key.
 	//
-	AuthorizationSignatureKeyID optionalnullable.OptionalNullable[string] `json:"authorizationSignatureKeyId,omitzero" form:"name=authorizationSignatureKeyId"`
+	AuthorizationSignatureKeyID *string `json:"authorizationSignatureKeyId,omitzero" form:"name=authorizationSignatureKeyId"`
 	// The [user info endpoint](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo) of the service. A URL that starts with `https://`. For example, `https://example.com/auth/userinfo`.
 	//
 	// The value of this property is used as `userinfo_endpoint` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	UserInfoEndpoint optionalnullable.OptionalNullable[string] `json:"userInfoEndpoint,omitzero" form:"name=userInfoEndpoint"`
+	UserInfoEndpoint *string `json:"userInfoEndpoint,omitzero" form:"name=userInfoEndpoint"`
 	// The boolean flag which indicates whether the [OAuth 2.0 Dynamic Client Registration Protocol](https://tools.ietf.org/html/rfc7591) is supported.
 	//
 	DynamicRegistrationSupported *bool `json:"dynamicRegistrationSupported,omitzero" form:"name=dynamicRegistrationSupported"`
@@ -2639,33 +2638,33 @@ type ServiceInput struct {
 	//
 	// The value of this property is used as `registration_endpoint` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	RegistrationEndpoint optionalnullable.OptionalNullable[string] `json:"registrationEndpoint,omitzero" form:"name=registrationEndpoint"`
+	RegistrationEndpoint *string `json:"registrationEndpoint,omitzero" form:"name=registrationEndpoint"`
 	// The URI of the registration management endpoint. If dynamic client registration is supported, and this is set, this URI will be used as the basis of the client's management endpoint by appending `/clientid&#125;/` to it as a path element. If this is unset, the value of `registrationEndpoint` will be used as the URI base instead.
 	//
-	RegistrationManagementEndpoint optionalnullable.OptionalNullable[string] `json:"registrationManagementEndpoint,omitzero" form:"name=registrationManagementEndpoint"`
+	RegistrationManagementEndpoint *string `json:"registrationManagementEndpoint,omitzero" form:"name=registrationManagementEndpoint"`
 	// The URL of the "Policy" of the service.
 	//
 	// The value of this property is used as `op_policy_uri` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	PolicyURI optionalnullable.OptionalNullable[string] `json:"policyUri,omitzero" form:"name=policyUri"`
+	PolicyURI *string `json:"policyUri,omitzero" form:"name=policyUri"`
 	// The URL of the "Terms Of Service" of the service.
 	//
 	// The value of this property is used as `op_tos_uri` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	TosURI optionalnullable.OptionalNullable[string] `json:"tosUri,omitzero" form:"name=tosUri"`
+	TosURI *string `json:"tosUri,omitzero" form:"name=tosUri"`
 	// The URL of a page where documents for developers can be found.
 	//
 	// The value of this property is used as `service_documentation` property in the [OpenID Provider Metadata](http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	ServiceDocumentation optionalnullable.OptionalNullable[string] `json:"serviceDocumentation,omitzero" form:"name=serviceDocumentation"`
+	ServiceDocumentation *string `json:"serviceDocumentation,omitzero" form:"name=serviceDocumentation"`
 	// The URI of backchannel authentication endpoint, which is defined in the specification of [CIBA (Client Initiated Backchannel Authentication)](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html).
 	//
-	BackchannelAuthenticationEndpoint optionalnullable.OptionalNullable[string] `json:"backchannelAuthenticationEndpoint,omitzero" form:"name=backchannelAuthenticationEndpoint"`
+	BackchannelAuthenticationEndpoint *string `json:"backchannelAuthenticationEndpoint,omitzero" form:"name=backchannelAuthenticationEndpoint"`
 	// The supported backchannel token delivery modes. This property corresponds to the `backchannel_token_delivery_modes_supported` metadata.
 	//
 	// Backchannel token delivery modes are defined in the specification of [CIBA (Client Initiated Backchannel Authentication)](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html).
 	//
-	SupportedBackchannelTokenDeliveryModes optionalnullable.OptionalNullable[[]DeliveryMode] `json:"supportedBackchannelTokenDeliveryModes,omitzero" form:"name=supportedBackchannelTokenDeliveryModes"`
+	SupportedBackchannelTokenDeliveryModes []DeliveryMode `json:"supportedBackchannelTokenDeliveryModes,omitzero" form:"name=supportedBackchannelTokenDeliveryModes"`
 	// The duration of backchannel authentication request IDs issued from the backchannel authentication endpoint in seconds. This is used as the value of the `expires_in` property in responses from the backchannel authentication endpoint.
 	//
 	BackchannelAuthReqIDDuration *int `json:"backchannelAuthReqIdDuration,omitzero" form:"name=backchannelAuthReqIdDuration"`
@@ -2682,44 +2681,44 @@ type ServiceInput struct {
 	//
 	// Device authorization endpoint is defined in the specification of OAuth 2.0 Device Authorization Grant.
 	//
-	DeviceAuthorizationEndpoint optionalnullable.OptionalNullable[string] `json:"deviceAuthorizationEndpoint,omitzero" form:"name=deviceAuthorizationEndpoint"`
+	DeviceAuthorizationEndpoint *string `json:"deviceAuthorizationEndpoint,omitzero" form:"name=deviceAuthorizationEndpoint"`
 	// The verification URI for the device flow. This URI is used as the value of the `verification_uri` parameter in responses from the device authorization endpoint.
 	//
-	DeviceVerificationURI optionalnullable.OptionalNullable[string] `json:"deviceVerificationUri,omitzero" form:"name=deviceVerificationUri"`
+	DeviceVerificationURI *string `json:"deviceVerificationUri,omitzero" form:"name=deviceVerificationUri"`
 	// The verification URI for the device flow with a placeholder for a user code. This URI is used to build the value of the `verification_uri_complete` parameter in responses from the device authorization endpoint.
 	//
-	DeviceVerificationURIComplete optionalnullable.OptionalNullable[string] `json:"deviceVerificationUriComplete,omitzero" form:"name=deviceVerificationUriComplete"`
+	DeviceVerificationURIComplete *string `json:"deviceVerificationUriComplete,omitzero" form:"name=deviceVerificationUriComplete"`
 	// The duration of device verification codes and end-user verification codes issued from the device authorization endpoint in seconds. This is used as the value of the `expires_in` property in responses from the device authorization endpoint.
 	//
 	DeviceFlowCodeDuration *int `json:"deviceFlowCodeDuration,omitzero" form:"name=deviceFlowCodeDuration"`
 	// The minimum interval between polling requests to the token endpoint from client applications in seconds in device flow. This is used as the value of the `interval` property in responses from the device authorization endpoint.
 	//
-	DeviceFlowPollingInterval *int                                               `json:"deviceFlowPollingInterval,omitzero" form:"name=deviceFlowPollingInterval"`
-	UserCodeCharset           optionalnullable.OptionalNullable[UserCodeCharset] `json:"userCodeCharset,omitzero" form:"name=userCodeCharset"`
+	DeviceFlowPollingInterval *int             `json:"deviceFlowPollingInterval,omitzero" form:"name=deviceFlowPollingInterval"`
+	UserCodeCharset           *UserCodeCharset `json:"userCodeCharset,omitzero" form:"name=userCodeCharset"`
 	// The length of end-user verification codes (`user_code`) for Device Flow.
 	//
 	UserCodeLength *int `json:"userCodeLength,omitzero" form:"name=userCodeLength"`
 	// Trust frameworks supported by this service. This corresponds to the `trust_frameworks_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedTrustFrameworks optionalnullable.OptionalNullable[[]string] `json:"supportedTrustFrameworks,omitzero" form:"name=supportedTrustFrameworks"`
+	SupportedTrustFrameworks []string `json:"supportedTrustFrameworks,omitzero" form:"name=supportedTrustFrameworks"`
 	// Evidence supported by this service. This corresponds to the `evidence_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedEvidence optionalnullable.OptionalNullable[[]string] `json:"supportedEvidence,omitzero" form:"name=supportedEvidence"`
+	SupportedEvidence []string `json:"supportedEvidence,omitzero" form:"name=supportedEvidence"`
 	// Identity documents supported by this service. This corresponds to the `id_documents_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedIdentityDocuments optionalnullable.OptionalNullable[[]string] `json:"supportedIdentityDocuments,omitzero" form:"name=supportedIdentityDocuments"`
+	SupportedIdentityDocuments []string `json:"supportedIdentityDocuments,omitzero" form:"name=supportedIdentityDocuments"`
 	// Verification methods supported by this service. This corresponds to the `id_documents_verification_methods_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedVerificationMethods optionalnullable.OptionalNullable[[]string] `json:"supportedVerificationMethods,omitzero" form:"name=supportedVerificationMethods"`
+	SupportedVerificationMethods []string `json:"supportedVerificationMethods,omitzero" form:"name=supportedVerificationMethods"`
 	// Verified claims supported by this service. This corresponds to the `claims_in_verified_claims_supported` [metadata](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.7).
 	//
-	SupportedVerifiedClaims optionalnullable.OptionalNullable[[]string] `json:"supportedVerifiedClaims,omitzero" form:"name=supportedVerifiedClaims"`
+	SupportedVerifiedClaims []string `json:"supportedVerifiedClaims,omitzero" form:"name=supportedVerifiedClaims"`
 	// The verified claims validation schema set.
 	//
 	VerifiedClaimsValidationSchemaSet *VerifiedClaimsValidationSchema `json:"verifiedClaimsValidationSchemaSet,omitzero" form:"name=verifiedClaimsValidationSchemaSet"`
 	// The attributes of this service.
 	//
-	Attributes optionalnullable.OptionalNullable[[]Pair] `json:"attributes,omitzero" form:"name=attributes,json"`
+	Attributes []Pair `json:"attributes,omitzero" form:"name=attributes,json"`
 	// The flag indicating whether the nbf claim in the request object is optional even when the authorization request is regarded as a FAPI-Part2 request.
 	//
 	NbfOptional *bool `json:"nbfOptional,omitzero" form:"name=nbfOptional"`
@@ -2728,7 +2727,7 @@ type ServiceInput struct {
 	IssSuppressed *bool `json:"issSuppressed,omitzero" form:"name=issSuppressed"`
 	// custom client metadata supported by this service.
 	//
-	SupportedCustomClientMetadata optionalnullable.OptionalNullable[[]string] `json:"supportedCustomClientMetadata,omitzero" form:"name=supportedCustomClientMetadata"`
+	SupportedCustomClientMetadata []string `json:"supportedCustomClientMetadata,omitzero" form:"name=supportedCustomClientMetadata"`
 	// The flag indicating whether the expiration date of an access token never exceeds that of the corresponding refresh token.
 	//
 	TokenExpirationLinked *bool `json:"tokenExpirationLinked,omitzero" form:"name=tokenExpirationLinked"`
@@ -2752,10 +2751,10 @@ type ServiceInput struct {
 	//
 	// This `hsks` property is output only, meaning that `hsks` in requests to `/api/service/create` API and `/api/service/update` API do not have any effect. The contents of this property is controlled only by `/api/hsk/*` APIs.
 	//
-	Hsks optionalnullable.OptionalNullable[[]Hsk] `json:"hsks,omitzero" form:"name=hsks,json"`
+	Hsks []Hsk `json:"hsks,omitzero" form:"name=hsks,json"`
 	// The URL of the grant management endpoint.
 	//
-	GrantManagementEndpoint optionalnullable.OptionalNullable[string] `json:"grantManagementEndpoint,omitzero" form:"name=grantManagementEndpoint"`
+	GrantManagementEndpoint *string `json:"grantManagementEndpoint,omitzero" form:"name=grantManagementEndpoint"`
 	// The flag indicating whether every authorization request (and any request serving as an authorization request such as CIBA backchannel authentication request and device authorization request) must include the `grant_management_action` request parameter.
 	//
 	GrantManagementActionRequired *bool `json:"grantManagementActionRequired,omitzero" form:"name=grantManagementActionRequired"`
@@ -2775,10 +2774,10 @@ type ServiceInput struct {
 	//
 	// The value of this property is used as `end_session_endpoint` property in the [OpenID Provider Metadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
-	EndSessionEndpoint optionalnullable.OptionalNullable[string] `json:"endSessionEndpoint,omitzero" form:"name=endSessionEndpoint"`
+	EndSessionEndpoint *string `json:"endSessionEndpoint,omitzero" form:"name=endSessionEndpoint"`
 	// The URL of the challenge endpoint, which is defined in OAuth 2.0 Attestation-Based Client Authentication.
 	//
-	ChallengeEndpoint optionalnullable.OptionalNullable[string] `json:"challengeEndpoint,omitzero" form:"name=challengeEndpoint"`
+	ChallengeEndpoint *string `json:"challengeEndpoint,omitzero" form:"name=challengeEndpoint"`
 	// The flag indicating whether the port number component of redirection URIs can be variable when the host component indicates loopback.
 	//
 	LoopbackRedirectionURIVariable *bool `json:"loopbackRedirectionUriVariable,omitzero" form:"name=loopbackRedirectionUriVariable"`
@@ -2790,58 +2789,58 @@ type ServiceInput struct {
 	AccessTokenForExternalAttachmentEmbedded *bool `json:"accessTokenForExternalAttachmentEmbedded,omitzero" form:"name=accessTokenForExternalAttachmentEmbedded"`
 	// Identifiers of entities that can issue entity statements for this service. This property corresponds to the `authority_hints` property that appears in a self-signed entity statement that is defined in OpenID Connect Federation 1.0.
 	//
-	AuthorityHints optionalnullable.OptionalNullable[[]string] `json:"authorityHints,omitzero" form:"name=authorityHints"`
+	AuthorityHints []string `json:"authorityHints,omitzero" form:"name=authorityHints"`
 	// flag indicating whether this service supports OpenID Connect Federation 1
 	//
 	FederationEnabled *bool `json:"federationEnabled,omitzero" form:"name=federationEnabled"`
 	// JWK Set document containing keys that are used to sign (1) self-signed entity statement of this service and (2) the response from `signed_jwks_uri`.
 	//
-	FederationJwks optionalnullable.OptionalNullable[string] `json:"federationJwks,omitzero" form:"name=federationJwks"`
+	FederationJwks *string `json:"federationJwks,omitzero" form:"name=federationJwks"`
 	// A key ID to identify a JWK used to sign the entity configuration and the signed JWK Set.
 	//
-	FederationSignatureKeyID optionalnullable.OptionalNullable[string] `json:"federationSignatureKeyId,omitzero" form:"name=federationSignatureKeyId"`
+	FederationSignatureKeyID *string `json:"federationSignatureKeyId,omitzero" form:"name=federationSignatureKeyId"`
 	// The duration of the entity configuration in seconds.
 	//
 	FederationConfigurationDuration *int64 `json:"federationConfigurationDuration,omitzero" form:"name=federationConfigurationDuration"`
 	// The URI of the federation registration endpoint. This property corresponds to the `federation_registration_endpoint` server metadata that is defined in OpenID Connect Federation 1.0.
 	//
-	FederationRegistrationEndpoint optionalnullable.OptionalNullable[string] `json:"federationRegistrationEndpoint,omitzero" form:"name=federationRegistrationEndpoint"`
+	FederationRegistrationEndpoint *string `json:"federationRegistrationEndpoint,omitzero" form:"name=federationRegistrationEndpoint"`
 	// The human-readable name representing the organization that operates this service. This property corresponds to the `organization_name` server metadata that is defined in OpenID Connect Federation 1.0.
 	//
-	OrganizationName optionalnullable.OptionalNullable[string] `json:"organizationName,omitzero" form:"name=organizationName"`
+	OrganizationName *string `json:"organizationName,omitzero" form:"name=organizationName"`
 	// The transformed claims predefined by this service in JSON format. This property corresponds to the `transformed_claims_predefined` server metadata.
 	//
-	PredefinedTransformedClaims optionalnullable.OptionalNullable[string] `json:"predefinedTransformedClaims,omitzero" form:"name=predefinedTransformedClaims"`
+	PredefinedTransformedClaims *string `json:"predefinedTransformedClaims,omitzero" form:"name=predefinedTransformedClaims"`
 	// flag indicating whether refresh token requests with the same refresh token can be made multiple times in quick succession and they can obtain the same renewed refresh token within the short period.
 	//
 	RefreshTokenIdempotent *bool `json:"refreshTokenIdempotent,omitzero" form:"name=refreshTokenIdempotent"`
 	// The URI of the endpoint that returns this service's JWK Set document in the JWT format. This property corresponds to the `signed_jwks_uri` server metadata defined in OpenID Connect Federation 1.0.
 	//
-	SignedJwksURI optionalnullable.OptionalNullable[string] `json:"signedJwksUri,omitzero" form:"name=signedJwksUri"`
+	SignedJwksURI *string `json:"signedJwksUri,omitzero" form:"name=signedJwksUri"`
 	// Supported attachment types. This property corresponds to the &#123;@code attachments_supported&#125; server metadata which was added by the third implementer's draft of OpenID Connect for Identity Assurance 1.0.
 	//
-	SupportedAttachments optionalnullable.OptionalNullable[[]AttachmentType] `json:"supportedAttachments,omitzero" form:"name=supportedAttachments"`
+	SupportedAttachments []AttachmentType `json:"supportedAttachments,omitzero" form:"name=supportedAttachments"`
 	// Supported algorithms used to compute digest values of external attachments. This property corresponds to the `digest_algorithms_supported` server metadata which was added by the third implementer's draft of OpenID Connect for Identity Assurance 1.0.
 	//
-	SupportedDigestAlgorithms optionalnullable.OptionalNullable[[]string] `json:"supportedDigestAlgorithms,omitzero" form:"name=supportedDigestAlgorithms"`
+	SupportedDigestAlgorithms []string `json:"supportedDigestAlgorithms,omitzero" form:"name=supportedDigestAlgorithms"`
 	// Document types supported by this service. This property corresponds to the `documents_supported` server metadata.
 	//
-	SupportedDocuments optionalnullable.OptionalNullable[[]string] `json:"supportedDocuments,omitzero" form:"name=supportedDocuments"`
+	SupportedDocuments []string `json:"supportedDocuments,omitzero" form:"name=supportedDocuments"`
 	// validation and verification processes supported by this service. This property corresponds to the `documents_methods_supported` server metadata.
 	//
 	// The third implementer's draft of [OpenID Connect for Identity Assurance 1.0](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html) renamed the `id_documents_verification_methods_supported` server metadata to `documents_methods_supported`.
 	//
-	SupportedDocumentsMethods optionalnullable.OptionalNullable[[]string] `json:"supportedDocumentsMethods,omitzero" form:"name=supportedDocumentsMethods"`
+	SupportedDocumentsMethods []string `json:"supportedDocumentsMethods,omitzero" form:"name=supportedDocumentsMethods"`
 	// Document validation methods supported by this service. This property corresponds to the `documents_validation_methods_supported` server metadata which was added by the third implementer's draft of
 	//
-	SupportedDocumentsValidationMethods optionalnullable.OptionalNullable[[]string] `json:"supportedDocumentsValidationMethods,omitzero" form:"name=supportedDocumentsValidationMethods"`
+	SupportedDocumentsValidationMethods []string `json:"supportedDocumentsValidationMethods,omitzero" form:"name=supportedDocumentsValidationMethods"`
 	// Document verification methods supported by this service. This property corresponds to the `documents_verification_methods_supported` server metadata which was added by the third implementer's draft of [OpenID Connect for Identity Assurance 1.0](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html)
 	//
-	SupportedDocumentsVerificationMethods optionalnullable.OptionalNullable[[]string] `json:"supportedDocumentsVerificationMethods,omitzero" form:"name=supportedDocumentsVerificationMethods"`
+	SupportedDocumentsVerificationMethods []string `json:"supportedDocumentsVerificationMethods,omitzero" form:"name=supportedDocumentsVerificationMethods"`
 	// Electronic record types supported by this service. This property corresponds to the `electronic_records_supported` server metadata which was added by the third implementer's draft of [OpenID Connect for Identity Assurance 1.0](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html)
 	//
-	SupportedElectronicRecords       optionalnullable.OptionalNullable[[]string]                 `json:"supportedElectronicRecords,omitzero" form:"name=supportedElectronicRecords"`
-	SupportedClientRegistrationTypes optionalnullable.OptionalNullable[[]ClientRegistrationType] `json:"supportedClientRegistrationTypes,omitzero" form:"name=supportedClientRegistrationTypes"`
+	SupportedElectronicRecords       []string                 `json:"supportedElectronicRecords,omitzero" form:"name=supportedElectronicRecords"`
+	SupportedClientRegistrationTypes []ClientRegistrationType `json:"supportedClientRegistrationTypes,omitzero" form:"name=supportedClientRegistrationTypes"`
 	// The flag indicating whether to prohibit unidentifiable clients from making token exchange requests.
 	//
 	TokenExchangeByIdentifiableClientsOnly *bool `json:"tokenExchangeByIdentifiableClientsOnly,omitzero" form:"name=tokenExchangeByIdentifiableClientsOnly"`
@@ -2873,7 +2872,7 @@ type ServiceInput struct {
 	//
 	// If this property is empty, client registration fails regardless of whether its type is `automatic` or `explicit`. It means that OpenID Connect Federation 1.0 does not work.
 	//
-	TrustAnchors optionalnullable.OptionalNullable[[]TrustAnchor] `json:"trustAnchors,omitzero" form:"name=trustAnchors,json"`
+	TrustAnchors []TrustAnchor `json:"trustAnchors,omitzero" form:"name=trustAnchors,json"`
 	// The flag indicating whether the openid scope should be dropped from scopes list assigned to access token issued when a refresh token grant is used.
 	//
 	OpenidDroppedOnRefreshWithoutOfflineAccess *bool `json:"openidDroppedOnRefreshWithoutOfflineAccess,omitzero" form:"name=openidDroppedOnRefreshWithoutOfflineAccess"`
@@ -2884,7 +2883,7 @@ type ServiceInput struct {
 	IDTokenDroppedOnIssueWithoutOpenid *bool `json:"idTokenDroppedOnIssueWithoutOpenid,omitzero" form:"name=idTokenDroppedOnIssueWithoutOpenid"`
 	// Supported document check methods. This property corresponds to the `documents_check_methods_supported` server metadata which was added by the fourth implementer's draft of OpenID Connect for Identity Assurance 1.0.
 	//
-	SupportedDocumentsCheckMethods optionalnullable.OptionalNullable[[]string] `json:"supportedDocumentsCheckMethods,omitzero" form:"name=supportedDocumentsCheckMethods"`
+	SupportedDocumentsCheckMethods []string `json:"supportedDocumentsCheckMethods,omitzero" form:"name=supportedDocumentsCheckMethods"`
 	// The flag indicating whether this service signs responses from the resource server.
 	//
 	RsResponseSigned *bool `json:"rsResponseSigned,omitzero" form:"name=rsResponseSigned"`
@@ -2899,7 +2898,7 @@ type ServiceInput struct {
 	VerifiableCredentialsEnabled *bool `json:"verifiableCredentialsEnabled,omitzero" form:"name=verifiableCredentialsEnabled"`
 	// The URL at which the JWK Set document of the credential issuer is exposed.
 	//
-	CredentialJwksURI optionalnullable.OptionalNullable[string] `json:"credentialJwksUri,omitzero" form:"name=credentialJwksUri"`
+	CredentialJwksURI *string `json:"credentialJwksUri,omitzero" form:"name=credentialJwksUri"`
 	// The default duration of credential offers in seconds.
 	//
 	CredentialOfferDuration *int64 `json:"credentialOfferDuration,omitzero" form:"name=credentialOfferDuration"`
@@ -2914,36 +2913,36 @@ type ServiceInput struct {
 	CredentialTransactionDuration *int64 `json:"credentialTransactionDuration,omitzero" form:"name=credentialTransactionDuration"`
 	// The key ID of the key for signing introspection responses.
 	//
-	IntrospectionSignatureKeyID optionalnullable.OptionalNullable[string] `json:"introspectionSignatureKeyId,omitzero" form:"name=introspectionSignatureKeyId"`
+	IntrospectionSignatureKeyID *string `json:"introspectionSignatureKeyId,omitzero" form:"name=introspectionSignatureKeyId"`
 	// The key ID of the key for signing introspection responses.
 	//
-	ResourceSignatureKeyID optionalnullable.OptionalNullable[string] `json:"resourceSignatureKeyId,omitzero" form:"name=resourceSignatureKeyId"`
+	ResourceSignatureKeyID *string `json:"resourceSignatureKeyId,omitzero" form:"name=resourceSignatureKeyId"`
 	// The default length of user PINs.
 	//
 	UserPinLength *int `json:"userPinLength,omitzero" form:"name=userPinLength"`
 	// The supported `prompt` values.
 	//
-	SupportedPromptValues optionalnullable.OptionalNullable[[]Prompt] `json:"supportedPromptValues,omitzero" form:"name=supportedPromptValues"`
+	SupportedPromptValues []Prompt `json:"supportedPromptValues,omitzero" form:"name=supportedPromptValues"`
 	// The flag indicating whether to enable the feature of ID token reissuance in the refresh token flow.
 	//
 	IDTokenReissuable *bool `json:"idTokenReissuable,omitzero" form:"name=idTokenReissuable"`
 	// The JWK Set document containing private keys that are used to sign verifiable credentials.
 	//
-	CredentialJwks optionalnullable.OptionalNullable[string] `json:"credentialJwks,omitzero" form:"name=credentialJwks"`
+	CredentialJwks *string `json:"credentialJwks,omitzero" form:"name=credentialJwks"`
 	// FAPI modes for this service.
 	//
 	// When the value of this property is not `null`, Authlete always processes requests to this service based on the specified FAPI modes if the FAPI feature is enabled in Authlete and the FAPI profile is supported by this service.
 	//
 	// For instance, when this property is set to an array containing `FAPI1_ADVANCED` only, Authlete always processes requests to this service based on "Financial-grade API Security Profile 1.0 - Part 2: Advanced" if the FAPI feature is enabled in Authlete and the FAPI profile is supported by this service.
 	//
-	FapiModes optionalnullable.OptionalNullable[[]FapiMode] `json:"fapiModes,omitzero" form:"name=fapiModes"`
+	FapiModes []FapiMode `json:"fapiModes,omitzero" form:"name=fapiModes"`
 	// The default duration of verifiable credentials in seconds.
 	//
-	CredentialDuration       *int64                                                      `json:"credentialDuration,omitzero" form:"name=credentialDuration"`
-	CredentialIssuerMetadata optionalnullable.OptionalNullable[CredentialIssuerMetadata] `json:"credentialIssuerMetadata,omitzero" form:"name=credentialIssuerMetadata,json"`
+	CredentialDuration       *int64                    `json:"credentialDuration,omitzero" form:"name=credentialDuration"`
+	CredentialIssuerMetadata *CredentialIssuerMetadata `json:"credentialIssuerMetadata,omitzero" form:"name=credentialIssuerMetadata,json"`
 	// The type of the `aud` claim in ID tokens.
 	//
-	IDTokenAudType optionalnullable.OptionalNullable[string] `json:"idTokenAudType,omitzero" form:"name=idTokenAudType"`
+	IDTokenAudType *string `json:"idTokenAudType,omitzero" form:"name=idTokenAudType"`
 	// Flag that enables the [OpenID Connect Native SSO for Mobile Apps 1.0](https://openid.net/specs/openid-connect-native-sso-1_0.html) specification (“Native SSO”). When this property is **not** `true`, Native SSO specific parameters are ignored or treated as errors. For example:
 	//
 	// * The `device_sso` scope has no special meaning (Authlete does not embed the `sid` claim in ID tokens).
@@ -2961,7 +2960,7 @@ type ServiceInput struct {
 	//
 	// Choose the value that matches the OID4VCI behaviour your service should expose. See the OID4VCI documentation for details.
 	//
-	Oid4vciVersion optionalnullable.OptionalNullable[string] `json:"oid4vciVersion,omitzero" form:"name=oid4vciVersion"`
+	Oid4vciVersion *string `json:"oid4vciVersion,omitzero" form:"name=oid4vciVersion"`
 	// Flag that controls whether the CIMD metadata policy is applied to client metadata obtained through the Client ID Metadata Document (CIMD) mechanism.
 	//
 	CimdMetadataPolicyEnabled *bool `json:"cimdMetadataPolicyEnabled,omitzero" form:"name=cimdMetadataPolicyEnabled"`
@@ -2973,7 +2972,7 @@ type ServiceInput struct {
 	CimdAllowlistEnabled *bool `json:"cimdAllowlistEnabled,omitzero" form:"name=cimdAllowlistEnabled"`
 	// The allowlist of CIMD endpoints (hosts/URIs) that may be used when retrieving client metadata via Client ID Metadata Documents.
 	//
-	CimdAllowlist optionalnullable.OptionalNullable[[]string] `json:"cimdAllowlist,omitzero" form:"name=cimdAllowlist"`
+	CimdAllowlist []string `json:"cimdAllowlist,omitzero" form:"name=cimdAllowlist"`
 	// If `true`, CIMD retrieval is always attempted for clients, regardless of other conditions.
 	//
 	CimdAlwaysRetrieved *bool `json:"cimdAlwaysRetrieved,omitzero" form:"name=cimdAlwaysRetrieved"`
@@ -2985,7 +2984,7 @@ type ServiceInput struct {
 	CimdQueryPermitted *bool `json:"cimdQueryPermitted,omitzero" form:"name=cimdQueryPermitted"`
 	// The metadata policy applied to client metadata obtained through the CIMD mechanism. The value must follow the metadata policy grammar defined in [OpenID Federation 1.0 §6.1 Metadata Policy](https://openid.net/specs/openid-federation-1_0.html#name-metadata-policy).
 	//
-	CimdMetadataPolicy optionalnullable.OptionalNullable[string] `json:"cimdMetadataPolicy,omitzero" form:"name=cimdMetadataPolicy"`
+	CimdMetadataPolicy *string `json:"cimdMetadataPolicy,omitzero" form:"name=cimdMetadataPolicy"`
 	// When `true`, client ID aliases starting with `https://` or `http://` are prohibited.
 	//
 	HTTPAliasProhibited *bool `json:"httpAliasProhibited,omitzero" form:"name=httpAliasProhibited"`
@@ -3006,10 +3005,10 @@ type ServiceInput struct {
 	KeyAttesterRootsOnly *bool `json:"keyAttesterRootsOnly,omitzero" form:"name=keyAttesterRootsOnly"`
 	// The trusted root certificates (PEM-encoded X.509) for validating the x5c chain in Client Attestation JWTs.
 	//
-	ClientAttesterRoots optionalnullable.OptionalNullable[[]string] `json:"clientAttesterRoots,omitzero" form:"name=clientAttesterRoots"`
+	ClientAttesterRoots []string `json:"clientAttesterRoots,omitzero" form:"name=clientAttesterRoots"`
 	// The trusted root certificates (PEM-encoded X.509) for validating the x5c chain in Key Attestation JWTs.
 	//
-	KeyAttesterRoots optionalnullable.OptionalNullable[[]string] `json:"keyAttesterRoots,omitzero" form:"name=keyAttesterRoots"`
+	KeyAttesterRoots []string `json:"keyAttesterRoots,omitzero" form:"name=keyAttesterRoots"`
 	// The flag indicating whether this service supports OpenID Connect Back-Channel Logout 1.0.
 	//
 	BackchannelLogoutSupported *bool `json:"backchannelLogoutSupported,omitzero" form:"name=backchannelLogoutSupported"`
@@ -3018,7 +3017,7 @@ type ServiceInput struct {
 	BackchannelLogoutSessionSupported *bool `json:"backchannelLogoutSessionSupported,omitzero" form:"name=backchannelLogoutSessionSupported"`
 	// The HAIP version to comply with. Valid values for this property are as follows: `"1.0"`. If this property is set, requests to this service undergo additional validation based on the specified version of the [HAIP](https://openid.net/specs/openid4vc-high-assurance-interoperability-profile-1_0.html) specification.
 	//
-	HaipVersion optionalnullable.OptionalNullable[string] `json:"haipVersion,omitzero" form:"name=haipVersion"`
+	HaipVersion *string `json:"haipVersion,omitzero" form:"name=haipVersion"`
 }
 
 func (s ServiceInput) MarshalJSON() ([]byte, error) {
@@ -3032,21 +3031,21 @@ func (s *ServiceInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *ServiceInput) GetServiceName() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetServiceName() *string {
 	if s == nil {
 		return nil
 	}
 	return s.ServiceName
 }
 
-func (s *ServiceInput) GetIssuer() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetIssuer() *string {
 	if s == nil {
 		return nil
 	}
 	return s.Issuer
 }
 
-func (s *ServiceInput) GetDescription() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetDescription() *string {
 	if s == nil {
 		return nil
 	}
@@ -3067,77 +3066,77 @@ func (s *ServiceInput) GetClientsPerDeveloper() *int {
 	return s.ClientsPerDeveloper
 }
 
-func (s *ServiceInput) GetSnsCredentials() optionalnullable.OptionalNullable[[]SnsCredentials] {
+func (s *ServiceInput) GetSnsCredentials() []SnsCredentials {
 	if s == nil {
 		return nil
 	}
 	return s.SnsCredentials
 }
 
-func (s *ServiceInput) GetSupportedDeveloperSnses() optionalnullable.OptionalNullable[[]SupportedDeveloperSnse] {
+func (s *ServiceInput) GetSupportedDeveloperSnses() []SupportedDeveloperSnse {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDeveloperSnses
 }
 
-func (s *ServiceInput) GetDeveloperSnsCredentials() optionalnullable.OptionalNullable[[]SnsCredentials] {
+func (s *ServiceInput) GetDeveloperSnsCredentials() []SnsCredentials {
 	if s == nil {
 		return nil
 	}
 	return s.DeveloperSnsCredentials
 }
 
-func (s *ServiceInput) GetMetadata() optionalnullable.OptionalNullable[[]Pair] {
+func (s *ServiceInput) GetMetadata() []Pair {
 	if s == nil {
 		return nil
 	}
 	return s.Metadata
 }
 
-func (s *ServiceInput) GetAuthenticationCallbackEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetAuthenticationCallbackEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthenticationCallbackEndpoint
 }
 
-func (s *ServiceInput) GetAuthenticationCallbackAPIKey() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetAuthenticationCallbackAPIKey() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthenticationCallbackAPIKey
 }
 
-func (s *ServiceInput) GetAuthenticationCallbackAPISecret() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetAuthenticationCallbackAPISecret() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthenticationCallbackAPISecret
 }
 
-func (s *ServiceInput) GetSupportedGrantTypes() optionalnullable.OptionalNullable[[]GrantType] {
+func (s *ServiceInput) GetSupportedGrantTypes() []GrantType {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedGrantTypes
 }
 
-func (s *ServiceInput) GetSupportedResponseTypes() optionalnullable.OptionalNullable[[]ResponseType] {
+func (s *ServiceInput) GetSupportedResponseTypes() []ResponseType {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedResponseTypes
 }
 
-func (s *ServiceInput) GetSupportedAuthorizationDetailsTypes() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedAuthorizationDetailsTypes() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedAuthorizationDetailsTypes
 }
 
-func (s *ServiceInput) GetSupportedServiceProfiles() optionalnullable.OptionalNullable[[]ServiceProfile] {
+func (s *ServiceInput) GetSupportedServiceProfiles() []ServiceProfile {
 	if s == nil {
 		return nil
 	}
@@ -3158,21 +3157,21 @@ func (s *ServiceInput) GetErrorURIOmitted() *bool {
 	return s.ErrorURIOmitted
 }
 
-func (s *ServiceInput) GetAuthorizationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetAuthorizationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthorizationEndpoint
 }
 
-func (s *ServiceInput) GetSupportedUILocales() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedUILocales() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedUILocales
 }
 
-func (s *ServiceInput) GetSupportedDisplays() optionalnullable.OptionalNullable[[]Display] {
+func (s *ServiceInput) GetSupportedDisplays() []Display {
 	if s == nil {
 		return nil
 	}
@@ -3207,14 +3206,14 @@ func (s *ServiceInput) GetAuthorizationCodeDuration() *int64 {
 	return s.AuthorizationCodeDuration
 }
 
-func (s *ServiceInput) GetTokenEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetTokenEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.TokenEndpoint
 }
 
-func (s *ServiceInput) GetSupportedTokenAuthMethods() optionalnullable.OptionalNullable[[]ClientAuthMethod] {
+func (s *ServiceInput) GetSupportedTokenAuthMethods() []ClientAuthMethod {
 	if s == nil {
 		return nil
 	}
@@ -3228,35 +3227,35 @@ func (s *ServiceInput) GetMissingClientIDAllowed() *bool {
 	return s.MissingClientIDAllowed
 }
 
-func (s *ServiceInput) GetRevocationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetRevocationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.RevocationEndpoint
 }
 
-func (s *ServiceInput) GetSupportedRevocationAuthMethods() optionalnullable.OptionalNullable[[]ClientAuthMethod] {
+func (s *ServiceInput) GetSupportedRevocationAuthMethods() []ClientAuthMethod {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedRevocationAuthMethods
 }
 
-func (s *ServiceInput) GetIntrospectionEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetIntrospectionEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.IntrospectionEndpoint
 }
 
-func (s *ServiceInput) GetSupportedIntrospectionAuthMethods() optionalnullable.OptionalNullable[[]ClientAuthMethod] {
+func (s *ServiceInput) GetSupportedIntrospectionAuthMethods() []ClientAuthMethod {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedIntrospectionAuthMethods
 }
 
-func (s *ServiceInput) GetPushedAuthReqEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetPushedAuthReqEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -3298,21 +3297,21 @@ func (s *ServiceInput) GetMutualTLSValidatePkiCertChain() *bool {
 	return s.MutualTLSValidatePkiCertChain
 }
 
-func (s *ServiceInput) GetTrustedRootCertificates() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetTrustedRootCertificates() []string {
 	if s == nil {
 		return nil
 	}
 	return s.TrustedRootCertificates
 }
 
-func (s *ServiceInput) GetMtlsEndpointAliases() optionalnullable.OptionalNullable[[]NamedURI] {
+func (s *ServiceInput) GetMtlsEndpointAliases() []NamedURI {
 	if s == nil {
 		return nil
 	}
 	return s.MtlsEndpointAliases
 }
 
-func (s *ServiceInput) GetAccessTokenType() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetAccessTokenType() *string {
 	if s == nil {
 		return nil
 	}
@@ -3340,14 +3339,14 @@ func (s *ServiceInput) GetSingleAccessTokenPerSubject() *bool {
 	return s.SingleAccessTokenPerSubject
 }
 
-func (s *ServiceInput) GetAccessTokenSignAlg() optionalnullable.OptionalNullable[JwsAlg] {
+func (s *ServiceInput) GetAccessTokenSignAlg() *JwsAlg {
 	if s == nil {
 		return nil
 	}
 	return s.AccessTokenSignAlg
 }
 
-func (s *ServiceInput) GetAccessTokenSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetAccessTokenSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
@@ -3382,7 +3381,7 @@ func (s *ServiceInput) GetRefreshTokenKept() *bool {
 	return s.RefreshTokenKept
 }
 
-func (s *ServiceInput) GetSupportedScopes() optionalnullable.OptionalNullable[[]Scope] {
+func (s *ServiceInput) GetSupportedScopes() []Scope {
 	if s == nil {
 		return nil
 	}
@@ -3410,21 +3409,21 @@ func (s *ServiceInput) GetAllowableClockSkew() *int {
 	return s.AllowableClockSkew
 }
 
-func (s *ServiceInput) GetSupportedClaimTypes() optionalnullable.OptionalNullable[[]ClaimType] {
+func (s *ServiceInput) GetSupportedClaimTypes() []ClaimType {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedClaimTypes
 }
 
-func (s *ServiceInput) GetSupportedClaimLocales() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedClaimLocales() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedClaimLocales
 }
 
-func (s *ServiceInput) GetSupportedClaims() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedClaims() []string {
 	if s == nil {
 		return nil
 	}
@@ -3438,42 +3437,42 @@ func (s *ServiceInput) GetClaimShortcutRestrictive() *bool {
 	return s.ClaimShortcutRestrictive
 }
 
-func (s *ServiceInput) GetJwksURI() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetJwksURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.JwksURI
 }
 
-func (s *ServiceInput) GetJwks() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetJwks() *string {
 	if s == nil {
 		return nil
 	}
 	return s.Jwks
 }
 
-func (s *ServiceInput) GetIDTokenSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetIDTokenSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.IDTokenSignatureKeyID
 }
 
-func (s *ServiceInput) GetUserInfoSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetUserInfoSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.UserInfoSignatureKeyID
 }
 
-func (s *ServiceInput) GetAuthorizationSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetAuthorizationSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.AuthorizationSignatureKeyID
 }
 
-func (s *ServiceInput) GetUserInfoEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetUserInfoEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -3487,49 +3486,49 @@ func (s *ServiceInput) GetDynamicRegistrationSupported() *bool {
 	return s.DynamicRegistrationSupported
 }
 
-func (s *ServiceInput) GetRegistrationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetRegistrationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.RegistrationEndpoint
 }
 
-func (s *ServiceInput) GetRegistrationManagementEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetRegistrationManagementEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.RegistrationManagementEndpoint
 }
 
-func (s *ServiceInput) GetPolicyURI() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetPolicyURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.PolicyURI
 }
 
-func (s *ServiceInput) GetTosURI() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetTosURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.TosURI
 }
 
-func (s *ServiceInput) GetServiceDocumentation() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetServiceDocumentation() *string {
 	if s == nil {
 		return nil
 	}
 	return s.ServiceDocumentation
 }
 
-func (s *ServiceInput) GetBackchannelAuthenticationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetBackchannelAuthenticationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.BackchannelAuthenticationEndpoint
 }
 
-func (s *ServiceInput) GetSupportedBackchannelTokenDeliveryModes() optionalnullable.OptionalNullable[[]DeliveryMode] {
+func (s *ServiceInput) GetSupportedBackchannelTokenDeliveryModes() []DeliveryMode {
 	if s == nil {
 		return nil
 	}
@@ -3564,21 +3563,21 @@ func (s *ServiceInput) GetBackchannelBindingMessageRequiredInFapi() *bool {
 	return s.BackchannelBindingMessageRequiredInFapi
 }
 
-func (s *ServiceInput) GetDeviceAuthorizationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetDeviceAuthorizationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.DeviceAuthorizationEndpoint
 }
 
-func (s *ServiceInput) GetDeviceVerificationURI() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetDeviceVerificationURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.DeviceVerificationURI
 }
 
-func (s *ServiceInput) GetDeviceVerificationURIComplete() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetDeviceVerificationURIComplete() *string {
 	if s == nil {
 		return nil
 	}
@@ -3599,7 +3598,7 @@ func (s *ServiceInput) GetDeviceFlowPollingInterval() *int {
 	return s.DeviceFlowPollingInterval
 }
 
-func (s *ServiceInput) GetUserCodeCharset() optionalnullable.OptionalNullable[UserCodeCharset] {
+func (s *ServiceInput) GetUserCodeCharset() *UserCodeCharset {
 	if s == nil {
 		return nil
 	}
@@ -3613,35 +3612,35 @@ func (s *ServiceInput) GetUserCodeLength() *int {
 	return s.UserCodeLength
 }
 
-func (s *ServiceInput) GetSupportedTrustFrameworks() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedTrustFrameworks() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedTrustFrameworks
 }
 
-func (s *ServiceInput) GetSupportedEvidence() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedEvidence() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedEvidence
 }
 
-func (s *ServiceInput) GetSupportedIdentityDocuments() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedIdentityDocuments() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedIdentityDocuments
 }
 
-func (s *ServiceInput) GetSupportedVerificationMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedVerificationMethods() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedVerificationMethods
 }
 
-func (s *ServiceInput) GetSupportedVerifiedClaims() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedVerifiedClaims() []string {
 	if s == nil {
 		return nil
 	}
@@ -3655,7 +3654,7 @@ func (s *ServiceInput) GetVerifiedClaimsValidationSchemaSet() *VerifiedClaimsVal
 	return s.VerifiedClaimsValidationSchemaSet
 }
 
-func (s *ServiceInput) GetAttributes() optionalnullable.OptionalNullable[[]Pair] {
+func (s *ServiceInput) GetAttributes() []Pair {
 	if s == nil {
 		return nil
 	}
@@ -3676,7 +3675,7 @@ func (s *ServiceInput) GetIssSuppressed() *bool {
 	return s.IssSuppressed
 }
 
-func (s *ServiceInput) GetSupportedCustomClientMetadata() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedCustomClientMetadata() []string {
 	if s == nil {
 		return nil
 	}
@@ -3718,14 +3717,14 @@ func (s *ServiceInput) GetHsmEnabled() *bool {
 	return s.HsmEnabled
 }
 
-func (s *ServiceInput) GetHsks() optionalnullable.OptionalNullable[[]Hsk] {
+func (s *ServiceInput) GetHsks() []Hsk {
 	if s == nil {
 		return nil
 	}
 	return s.Hsks
 }
 
-func (s *ServiceInput) GetGrantManagementEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetGrantManagementEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -3753,14 +3752,14 @@ func (s *ServiceInput) GetDcrScopeUsedAsRequestable() *bool {
 	return s.DcrScopeUsedAsRequestable
 }
 
-func (s *ServiceInput) GetEndSessionEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetEndSessionEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.EndSessionEndpoint
 }
 
-func (s *ServiceInput) GetChallengeEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetChallengeEndpoint() *string {
 	if s == nil {
 		return nil
 	}
@@ -3788,7 +3787,7 @@ func (s *ServiceInput) GetAccessTokenForExternalAttachmentEmbedded() *bool {
 	return s.AccessTokenForExternalAttachmentEmbedded
 }
 
-func (s *ServiceInput) GetAuthorityHints() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetAuthorityHints() []string {
 	if s == nil {
 		return nil
 	}
@@ -3802,14 +3801,14 @@ func (s *ServiceInput) GetFederationEnabled() *bool {
 	return s.FederationEnabled
 }
 
-func (s *ServiceInput) GetFederationJwks() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetFederationJwks() *string {
 	if s == nil {
 		return nil
 	}
 	return s.FederationJwks
 }
 
-func (s *ServiceInput) GetFederationSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetFederationSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
@@ -3823,21 +3822,21 @@ func (s *ServiceInput) GetFederationConfigurationDuration() *int64 {
 	return s.FederationConfigurationDuration
 }
 
-func (s *ServiceInput) GetFederationRegistrationEndpoint() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetFederationRegistrationEndpoint() *string {
 	if s == nil {
 		return nil
 	}
 	return s.FederationRegistrationEndpoint
 }
 
-func (s *ServiceInput) GetOrganizationName() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetOrganizationName() *string {
 	if s == nil {
 		return nil
 	}
 	return s.OrganizationName
 }
 
-func (s *ServiceInput) GetPredefinedTransformedClaims() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetPredefinedTransformedClaims() *string {
 	if s == nil {
 		return nil
 	}
@@ -3851,63 +3850,63 @@ func (s *ServiceInput) GetRefreshTokenIdempotent() *bool {
 	return s.RefreshTokenIdempotent
 }
 
-func (s *ServiceInput) GetSignedJwksURI() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetSignedJwksURI() *string {
 	if s == nil {
 		return nil
 	}
 	return s.SignedJwksURI
 }
 
-func (s *ServiceInput) GetSupportedAttachments() optionalnullable.OptionalNullable[[]AttachmentType] {
+func (s *ServiceInput) GetSupportedAttachments() []AttachmentType {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedAttachments
 }
 
-func (s *ServiceInput) GetSupportedDigestAlgorithms() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedDigestAlgorithms() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDigestAlgorithms
 }
 
-func (s *ServiceInput) GetSupportedDocuments() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedDocuments() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDocuments
 }
 
-func (s *ServiceInput) GetSupportedDocumentsMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedDocumentsMethods() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDocumentsMethods
 }
 
-func (s *ServiceInput) GetSupportedDocumentsValidationMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedDocumentsValidationMethods() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDocumentsValidationMethods
 }
 
-func (s *ServiceInput) GetSupportedDocumentsVerificationMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedDocumentsVerificationMethods() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedDocumentsVerificationMethods
 }
 
-func (s *ServiceInput) GetSupportedElectronicRecords() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedElectronicRecords() []string {
 	if s == nil {
 		return nil
 	}
 	return s.SupportedElectronicRecords
 }
 
-func (s *ServiceInput) GetSupportedClientRegistrationTypes() optionalnullable.OptionalNullable[[]ClientRegistrationType] {
+func (s *ServiceInput) GetSupportedClientRegistrationTypes() []ClientRegistrationType {
 	if s == nil {
 		return nil
 	}
@@ -3977,7 +3976,7 @@ func (s *ServiceInput) GetDcrDuplicateSoftwareIDBlocked() *bool {
 	return s.DcrDuplicateSoftwareIDBlocked
 }
 
-func (s *ServiceInput) GetTrustAnchors() optionalnullable.OptionalNullable[[]TrustAnchor] {
+func (s *ServiceInput) GetTrustAnchors() []TrustAnchor {
 	if s == nil {
 		return nil
 	}
@@ -3998,7 +3997,7 @@ func (s *ServiceInput) GetIDTokenDroppedOnIssueWithoutOpenid() *bool {
 	return s.IDTokenDroppedOnIssueWithoutOpenid
 }
 
-func (s *ServiceInput) GetSupportedDocumentsCheckMethods() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetSupportedDocumentsCheckMethods() []string {
 	if s == nil {
 		return nil
 	}
@@ -4033,7 +4032,7 @@ func (s *ServiceInput) GetVerifiableCredentialsEnabled() *bool {
 	return s.VerifiableCredentialsEnabled
 }
 
-func (s *ServiceInput) GetCredentialJwksURI() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetCredentialJwksURI() *string {
 	if s == nil {
 		return nil
 	}
@@ -4068,14 +4067,14 @@ func (s *ServiceInput) GetCredentialTransactionDuration() *int64 {
 	return s.CredentialTransactionDuration
 }
 
-func (s *ServiceInput) GetIntrospectionSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetIntrospectionSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.IntrospectionSignatureKeyID
 }
 
-func (s *ServiceInput) GetResourceSignatureKeyID() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetResourceSignatureKeyID() *string {
 	if s == nil {
 		return nil
 	}
@@ -4089,7 +4088,7 @@ func (s *ServiceInput) GetUserPinLength() *int {
 	return s.UserPinLength
 }
 
-func (s *ServiceInput) GetSupportedPromptValues() optionalnullable.OptionalNullable[[]Prompt] {
+func (s *ServiceInput) GetSupportedPromptValues() []Prompt {
 	if s == nil {
 		return nil
 	}
@@ -4103,14 +4102,14 @@ func (s *ServiceInput) GetIDTokenReissuable() *bool {
 	return s.IDTokenReissuable
 }
 
-func (s *ServiceInput) GetCredentialJwks() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetCredentialJwks() *string {
 	if s == nil {
 		return nil
 	}
 	return s.CredentialJwks
 }
 
-func (s *ServiceInput) GetFapiModes() optionalnullable.OptionalNullable[[]FapiMode] {
+func (s *ServiceInput) GetFapiModes() []FapiMode {
 	if s == nil {
 		return nil
 	}
@@ -4124,14 +4123,14 @@ func (s *ServiceInput) GetCredentialDuration() *int64 {
 	return s.CredentialDuration
 }
 
-func (s *ServiceInput) GetCredentialIssuerMetadata() optionalnullable.OptionalNullable[CredentialIssuerMetadata] {
+func (s *ServiceInput) GetCredentialIssuerMetadata() *CredentialIssuerMetadata {
 	if s == nil {
 		return nil
 	}
 	return s.CredentialIssuerMetadata
 }
 
-func (s *ServiceInput) GetIDTokenAudType() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetIDTokenAudType() *string {
 	if s == nil {
 		return nil
 	}
@@ -4145,7 +4144,7 @@ func (s *ServiceInput) GetNativeSsoSupported() *bool {
 	return s.NativeSsoSupported
 }
 
-func (s *ServiceInput) GetOid4vciVersion() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetOid4vciVersion() *string {
 	if s == nil {
 		return nil
 	}
@@ -4173,7 +4172,7 @@ func (s *ServiceInput) GetCimdAllowlistEnabled() *bool {
 	return s.CimdAllowlistEnabled
 }
 
-func (s *ServiceInput) GetCimdAllowlist() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetCimdAllowlist() []string {
 	if s == nil {
 		return nil
 	}
@@ -4201,7 +4200,7 @@ func (s *ServiceInput) GetCimdQueryPermitted() *bool {
 	return s.CimdQueryPermitted
 }
 
-func (s *ServiceInput) GetCimdMetadataPolicy() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetCimdMetadataPolicy() *string {
 	if s == nil {
 		return nil
 	}
@@ -4250,14 +4249,14 @@ func (s *ServiceInput) GetKeyAttesterRootsOnly() *bool {
 	return s.KeyAttesterRootsOnly
 }
 
-func (s *ServiceInput) GetClientAttesterRoots() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetClientAttesterRoots() []string {
 	if s == nil {
 		return nil
 	}
 	return s.ClientAttesterRoots
 }
 
-func (s *ServiceInput) GetKeyAttesterRoots() optionalnullable.OptionalNullable[[]string] {
+func (s *ServiceInput) GetKeyAttesterRoots() []string {
 	if s == nil {
 		return nil
 	}
@@ -4278,7 +4277,7 @@ func (s *ServiceInput) GetBackchannelLogoutSessionSupported() *bool {
 	return s.BackchannelLogoutSessionSupported
 }
 
-func (s *ServiceInput) GetHaipVersion() optionalnullable.OptionalNullable[string] {
+func (s *ServiceInput) GetHaipVersion() *string {
 	if s == nil {
 		return nil
 	}

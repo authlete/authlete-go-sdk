@@ -34,7 +34,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 go:
-  version: 0.2.1
+  version: 0.3.0
   additionalDependencies: {}
   baseErrorName: AuthleteError
   clientServerStatusCodesAsErrors: true
@@ -63,7 +63,7 @@ go:
   methodArguments: require-security-and-request
   modulePath: github.com/authlete/authlete-go-sdk
   multipartArrayFormat: standard
-  nullableOptionalWrapper: true
+  nullableOptionalWrapper: false
   optionalMethodArguments: pointers
   outputModelSuffix: output
   respectRequiredFields: false

@@ -4,7 +4,6 @@ package components
 
 import (
 	"github.com/authlete/authlete-go-sdk/internal/utils"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 )
 
 type AuditEntriesGetResponse struct {
@@ -13,7 +12,7 @@ type AuditEntriesGetResponse struct {
 	Entries []AuditLogEntry `json:"entries,omitzero"`
 	// An opaque cursor pointing at the next page. Pass this value as the `cursor` parameter of the next request to fetch the following page. Absent or `null` on the last page.
 	//
-	NextCursor optionalnullable.OptionalNullable[string] `json:"nextCursor,omitzero"`
+	NextCursor *string `json:"nextCursor,omitzero"`
 	// The effective page size limit applied to this response. May differ from the requested `limit` if the requested value was outside the allowed range.
 	//
 	Limit *int64 `json:"limit,omitzero"`
@@ -37,7 +36,7 @@ func (a *AuditEntriesGetResponse) GetEntries() []AuditLogEntry {
 	return a.Entries
 }
 
-func (a *AuditEntriesGetResponse) GetNextCursor() optionalnullable.OptionalNullable[string] {
+func (a *AuditEntriesGetResponse) GetNextCursor() *string {
 	if a == nil {
 		return nil
 	}

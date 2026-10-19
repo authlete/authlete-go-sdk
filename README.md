@@ -722,7 +722,6 @@ import (
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
 	"github.com/authlete/authlete-go-sdk/models/operations"
-	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"log"
 	"os"
 )
@@ -738,8 +737,8 @@ func main() {
 		APIServerID:    authlete.Pointer[int64](76281),
 		OrganizationID: 123456789012345,
 		Service: &components.ServiceInput{
-			ServiceName: optionalnullable.From(authlete.Pointer("My service")),
-			Issuer:      optionalnullable.From(authlete.Pointer("https://my-service.example.com")),
+			ServiceName: authlete.Pointer("My service"),
+			Issuer:      authlete.Pointer("https://my-service.example.com"),
 		},
 	}, operations.WithServerURL("https://login.authlete.com"))
 	if err != nil {
