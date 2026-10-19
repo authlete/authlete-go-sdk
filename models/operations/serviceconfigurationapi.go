@@ -7,18 +7,29 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ServiceConfigurationAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (s *ServiceConfigurationAPIGlobals) GetServiceID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ServiceID
+}
+
 type ServiceConfigurationAPIRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// This boolean value indicates whether the JSON in the response should be formatted or not. If `true`, the JSON in the response is pretty-formatted. The default value is `false`.
 	Pretty *bool `queryParam:"style=form,explode=true,name=pretty"`
 	// Get the JSON Patch [RFC 6902 JavaScript Object Notation (JSON) Patch](https://www.rfc-editor.org/rfc/rfc6902) to be applied.
 	Patch *string `queryParam:"style=form,explode=true,name=patch"`
 }
 
-func (s *ServiceConfigurationAPIRequest) GetServiceID() string {
+func (s *ServiceConfigurationAPIRequest) GetServiceID() *string {
 	if s == nil {
-		return ""
+		return nil
 	}
 	return s.ServiceID
 }

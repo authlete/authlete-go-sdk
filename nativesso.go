@@ -33,10 +33,9 @@ func newNativeSso(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *h
 
 // Process - Native SSO Processing
 // This API should be called by the implementation of a token endpoint to generate the ID token and token response that comply with [OpenID Connect Native SSO for Mobile Apps 1.0](https://openid.net/specs/openid-connect-native-sso-1_0.html) (Native SSO) when Authlete’s `/auth/token` response indicates `action = NATIVE_SSO` (after you validate the session id and verify or generate the device secret as required by the flow). The token endpoint implementation should retrieve the value of `action` from the response and take the following steps according to the value.
-func (s *NativeSso) Process(ctx context.Context, serviceID string, body components.NativeSsoRequest, opts ...operations.Option) (*operations.NativeSsoAPIResponse, error) {
-	request := operations.NativeSsoAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *NativeSso) Process(ctx context.Context, request operations.NativeSsoAPIRequest, opts ...operations.Option) (*operations.NativeSsoAPIResponse, error) {
+	globals := operations.NativeSsoAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *NativeSso) Process(ctx context.Context, serviceID string, body componen
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/nativesso", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/nativesso", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -343,10 +342,9 @@ func (s *NativeSso) Process(ctx context.Context, serviceID string, body componen
 
 // Logout - Native SSO Logout Processing
 // The `/nativesso/logout` API is supposed to be used to support the concept of "logout from all applications" in the context of [OpenID Connect Native SSO for Mobile Apps 1.0](https://openid.net/specs/openid-connect-native-sso-1_0.html) (Native SSO). This is accomplished by deleting access/refresh token records associated with the specified session ID. In Authlete's implementation, access/refresh token records can be associated with a session ID only through the mechanism introduced by Native SSO.
-func (s *NativeSso) Logout(ctx context.Context, serviceID string, body components.NativeSsoLogoutRequest, opts ...operations.Option) (*operations.NativeSsoLogoutAPIResponse, error) {
-	request := operations.NativeSsoLogoutAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *NativeSso) Logout(ctx context.Context, request operations.NativeSsoLogoutAPIRequest, opts ...operations.Option) (*operations.NativeSsoLogoutAPIResponse, error) {
+	globals := operations.NativeSsoLogoutAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -367,7 +365,7 @@ func (s *NativeSso) Logout(ctx context.Context, serviceID string, body component
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/nativesso/logout", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/nativesso/logout", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

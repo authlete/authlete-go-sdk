@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type PushedAuthReqAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (p *PushedAuthReqAPIGlobals) GetServiceID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ServiceID
+}
+
 type PushedAuthReqAPIRequest struct {
 	// A service ID.
-	ServiceID string                                `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                               `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.PushedAuthorizationRequest `request:"mediaType=application/json"`
 }
 
-func (p *PushedAuthReqAPIRequest) GetServiceID() string {
+func (p *PushedAuthReqAPIRequest) GetServiceID() *string {
 	if p == nil {
-		return ""
+		return nil
 	}
 	return p.ServiceID
 }

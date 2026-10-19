@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type NativeSsoLogoutAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (n *NativeSsoLogoutAPIGlobals) GetServiceID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ServiceID
+}
+
 type NativeSsoLogoutAPIRequest struct {
 	// A service ID.
-	ServiceID string                            `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                           `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.NativeSsoLogoutRequest `request:"mediaType=application/json"`
 }
 
-func (n *NativeSsoLogoutAPIRequest) GetServiceID() string {
+func (n *NativeSsoLogoutAPIRequest) GetServiceID() *string {
 	if n == nil {
-		return ""
+		return nil
 	}
 	return n.ServiceID
 }

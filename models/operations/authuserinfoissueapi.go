@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type AuthUserinfoIssueAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (a *AuthUserinfoIssueAPIGlobals) GetServiceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceID
+}
+
 type AuthUserinfoIssueAPIRequest struct {
 	// A service ID.
-	ServiceID string                          `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                         `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.UserinfoIssueRequest `request:"mediaType=application/json"`
 }
 
-func (a *AuthUserinfoIssueAPIRequest) GetServiceID() string {
+func (a *AuthUserinfoIssueAPIRequest) GetServiceID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.ServiceID
 }

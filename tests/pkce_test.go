@@ -11,6 +11,7 @@ import (
 
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/stretchr/testify/require"
 )
 
@@ -42,12 +43,12 @@ func runPkceFlow(
 	t.Helper()
 	encodedRedirect := url.QueryEscape(redirectURI)
 
-	authResp, err := sdk.Authorization.ProcessRequest(ctx, svcID, components.AuthorizationRequest{
+	authResp, err := sdk.Authorization.ProcessRequest(ctx, operations.AuthAuthorizationAPIRequest{ServiceID: &svcID, Body: components.AuthorizationRequest{
 		Parameters: fmt.Sprintf(
 			"response_type=code&client_id=%s&redirect_uri=%s&state=%s&code_challenge=%s&code_challenge_method=%s",
 			clientID, encodedRedirect, testState, codeChallenge, codeChallengeMethod,
 		),
-	})
+	}})
 	require.NoError(t, err, "authorization request failed")
 	require.NotNil(t, authResp.AuthorizationResponse)
 	auth := authResp.AuthorizationResponse
@@ -56,10 +57,10 @@ func runPkceFlow(
 		"expected INTERACTION, got %s", *auth.Action)
 	require.NotNil(t, auth.Ticket)
 
-	issueResp, err := sdk.Authorization.Issue(ctx, svcID, components.AuthorizationIssueRequest{
+	issueResp, err := sdk.Authorization.Issue(ctx, operations.AuthAuthorizationIssueAPIRequest{ServiceID: &svcID, Body: components.AuthorizationIssueRequest{
 		Ticket:  *auth.Ticket,
 		Subject: subject,
-	})
+	}})
 	require.NoError(t, err, "authorization issue failed")
 	require.NotNil(t, issueResp.AuthorizationIssueResponse)
 	issue := issueResp.AuthorizationIssueResponse
@@ -67,14 +68,14 @@ func runPkceFlow(
 	require.Equal(t, components.AuthorizationIssueResponseActionLocation, *issue.Action)
 	require.NotNil(t, issue.AuthorizationCode)
 
-	tokenResp, err := sdk.Token.Process(ctx, svcID, components.TokenRequest{
+	tokenResp, err := sdk.Token.Process(ctx, operations.AuthTokenAPIRequest{ServiceID: &svcID, Body: components.TokenRequest{
 		Parameters: fmt.Sprintf(
 			"grant_type=authorization_code&code=%s&redirect_uri=%s&code_verifier=%s",
 			*issue.AuthorizationCode, encodedRedirect, codeVerifier,
 		),
 		ClientID:     ptr(clientID),
 		ClientSecret: ptr(clientSecret),
-	})
+	}})
 	require.NoError(t, err, "token request failed")
 	require.NotNil(t, tokenResp.TokenResponse)
 	return tokenResp.TokenResponse
@@ -88,14 +89,14 @@ func TestPkceFlow(t *testing.T) {
 	mgmtClient := createSDKClient(mgmtToken)
 	sdkClient := createSDKClient(serviceToken)
 
-	_, err := mgmtClient.Service.Update(ctx, serviceID, &components.ServiceInput{
+	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 		AccessTokenDuration: ptr(tokenDurationSeconds),
-	})
+	}})
 	require.NoError(t, err, "failed to update service")
 
 	clientID, clientSecret := createTestClient(t, mgmtClient, serviceID)
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Client.Delete(context.Background(), serviceID, clientID)
+		_, _ = mgmtClient.Client.Delete(context.Background(), operations.ClientDeleteAPIRequest{ClientID: clientID})
 	})
 
 	t.Run("PkceS256Flow", func(t *testing.T) {
@@ -147,22 +148,22 @@ func TestPkceRequired(t *testing.T) {
 	mgmtClient := createSDKClient(mgmtToken)
 	sdkClient := createSDKClient(serviceToken)
 
-	_, err := mgmtClient.Service.Update(ctx, serviceID, &components.ServiceInput{
+	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 		PkceRequired:        ptr(true),
 		AccessTokenDuration: ptr(tokenDurationSeconds),
-	})
+	}})
 	require.NoError(t, err, "failed to enable pkceRequired")
 
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Service.Update(context.Background(), serviceID, &components.ServiceInput{
+		_, _ = mgmtClient.Service.Update(context.Background(), operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 			PkceRequired:        ptr(false),
 			AccessTokenDuration: ptr(tokenDurationSeconds),
-		})
+		}})
 	})
 
 	clientID, clientSecret := createTestClient(t, mgmtClient, serviceID)
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Client.Delete(context.Background(), serviceID, clientID)
+		_, _ = mgmtClient.Client.Delete(context.Background(), operations.ClientDeleteAPIRequest{ClientID: clientID})
 	})
 
 	t.Run("MissingCodeChallengeRejected", func(t *testing.T) {
@@ -170,9 +171,9 @@ func TestPkceRequired(t *testing.T) {
 		params := fmt.Sprintf("response_type=code&client_id=%s&redirect_uri=%s&state=%s",
 			clientID, encodedRedirect, testState)
 
-		authResp, err := sdkClient.Authorization.ProcessRequest(ctx, serviceID, components.AuthorizationRequest{
+		authResp, err := sdkClient.Authorization.ProcessRequest(ctx, operations.AuthAuthorizationAPIRequest{Body: components.AuthorizationRequest{
 			Parameters: params,
-		})
+		}})
 		require.NoError(t, err, "authorization request failed")
 		require.NotNil(t, authResp.AuthorizationResponse)
 		require.NotNil(t, authResp.AuthorizationResponse.Action)
@@ -204,22 +205,22 @@ func TestPkceS256Required(t *testing.T) {
 	mgmtClient := createSDKClient(mgmtToken)
 	sdkClient := createSDKClient(serviceToken)
 
-	_, err := mgmtClient.Service.Update(ctx, serviceID, &components.ServiceInput{
+	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 		PkceS256Required:    ptr(true),
 		AccessTokenDuration: ptr(tokenDurationSeconds),
-	})
+	}})
 	require.NoError(t, err, "failed to enable pkceS256Required")
 
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Service.Update(context.Background(), serviceID, &components.ServiceInput{
+		_, _ = mgmtClient.Service.Update(context.Background(), operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 			PkceS256Required:    ptr(false),
 			AccessTokenDuration: ptr(tokenDurationSeconds),
-		})
+		}})
 	})
 
 	clientID, clientSecret := createTestClient(t, mgmtClient, serviceID)
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Client.Delete(context.Background(), serviceID, clientID)
+		_, _ = mgmtClient.Client.Delete(context.Background(), operations.ClientDeleteAPIRequest{ClientID: clientID})
 	})
 
 	t.Run("PlainMethodRejected", func(t *testing.T) {
@@ -231,9 +232,9 @@ func TestPkceS256Required(t *testing.T) {
 			clientID, encodedRedirect, testState, verifier,
 		)
 
-		authResp, err := sdkClient.Authorization.ProcessRequest(ctx, serviceID, components.AuthorizationRequest{
+		authResp, err := sdkClient.Authorization.ProcessRequest(ctx, operations.AuthAuthorizationAPIRequest{Body: components.AuthorizationRequest{
 			Parameters: params,
-		})
+		}})
 		require.NoError(t, err, "authorization request failed")
 		require.NotNil(t, authResp.AuthorizationResponse)
 		require.NotNil(t, authResp.AuthorizationResponse.Action)

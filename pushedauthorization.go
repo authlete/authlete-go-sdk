@@ -33,10 +33,9 @@ func newPushedAuthorization(rootSDK *Authlete, sdkConfig config.SDKConfiguration
 
 // Create - Process Pushed Authorization Request
 // This API creates a pushed request authorization. It authenticates the client and creates a authorization_uri to be returned by the authorization server.
-func (s *PushedAuthorization) Create(ctx context.Context, serviceID string, body components.PushedAuthorizationRequest, opts ...operations.Option) (*operations.PushedAuthReqAPIResponse, error) {
-	request := operations.PushedAuthReqAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *PushedAuthorization) Create(ctx context.Context, request operations.PushedAuthReqAPIRequest, opts ...operations.Option) (*operations.PushedAuthReqAPIResponse, error) {
+	globals := operations.PushedAuthReqAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *PushedAuthorization) Create(ctx context.Context, serviceID string, body
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/pushed_auth_req", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/pushed_auth_req", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

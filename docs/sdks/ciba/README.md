@@ -25,6 +25,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -32,13 +33,16 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Ciba.ProcessAuthentication(ctx, "<id>", components.BackchannelAuthenticationRequest{
-        Parameters: "login_hint=john&scope=openid&client_notification_token=my-client-notification-token&user_code=my-user-code",
-        ClientID: authlete.Pointer("26862190133482"),
-        ClientSecret: authlete.Pointer("8J9pAEX6IQw7lYtYGsc_s9N4jlEz_DfkoCHIswJjFjfgKZX-nC4EvKtaHXcP9mHBfS7IU4jytjSZZpaK9UJ77A"),
+    res, err := s.Ciba.ProcessAuthentication(ctx, operations.BackchannelAuthenticationAPIRequest{
+        Body: components.BackchannelAuthenticationRequest{
+            Parameters: "login_hint=john&scope=openid&client_notification_token=my-client-notification-token&user_code=my-user-code",
+            ClientID: authlete.Pointer("26862190133482"),
+            ClientSecret: authlete.Pointer("8J9pAEX6IQw7lYtYGsc_s9N4jlEz_DfkoCHIswJjFjfgKZX-nC4EvKtaHXcP9mHBfS7IU4jytjSZZpaK9UJ77A"),
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -51,12 +55,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                                  | Type                                                                                                       | Required                                                                                                   | Description                                                                                                |
-| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `ctx`                                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                                      | :heavy_check_mark:                                                                                         | The context to use for the request.                                                                        |
-| `serviceID`                                                                                                | `string`                                                                                                   | :heavy_check_mark:                                                                                         | A service ID.                                                                                              |
-| `body`                                                                                                     | [components.BackchannelAuthenticationRequest](../../models/components/backchannelauthenticationrequest.md) | :heavy_check_mark:                                                                                         | N/A                                                                                                        |
-| `opts`                                                                                                     | [][operations.Option](../../models/operations/option.md)                                                   | :heavy_minus_sign:                                                                                         | The options for this request.                                                                              |
+| Parameter                                                                                                        | Type                                                                                                             | Required                                                                                                         | Description                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `ctx`                                                                                                            | [context.Context](https://pkg.go.dev/context#Context)                                                            | :heavy_check_mark:                                                                                               | The context to use for the request.                                                                              |
+| `request`                                                                                                        | [operations.BackchannelAuthenticationAPIRequest](../../models/operations/backchannelauthenticationapirequest.md) | :heavy_check_mark:                                                                                               | The request object to use for the request.                                                                       |
+| `opts`                                                                                                           | [][operations.Option](../../models/operations/option.md)                                                         | :heavy_minus_sign:                                                                                               | The options for this request.                                                                                    |
 
 ### Response
 
@@ -87,6 +90,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -94,11 +98,14 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Ciba.Issue(ctx, "<id>", components.BackchannelAuthenticationIssueRequest{
-        Ticket: "NFIHGx_btVrWmtAD093D-87JxvT4DAtuijEkLVHbS4Q",
+    res, err := s.Ciba.Issue(ctx, operations.BackchannelAuthenticationIssueAPIRequest{
+        Body: components.BackchannelAuthenticationIssueRequest{
+            Ticket: "NFIHGx_btVrWmtAD093D-87JxvT4DAtuijEkLVHbS4Q",
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -111,12 +118,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                                            | Type                                                                                                                 | Required                                                                                                             | Description                                                                                                          |
-| -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `ctx`                                                                                                                | [context.Context](https://pkg.go.dev/context#Context)                                                                | :heavy_check_mark:                                                                                                   | The context to use for the request.                                                                                  |
-| `serviceID`                                                                                                          | `string`                                                                                                             | :heavy_check_mark:                                                                                                   | A service ID.                                                                                                        |
-| `body`                                                                                                               | [components.BackchannelAuthenticationIssueRequest](../../models/components/backchannelauthenticationissuerequest.md) | :heavy_check_mark:                                                                                                   | N/A                                                                                                                  |
-| `opts`                                                                                                               | [][operations.Option](../../models/operations/option.md)                                                             | :heavy_minus_sign:                                                                                                   | The options for this request.                                                                                        |
+| Parameter                                                                                                                  | Type                                                                                                                       | Required                                                                                                                   | Description                                                                                                                |
+| -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `ctx`                                                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                                                      | :heavy_check_mark:                                                                                                         | The context to use for the request.                                                                                        |
+| `request`                                                                                                                  | [operations.BackchannelAuthenticationIssueAPIRequest](../../models/operations/backchannelauthenticationissueapirequest.md) | :heavy_check_mark:                                                                                                         | The request object to use for the request.                                                                                 |
+| `opts`                                                                                                                     | [][operations.Option](../../models/operations/option.md)                                                                   | :heavy_minus_sign:                                                                                                         | The options for this request.                                                                                              |
 
 ### Response
 
@@ -147,6 +153,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -154,12 +161,15 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Ciba.Fail(ctx, "<id>", components.BackchannelAuthenticationFailRequest{
-        Ticket: "<value>",
-        Reason: components.BackchannelAuthenticationFailRequestReasonMissingUserCode,
+    res, err := s.Ciba.Fail(ctx, operations.BackchannelAuthenticationFailAPIRequest{
+        Body: components.BackchannelAuthenticationFailRequest{
+            Ticket: "<value>",
+            Reason: components.BackchannelAuthenticationFailRequestReasonMissingUserCode,
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -172,12 +182,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                                          | Type                                                                                                               | Required                                                                                                           | Description                                                                                                        |
-| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `ctx`                                                                                                              | [context.Context](https://pkg.go.dev/context#Context)                                                              | :heavy_check_mark:                                                                                                 | The context to use for the request.                                                                                |
-| `serviceID`                                                                                                        | `string`                                                                                                           | :heavy_check_mark:                                                                                                 | A service ID.                                                                                                      |
-| `body`                                                                                                             | [components.BackchannelAuthenticationFailRequest](../../models/components/backchannelauthenticationfailrequest.md) | :heavy_check_mark:                                                                                                 | N/A                                                                                                                |
-| `opts`                                                                                                             | [][operations.Option](../../models/operations/option.md)                                                           | :heavy_minus_sign:                                                                                                 | The options for this request.                                                                                      |
+| Parameter                                                                                                                | Type                                                                                                                     | Required                                                                                                                 | Description                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `ctx`                                                                                                                    | [context.Context](https://pkg.go.dev/context#Context)                                                                    | :heavy_check_mark:                                                                                                       | The context to use for the request.                                                                                      |
+| `request`                                                                                                                | [operations.BackchannelAuthenticationFailAPIRequest](../../models/operations/backchannelauthenticationfailapirequest.md) | :heavy_check_mark:                                                                                                       | The request object to use for the request.                                                                               |
+| `opts`                                                                                                                   | [][operations.Option](../../models/operations/option.md)                                                                 | :heavy_minus_sign:                                                                                                       | The options for this request.                                                                                            |
 
 ### Response
 
@@ -208,6 +217,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -215,13 +225,16 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Ciba.Complete(ctx, "<id>", components.BackchannelAuthenticationCompleteRequest{
-        Ticket: "NFIHGx_btVrWmtAD093D-87JxvT4DAtuijEkLVHbS4Q",
-        Result: components.BackchannelAuthenticationCompleteRequestResultAuthorized,
-        Subject: "john",
+    res, err := s.Ciba.Complete(ctx, operations.BackchannelAuthenticationCompleteAPIRequest{
+        Body: components.BackchannelAuthenticationCompleteRequest{
+            Ticket: "NFIHGx_btVrWmtAD093D-87JxvT4DAtuijEkLVHbS4Q",
+            Result: components.BackchannelAuthenticationCompleteRequestResultAuthorized,
+            Subject: "john",
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -234,12 +247,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                                                                  | Type                                                                                                                       | Required                                                                                                                   | Description                                                                                                                |
-| -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `ctx`                                                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                                                      | :heavy_check_mark:                                                                                                         | The context to use for the request.                                                                                        |
-| `serviceID`                                                                                                                | `string`                                                                                                                   | :heavy_check_mark:                                                                                                         | A service ID.                                                                                                              |
-| `body`                                                                                                                     | [components.BackchannelAuthenticationCompleteRequest](../../models/components/backchannelauthenticationcompleterequest.md) | :heavy_check_mark:                                                                                                         | N/A                                                                                                                        |
-| `opts`                                                                                                                     | [][operations.Option](../../models/operations/option.md)                                                                   | :heavy_minus_sign:                                                                                                         | The options for this request.                                                                                              |
+| Parameter                                                                                                                        | Type                                                                                                                             | Required                                                                                                                         | Description                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `ctx`                                                                                                                            | [context.Context](https://pkg.go.dev/context#Context)                                                                            | :heavy_check_mark:                                                                                                               | The context to use for the request.                                                                                              |
+| `request`                                                                                                                        | [operations.BackchannelAuthenticationCompleteAPIRequest](../../models/operations/backchannelauthenticationcompleteapirequest.md) | :heavy_check_mark:                                                                                                               | The request object to use for the request.                                                                                       |
+| `opts`                                                                                                                           | [][operations.Option](../../models/operations/option.md)                                                                         | :heavy_minus_sign:                                                                                                               | The options for this request.                                                                                                    |
 
 ### Response
 

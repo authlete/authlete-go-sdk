@@ -7,14 +7,25 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
-type HskGetListAPIRequest struct {
-	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+type HskGetListAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 }
 
-func (h *HskGetListAPIRequest) GetServiceID() string {
+func (h *HskGetListAPIGlobals) GetServiceID() *string {
 	if h == nil {
-		return ""
+		return nil
+	}
+	return h.ServiceID
+}
+
+type HskGetListAPIRequest struct {
+	// A service ID.
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (h *HskGetListAPIRequest) GetServiceID() *string {
+	if h == nil {
+		return nil
 	}
 	return h.ServiceID
 }

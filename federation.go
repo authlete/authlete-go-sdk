@@ -33,10 +33,9 @@ func newFederation(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *
 
 // Configuration - Process Entity Configuration Request
 // This API gathers the federation configuration about a service. The authorization server implementation should retrieve the value of the `action` response parameter from the API response and take the following steps according to the value.
-func (s *Federation) Configuration(ctx context.Context, serviceID string, body operations.FederationConfigurationAPIRequestBody, opts ...operations.Option) (*operations.FederationConfigurationAPIResponse, error) {
-	request := operations.FederationConfigurationAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Federation) Configuration(ctx context.Context, request operations.FederationConfigurationAPIRequest, opts ...operations.Option) (*operations.FederationConfigurationAPIResponse, error) {
+	globals := operations.FederationConfigurationAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body o
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/federation/configuration", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/federation/configuration", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -344,10 +343,9 @@ func (s *Federation) Configuration(ctx context.Context, serviceID string, body o
 // Registration - Process Federation Registration Request
 // The Authlete API is for implementations of the **federation registration endpoint** that accepts "explicit client registration". Its details are defined in [OpenID Connect Federation 1.0](https://openid.net/specs/openid-connect-federation-1_0.html). The endpoint accepts `POST` requests whose `Content-Type` is either of the following.
 // 1. `application/entity-statement+jwt`- `application/trust-chain+json` When the `Content-Type` of a request is `application/entity-statement+jwt`, the content of the request is the entity configuration of a relying party that is to be registered. In this case, the implementation of the federation registration endpoint should call Authlete's `/federation/registration` API with the entity configuration set to the `entityConfiguration` request parameter. On the other hand, when the `Content-Type` of a request is `application/trust-chain+json`, the content of the request is a JSON array that contains entity statements in JWT format. The sequence of the entity statements composes the trust chain of a relying party that is to be registered. In this case, the implementation of the federation registration endpoint should call Authlete's `/federation/registration` API with the trust chain set to the `trustChain` request parameter.
-func (s *Federation) Registration(ctx context.Context, serviceID string, body components.FederationRegistrationRequest, opts ...operations.Option) (*operations.FederationRegistrationAPIResponse, error) {
-	request := operations.FederationRegistrationAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Federation) Registration(ctx context.Context, request operations.FederationRegistrationAPIRequest, opts ...operations.Option) (*operations.FederationRegistrationAPIResponse, error) {
+	globals := operations.FederationRegistrationAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -368,7 +366,7 @@ func (s *Federation) Registration(ctx context.Context, serviceID string, body co
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/federation/registration", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/federation/registration", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

@@ -33,10 +33,9 @@ func newTokenManagement(rootSDK *Authlete, sdkConfig config.SDKConfiguration, ho
 
 // ReissueIDToken - Reissue ID Token
 // The API is expected to be called only when the value of the `action` parameter in a response from the `/auth/token` API is [ID_TOKEN_REISSUABLE](https://authlete.github.io/authlete-java-common/com/authlete/common/dto/TokenResponse.Action.html#ID_TOKEN_REISSUABLE). The purpose of the `/idtoken/reissue` API is to generate a token response that includes a new ID token together with a new access token and a refresh token.
-func (s *TokenManagement) ReissueIDToken(ctx context.Context, serviceID string, body *components.IdtokenReissueRequest, opts ...operations.Option) (*operations.IdtokenReissueAPIResponse, error) {
-	request := operations.IdtokenReissueAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *TokenManagement) ReissueIDToken(ctx context.Context, request operations.IdtokenReissueAPIRequest, opts ...operations.Option) (*operations.IdtokenReissueAPIResponse, error) {
+	globals := operations.IdtokenReissueAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *TokenManagement) ReissueIDToken(ctx context.Context, serviceID string, 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/idtoken/reissue", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/idtoken/reissue", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -344,6 +343,10 @@ func (s *TokenManagement) ReissueIDToken(ctx context.Context, serviceID string, 
 // List Issued Tokens
 // Get the list of access tokens that are associated with the service.
 func (s *TokenManagement) List(ctx context.Context, request operations.AuthTokenGetListAPIRequest, opts ...operations.Option) (*operations.AuthTokenGetListAPIResponse, error) {
+	globals := operations.AuthTokenGetListAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -362,7 +365,7 @@ func (s *TokenManagement) List(ctx context.Context, request operations.AuthToken
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/get/list", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/get/list", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -399,7 +402,7 @@ func (s *TokenManagement) List(ctx context.Context, request operations.AuthToken
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, globals, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -645,10 +648,9 @@ func (s *TokenManagement) List(ctx context.Context, request operations.AuthToken
 
 // Create Access Token
 // Create an access token.
-func (s *TokenManagement) Create(ctx context.Context, serviceID string, body components.TokenCreateRequest, opts ...operations.Option) (*operations.AuthTokenCreateAPIResponse, error) {
-	request := operations.AuthTokenCreateAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *TokenManagement) Create(ctx context.Context, request operations.AuthTokenCreateAPIRequest, opts ...operations.Option) (*operations.AuthTokenCreateAPIResponse, error) {
+	globals := operations.AuthTokenCreateAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -669,7 +671,7 @@ func (s *TokenManagement) Create(ctx context.Context, serviceID string, body com
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/create", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/create", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -955,10 +957,9 @@ func (s *TokenManagement) Create(ctx context.Context, serviceID string, body com
 
 // Update Access Token
 // Update an access token.
-func (s *TokenManagement) Update(ctx context.Context, serviceID string, body components.TokenUpdateRequest, opts ...operations.Option) (*operations.AuthTokenUpdateAPIResponse, error) {
-	request := operations.AuthTokenUpdateAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *TokenManagement) Update(ctx context.Context, request operations.AuthTokenUpdateAPIRequest, opts ...operations.Option) (*operations.AuthTokenUpdateAPIResponse, error) {
+	globals := operations.AuthTokenUpdateAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -979,7 +980,7 @@ func (s *TokenManagement) Update(ctx context.Context, serviceID string, body com
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/update", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/update", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1265,10 +1266,9 @@ func (s *TokenManagement) Update(ctx context.Context, serviceID string, body com
 
 // Delete Access Token
 // Delete an access token.
-func (s *TokenManagement) Delete(ctx context.Context, serviceID string, accessTokenIdentifier string, opts ...operations.Option) (*operations.AuthTokenDeleteAPIResponse, error) {
-	request := operations.AuthTokenDeleteAPIRequest{
-		ServiceID:             serviceID,
-		AccessTokenIdentifier: accessTokenIdentifier,
+func (s *TokenManagement) Delete(ctx context.Context, request operations.AuthTokenDeleteAPIRequest, opts ...operations.Option) (*operations.AuthTokenDeleteAPIResponse, error) {
+	globals := operations.AuthTokenDeleteAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -1289,7 +1289,7 @@ func (s *TokenManagement) Delete(ctx context.Context, serviceID string, accessTo
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/delete/{accessTokenIdentifier}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/delete/{accessTokenIdentifier}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1549,10 +1549,9 @@ func (s *TokenManagement) Delete(ctx context.Context, serviceID string, accessTo
 
 // Revoke Access Token
 // Revoke an access token.
-func (s *TokenManagement) Revoke(ctx context.Context, serviceID string, body components.TokenRevokeRequest, opts ...operations.Option) (*operations.AuthTokenRevokeAPIResponse, error) {
-	request := operations.AuthTokenRevokeAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *TokenManagement) Revoke(ctx context.Context, request operations.AuthTokenRevokeAPIRequest, opts ...operations.Option) (*operations.AuthTokenRevokeAPIResponse, error) {
+	globals := operations.AuthTokenRevokeAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -1573,7 +1572,7 @@ func (s *TokenManagement) Revoke(ctx context.Context, serviceID string, body com
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/revoke", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/token/revoke", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

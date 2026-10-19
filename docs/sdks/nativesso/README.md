@@ -23,6 +23,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -30,14 +31,17 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("715948317"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.NativeSso.Process(ctx, "715948317", components.NativeSsoRequest{
-        AccessToken: "_kh1aygxZ5NKLYKCJRM8M_AYvDg2wCWoprQDjfO87ZWq",
-        RefreshToken: authlete.Pointer("kHUGSt_d3LSgiCQzH7wa5TpwIHWgjAZGw14zZV7hRqw"),
-        Claims: authlete.Pointer("{\"given_name\":\"John\",\"family_name\":\"Brown\",\"email\":\"test@example.com\"}"),
-        DeviceSecret: "my-ds",
+    res, err := s.NativeSso.Process(ctx, operations.NativeSsoAPIRequest{
+        Body: components.NativeSsoRequest{
+            AccessToken: "_kh1aygxZ5NKLYKCJRM8M_AYvDg2wCWoprQDjfO87ZWq",
+            RefreshToken: authlete.Pointer("kHUGSt_d3LSgiCQzH7wa5TpwIHWgjAZGw14zZV7hRqw"),
+            Claims: authlete.Pointer("{\"given_name\":\"John\",\"family_name\":\"Brown\",\"email\":\"test@example.com\"}"),
+            DeviceSecret: "my-ds",
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -50,12 +54,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                  | Type                                                                       | Required                                                                   | Description                                                                | Example                                                                    |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `ctx`                                                                      | [context.Context](https://pkg.go.dev/context#Context)                      | :heavy_check_mark:                                                         | The context to use for the request.                                        |                                                                            |
-| `serviceID`                                                                | `string`                                                                   | :heavy_check_mark:                                                         | A service ID.                                                              | 715948317                                                                  |
-| `body`                                                                     | [components.NativeSsoRequest](../../models/components/nativessorequest.md) | :heavy_check_mark:                                                         | N/A                                                                        |                                                                            |
-| `opts`                                                                     | [][operations.Option](../../models/operations/option.md)                   | :heavy_minus_sign:                                                         | The options for this request.                                              |                                                                            |
+| Parameter                                                                        | Type                                                                             | Required                                                                         | Description                                                                      |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `ctx`                                                                            | [context.Context](https://pkg.go.dev/context#Context)                            | :heavy_check_mark:                                                               | The context to use for the request.                                              |
+| `request`                                                                        | [operations.NativeSsoAPIRequest](../../models/operations/nativessoapirequest.md) | :heavy_check_mark:                                                               | The request object to use for the request.                                       |
+| `opts`                                                                           | [][operations.Option](../../models/operations/option.md)                         | :heavy_minus_sign:                                                               | The options for this request.                                                    |
 
 ### Response
 
@@ -86,6 +89,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -93,11 +97,14 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.NativeSso.Logout(ctx, "<id>", components.NativeSsoLogoutRequest{
-        SessionID: "my-sid",
+    res, err := s.NativeSso.Logout(ctx, operations.NativeSsoLogoutAPIRequest{
+        Body: components.NativeSsoLogoutRequest{
+            SessionID: "my-sid",
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -110,12 +117,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                              | Type                                                                                   | Required                                                                               | Description                                                                            |
-| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `ctx`                                                                                  | [context.Context](https://pkg.go.dev/context#Context)                                  | :heavy_check_mark:                                                                     | The context to use for the request.                                                    |
-| `serviceID`                                                                            | `string`                                                                               | :heavy_check_mark:                                                                     | A service ID.                                                                          |
-| `body`                                                                                 | [components.NativeSsoLogoutRequest](../../models/components/nativessologoutrequest.md) | :heavy_check_mark:                                                                     | N/A                                                                                    |
-| `opts`                                                                                 | [][operations.Option](../../models/operations/option.md)                               | :heavy_minus_sign:                                                                     | The options for this request.                                                          |
+| Parameter                                                                                    | Type                                                                                         | Required                                                                                     | Description                                                                                  |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `ctx`                                                                                        | [context.Context](https://pkg.go.dev/context#Context)                                        | :heavy_check_mark:                                                                           | The context to use for the request.                                                          |
+| `request`                                                                                    | [operations.NativeSsoLogoutAPIRequest](../../models/operations/nativessologoutapirequest.md) | :heavy_check_mark:                                                                           | The request object to use for the request.                                                   |
+| `opts`                                                                                       | [][operations.Option](../../models/operations/option.md)                                     | :heavy_minus_sign:                                                                           | The options for this request.                                                                |
 
 ### Response
 

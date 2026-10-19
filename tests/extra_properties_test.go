@@ -9,6 +9,7 @@ import (
 
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/stretchr/testify/require"
 )
 
@@ -40,12 +41,12 @@ func obtainTicket(
 	t.Helper()
 	encodedRedirect := url.QueryEscape(redirectURI)
 
-	authResp, err := sdk.Authorization.ProcessRequest(ctx, svcID, components.AuthorizationRequest{
+	authResp, err := sdk.Authorization.ProcessRequest(ctx, operations.AuthAuthorizationAPIRequest{ServiceID: &svcID, Body: components.AuthorizationRequest{
 		Parameters: fmt.Sprintf(
 			"response_type=code&client_id=%s&redirect_uri=%s&state=%s",
 			clientID, encodedRedirect, testState,
 		),
-	})
+	}})
 	require.NoError(t, err, "authorization request failed")
 	require.NotNil(t, authResp.AuthorizationResponse)
 	require.NotNil(t, authResp.AuthorizationResponse.Action)
@@ -70,25 +71,25 @@ func TestExtraProperties(t *testing.T) {
 	mgmtClient := createSDKClient(mgmtToken)
 	sdkClient := createSDKClient(serviceToken)
 
-	_, err := mgmtClient.Service.Update(ctx, serviceID, &components.ServiceInput{
+	_, err := mgmtClient.Service.Update(ctx, operations.ServiceUpdateAPIRequest{Body: &components.ServiceInput{
 		AccessTokenDuration: ptr(tokenDurationSeconds),
-	})
+	}})
 	require.NoError(t, err, "failed to update service")
 
 	clientID, clientSecret := createTestClient(t, mgmtClient, serviceID)
 	t.Cleanup(func() {
-		_, _ = mgmtClient.Client.Delete(context.Background(), serviceID, clientID)
+		_, _ = mgmtClient.Client.Delete(context.Background(), operations.ClientDeleteAPIRequest{ClientID: clientID})
 	})
 
 	t.Run("PropertiesAtAuthorizationIssue", func(t *testing.T) {
 		encodedRedirect := url.QueryEscape(redirectURI)
 
 		// Authorization issue — attach properties here.
-		issueResp, err := sdkClient.Authorization.Issue(ctx, serviceID, components.AuthorizationIssueRequest{
+		issueResp, err := sdkClient.Authorization.Issue(ctx, operations.AuthAuthorizationIssueAPIRequest{Body: components.AuthorizationIssueRequest{
 			Ticket:     obtainTicket(t, ctx, sdkClient, serviceID, clientID),
 			Subject:    subject,
 			Properties: []components.Property{visibleProp, hiddenProp},
-		})
+		}})
 		require.NoError(t, err, "authorization issue failed")
 		require.NotNil(t, issueResp.AuthorizationIssueResponse)
 		issue := issueResp.AuthorizationIssueResponse
@@ -97,14 +98,14 @@ func TestExtraProperties(t *testing.T) {
 		require.NotNil(t, issue.AuthorizationCode)
 
 		// Token request — no properties here.
-		tokenResp, err := sdkClient.Token.Process(ctx, serviceID, components.TokenRequest{
+		tokenResp, err := sdkClient.Token.Process(ctx, operations.AuthTokenAPIRequest{Body: components.TokenRequest{
 			Parameters: fmt.Sprintf(
 				"grant_type=authorization_code&code=%s&redirect_uri=%s",
 				*issue.AuthorizationCode, encodedRedirect,
 			),
 			ClientID:     ptr(clientID),
 			ClientSecret: ptr(clientSecret),
-		})
+		}})
 		require.NoError(t, err, "token request failed")
 		require.NotNil(t, tokenResp.TokenResponse)
 		tok := tokenResp.TokenResponse
@@ -134,9 +135,9 @@ func TestExtraProperties(t *testing.T) {
 		require.False(t, hasHidden, "hidden property must not appear in response_content")
 
 		// Both accessible via introspection.
-		introResp, err := sdkClient.Introspection.Process(ctx, serviceID, components.IntrospectionRequest{
+		introResp, err := sdkClient.Introspection.Process(ctx, operations.AuthIntrospectionAPIRequest{Body: components.IntrospectionRequest{
 			Token: *tok.AccessToken,
-		})
+		}})
 		require.NoError(t, err, "introspection request failed")
 		require.NotNil(t, introResp.IntrospectionResponse)
 		introVisible := findProperty(introResp.IntrospectionResponse.Properties, *visibleProp.Key)
@@ -149,10 +150,10 @@ func TestExtraProperties(t *testing.T) {
 		encodedRedirect := url.QueryEscape(redirectURI)
 
 		// Authorization issue — no properties here.
-		issueResp, err := sdkClient.Authorization.Issue(ctx, serviceID, components.AuthorizationIssueRequest{
+		issueResp, err := sdkClient.Authorization.Issue(ctx, operations.AuthAuthorizationIssueAPIRequest{Body: components.AuthorizationIssueRequest{
 			Ticket:  obtainTicket(t, ctx, sdkClient, serviceID, clientID),
 			Subject: subject,
-		})
+		}})
 		require.NoError(t, err, "authorization issue failed")
 		require.NotNil(t, issueResp.AuthorizationIssueResponse)
 		issue := issueResp.AuthorizationIssueResponse
@@ -161,7 +162,7 @@ func TestExtraProperties(t *testing.T) {
 		require.NotNil(t, issue.AuthorizationCode)
 
 		// Token request — attach properties here.
-		tokenResp, err := sdkClient.Token.Process(ctx, serviceID, components.TokenRequest{
+		tokenResp, err := sdkClient.Token.Process(ctx, operations.AuthTokenAPIRequest{Body: components.TokenRequest{
 			Parameters: fmt.Sprintf(
 				"grant_type=authorization_code&code=%s&redirect_uri=%s",
 				*issue.AuthorizationCode, encodedRedirect,
@@ -169,7 +170,7 @@ func TestExtraProperties(t *testing.T) {
 			ClientID:     ptr(clientID),
 			ClientSecret: ptr(clientSecret),
 			Properties:   []components.Property{visibleProp},
-		})
+		}})
 		require.NoError(t, err, "token request failed")
 		require.NotNil(t, tokenResp.TokenResponse)
 		tok := tokenResp.TokenResponse

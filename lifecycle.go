@@ -33,11 +33,7 @@ func newLifecycle(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *h
 
 // GetAPILifecycleHealthcheck - Health Check
 // Perform a health check of the server.
-func (s *Lifecycle) GetAPILifecycleHealthcheck(ctx context.Context, extended *bool, opts ...operations.Option) (*operations.GetAPILifecycleHealthcheckResponse, error) {
-	request := operations.GetAPILifecycleHealthcheckRequest{
-		Extended: extended,
-	}
-
+func (s *Lifecycle) GetAPILifecycleHealthcheck(ctx context.Context, request operations.GetAPILifecycleHealthcheckRequest, opts ...operations.Option) (*operations.GetAPILifecycleHealthcheckResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,

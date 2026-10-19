@@ -7,9 +7,20 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientAuthorizationGetListBySubjectAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientAuthorizationGetListBySubjectAPIGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientAuthorizationGetListBySubjectAPIRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// Unique user ID of an end-user.
 	//
 	Subject string `pathParam:"style=simple,explode=false,name=subject"`
@@ -23,9 +34,9 @@ type ClientAuthorizationGetListBySubjectAPIRequest struct {
 	End *int `queryParam:"style=form,explode=true,name=end"`
 }
 
-func (c *ClientAuthorizationGetListBySubjectAPIRequest) GetServiceID() string {
+func (c *ClientAuthorizationGetListBySubjectAPIRequest) GetServiceID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ServiceID
 }

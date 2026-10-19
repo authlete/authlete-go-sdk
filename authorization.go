@@ -36,10 +36,9 @@ func newAuthorization(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hook
 
 // ProcessRequest - Process Authorization Request
 // This API parses request parameters of an authorization request and returns necessary data for the authorization server implementation to process the authorization request further.
-func (s *Authorization) ProcessRequest(ctx context.Context, serviceID string, body components.AuthorizationRequest, opts ...operations.Option) (*operations.AuthAuthorizationAPIResponse, error) {
-	request := operations.AuthAuthorizationAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Authorization) ProcessRequest(ctx context.Context, request operations.AuthAuthorizationAPIRequest, opts ...operations.Option) (*operations.AuthAuthorizationAPIResponse, error) {
+	globals := operations.AuthAuthorizationAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -60,7 +59,7 @@ func (s *Authorization) ProcessRequest(ctx context.Context, serviceID string, bo
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -346,10 +345,9 @@ func (s *Authorization) ProcessRequest(ctx context.Context, serviceID string, bo
 
 // Fail Authorization Request
 // This API generates a content of an error authorization response that the authorization server implementation returns to the client application.
-func (s *Authorization) Fail(ctx context.Context, serviceID string, body components.AuthorizationFailRequest, opts ...operations.Option) (*operations.AuthAuthorizationFailAPIResponse, error) {
-	request := operations.AuthAuthorizationFailAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Authorization) Fail(ctx context.Context, request operations.AuthAuthorizationFailAPIRequest, opts ...operations.Option) (*operations.AuthAuthorizationFailAPIResponse, error) {
+	globals := operations.AuthAuthorizationFailAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -370,7 +368,7 @@ func (s *Authorization) Fail(ctx context.Context, serviceID string, body compone
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization/fail", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization/fail", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -656,10 +654,9 @@ func (s *Authorization) Fail(ctx context.Context, serviceID string, body compone
 
 // Issue Authorization Response
 // This API parses request parameters of an authorization request and returns necessary data for the authorization server implementation to process the authorization request further.
-func (s *Authorization) Issue(ctx context.Context, serviceID string, body components.AuthorizationIssueRequest, opts ...operations.Option) (*operations.AuthAuthorizationIssueAPIResponse, error) {
-	request := operations.AuthAuthorizationIssueAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *Authorization) Issue(ctx context.Context, request operations.AuthAuthorizationIssueAPIRequest, opts ...operations.Option) (*operations.AuthAuthorizationIssueAPIResponse, error) {
+	globals := operations.AuthAuthorizationIssueAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -680,7 +677,7 @@ func (s *Authorization) Issue(ctx context.Context, serviceID string, body compon
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization/issue", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/auth/authorization/issue", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

@@ -7,9 +7,20 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientFlagUpdateAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientFlagUpdateAPIGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientFlagUpdateAPIRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// A client ID.
 	ClientIdentifier string                              `pathParam:"style=simple,explode=false,name=clientIdentifier"`
 	Body             *components.ClientFlagUpdateRequest `request:"mediaType=application/json"`
@@ -26,9 +37,9 @@ func (c *ClientFlagUpdateAPIRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *ClientFlagUpdateAPIRequest) GetServiceID() string {
+func (c *ClientFlagUpdateAPIRequest) GetServiceID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ServiceID
 }

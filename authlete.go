@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/authlete/authlete-go-sdk/internal/config"
+	"github.com/authlete/authlete-go-sdk/internal/globals"
 	"github.com/authlete/authlete-go-sdk/internal/hooks"
 	"github.com/authlete/authlete-go-sdk/internal/utils"
 	"github.com/authlete/authlete-go-sdk/models/components"
@@ -131,12 +132,10 @@ func Pointer[T any](v T) *T { return &v }
 //
 // - [Contact Page](https://www.authlete.com/contact/)
 type Authlete struct {
-	SDKVersion string
-	Service    *Service
-	Audit      *Audit
-	Client     *Client
-	// API endpoints for managing OAuth clients, including creation, update, and deletion of clients.
-	ClientManagement          *ClientManagement2
+	SDKVersion                string
+	Service                   *Service
+	Audit                     *Audit
+	Client                    *Client
 	Authorization             *Authorization
 	PushedAuthorization       *PushedAuthorization
 	Token                     *Token
@@ -213,6 +212,13 @@ func WithSecuritySource(security func(context.Context) (components.Security, err
 	}
 }
 
+// WithServiceID allows setting the ServiceID parameter for all supported operations
+func WithServiceID(serviceID string) SDKOption {
+	return func(sdk *Authlete) {
+		sdk.sdkConfiguration.Globals.ServiceID = &serviceID
+	}
+}
+
 func WithRetryConfig(retryConfig retry.Config) SDKOption {
 	return func(sdk *Authlete) {
 		sdk.sdkConfiguration.RetryConfig = &retryConfig
@@ -229,12 +235,13 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Authlete {
 	sdk := &Authlete{
-		SDKVersion: "0.1.0",
+		SDKVersion: "0.2.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.1.0 2.948.4 3.0.16 github.com/authlete/authlete-go-sdk",
-			SDKVersion:        "0.1.0",
+			UserAgent:         "speakeasy-sdk/go 0.2.0 2.948.4 3.0.16 github.com/authlete/authlete-go-sdk",
+			SDKVersion:        "0.2.0",
 			GenVersion:        "2.948.4",
 			OpenAPIDocVersion: "3.0.16",
+			Globals:           globals.Globals{},
 			ServerList:        ServerList,
 		},
 		hooks: hooks.New(),
@@ -242,6 +249,8 @@ func New(opts ...SDKOption) *Authlete {
 	for _, opt := range opts {
 		opt(sdk)
 	}
+
+	sdk.sdkConfiguration.FillGlobalsFromEnv()
 
 	if sdk.sdkConfiguration.Security == nil {
 		var envVarSecurity components.Security
@@ -260,7 +269,6 @@ func New(opts ...SDKOption) *Authlete {
 	sdk.Service = newService(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Audit = newAudit(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Client = newClient(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.ClientManagement = newClientManagement2(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Authorization = newAuthorization(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PushedAuthorization = newPushedAuthorization(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Token = newToken(sdk, sdk.sdkConfiguration, sdk.hooks)

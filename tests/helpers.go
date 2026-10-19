@@ -9,6 +9,7 @@ import (
 
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/authlete/authlete-go-sdk/optionalnullable"
 	"github.com/stretchr/testify/require"
 )
@@ -38,6 +39,7 @@ func createSDKClient(token string) *authlete.Authlete {
 	return authlete.New(
 		authlete.WithSecurity(token),
 		authlete.WithServerURL(apiBaseURL),
+		authlete.WithServiceID(serviceID),
 	)
 }
 
@@ -53,7 +55,7 @@ func createTestClient(t *testing.T, sdk *authlete.Authlete, svcID string) (clien
 		RedirectUris:  []string{redirectURI},
 	}
 
-	resp, err := sdk.Client.Create(ctx, svcID, &clientInput)
+	resp, err := sdk.Client.Create(ctx, operations.ClientCreateAPIRequest{ServiceID: &svcID, Body: &clientInput})
 	require.NoError(t, err, "failed to create test client")
 	require.NotNil(t, resp.Client, "client response must not be nil")
 	require.NotNil(t, resp.Client.ClientID, "client ID must not be nil")
@@ -66,9 +68,9 @@ func assertTokenValid(t *testing.T, sdk *authlete.Authlete, svcID string, access
 	t.Helper()
 
 	ctx := context.Background()
-	resp, err := sdk.Introspection.Process(ctx, svcID, components.IntrospectionRequest{
+	resp, err := sdk.Introspection.Process(ctx, operations.AuthIntrospectionAPIRequest{ServiceID: &svcID, Body: components.IntrospectionRequest{
 		Token: accessToken,
-	})
+	}})
 	require.NoError(t, err, "introspection request failed")
 	require.NotNil(t, resp.IntrospectionResponse, "introspection response must not be nil")
 	require.NotNil(t, resp.IntrospectionResponse.Action, "introspection action must not be nil")

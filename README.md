@@ -100,6 +100,7 @@ If you have any questions or need assistance, our team is here to help:
   * [SDK Example Usage](#sdk-example-usage)
   * [Authentication](#authentication-1)
   * [Available Resources and Operations](#available-resources-and-operations)
+  * [Global Parameters](#global-parameters)
   * [Pagination](#pagination)
   * [Retries](#retries)
   * [Error Handling](#error-handling)
@@ -131,6 +132,7 @@ package main
 import (
 	"context"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 	"os"
 )
@@ -139,10 +141,11 @@ func main() {
 	ctx := context.Background()
 
 	s := authlete.New(
+		authlete.WithServiceID("<id>"),
 		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
 	)
 
-	res, err := s.Service.Get(ctx, "<id>")
+	res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -172,6 +175,7 @@ package main
 import (
 	"context"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 	"os"
 )
@@ -181,9 +185,10 @@ func main() {
 
 	s := authlete.New(
 		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
+		authlete.WithServiceID("<id>"),
 	)
 
-	res, err := s.Service.Get(ctx, "<id>")
+	res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -236,33 +241,30 @@ func main() {
 * [Update](docs/sdks/client/README.md#update) - Update Client
 * [UpdateForm](docs/sdks/client/README.md#updateform) - Update Client
 * [Delete](docs/sdks/client/README.md#delete) - Delete Client ⚡
+* [ListByCursor](docs/sdks/client/README.md#listbycursor) - List Clients (Cursor Pagination)
+* [Search](docs/sdks/client/README.md#search) - Search Clients
 
-#### [Client.Management](docs/sdks/clientmanagement1/README.md)
+#### [Client.Management](docs/sdks/clientmanagement/README.md)
 
-* [UpdateLockFlag](docs/sdks/clientmanagement1/README.md#updatelockflag) - Update Client Lock
-* [RefreshSecret](docs/sdks/clientmanagement1/README.md#refreshsecret) - Rotate Client Secret
-* [UpdateSecret](docs/sdks/clientmanagement1/README.md#updatesecret) - Update Client Secret
-* [ListAuthorizedApplications](docs/sdks/clientmanagement1/README.md#listauthorizedapplications) - Get Authorized Applications
-* [ListAuthorizedApplicationsWithBody](docs/sdks/clientmanagement1/README.md#listauthorizedapplicationswithbody) - Get Authorized Applications
-* [ListAuthorizations](docs/sdks/clientmanagement1/README.md#listauthorizations) - Get Authorized Applications (by Subject)
-* [UpdateAuthorizations](docs/sdks/clientmanagement1/README.md#updateauthorizations) - Update Client Tokens
-* [DeleteClientTokens](docs/sdks/clientmanagement1/README.md#deleteclienttokens) - Delete Client Tokens
-* [RevokeClientTokens](docs/sdks/clientmanagement1/README.md#revokeclienttokens) - Delete Client Tokens
-* [DeleteAuthorizations](docs/sdks/clientmanagement1/README.md#deleteauthorizations) - Delete Client Tokens (by Subject)
-* [GetGrantedScopesForClient](docs/sdks/clientmanagement1/README.md#getgrantedscopesforclient) - Get Granted Scopes
-* [CreateGrantedScopes](docs/sdks/clientmanagement1/README.md#creategrantedscopes) - Get Granted Scopes
-* [GetGrantedScopes](docs/sdks/clientmanagement1/README.md#getgrantedscopes) - Get Granted Scopes (by Subject)
-* [DeleteGrantedScopesForClient](docs/sdks/clientmanagement1/README.md#deletegrantedscopesforclient) - Delete Granted Scopes
-* [DeleteGrantedScopes](docs/sdks/clientmanagement1/README.md#deletegrantedscopes) - Delete Granted Scopes (by Subject)
-* [GetRequestableScopes](docs/sdks/clientmanagement1/README.md#getrequestablescopes) - Get Requestable Scopes
-* [UpdateRequestableScopesWithBody](docs/sdks/clientmanagement1/README.md#updaterequestablescopeswithbody) - Update Requestable Scopes
-* [UpdateRequestableScopes](docs/sdks/clientmanagement1/README.md#updaterequestablescopes) - Update Requestable Scopes
-* [DeleteRequestableScopes](docs/sdks/clientmanagement1/README.md#deleterequestablescopes) - Delete Requestable Scopes
-
-### [ClientManagement](docs/sdks/clientmanagement2/README.md)
-
-* [ClientCursorListAPI](docs/sdks/clientmanagement2/README.md#clientcursorlistapi) - List Clients (Cursor Pagination)
-* [ClientSearchAPI](docs/sdks/clientmanagement2/README.md#clientsearchapi) - Search Clients
+* [UpdateLockFlag](docs/sdks/clientmanagement/README.md#updatelockflag) - Update Client Lock
+* [RefreshSecret](docs/sdks/clientmanagement/README.md#refreshsecret) - Rotate Client Secret
+* [UpdateSecret](docs/sdks/clientmanagement/README.md#updatesecret) - Update Client Secret
+* [GetAuthorizedApplications](docs/sdks/clientmanagement/README.md#getauthorizedapplications) - Get Authorized Applications
+* [GetAuthorizedApplicationsByPost](docs/sdks/clientmanagement/README.md#getauthorizedapplicationsbypost) - Get Authorized Applications
+* [ListAuthorizations](docs/sdks/clientmanagement/README.md#listauthorizations) - Get Authorized Applications (by Subject)
+* [UpdateAuthorizations](docs/sdks/clientmanagement/README.md#updateauthorizations) - Update Client Tokens
+* [DeleteClientTokens](docs/sdks/clientmanagement/README.md#deleteclienttokens) - Delete Client Tokens
+* [DeleteClientTokensByPost](docs/sdks/clientmanagement/README.md#deleteclienttokensbypost) - Delete Client Tokens
+* [DeleteAuthorizations](docs/sdks/clientmanagement/README.md#deleteauthorizations) - Delete Client Tokens (by Subject)
+* [GetClientGrantedScopes](docs/sdks/clientmanagement/README.md#getclientgrantedscopes) - Get Granted Scopes
+* [GetClientGrantedScopesByPost](docs/sdks/clientmanagement/README.md#getclientgrantedscopesbypost) - Get Granted Scopes
+* [GetGrantedScopes](docs/sdks/clientmanagement/README.md#getgrantedscopes) - Get Granted Scopes (by Subject)
+* [DeleteClientGrantedScopes](docs/sdks/clientmanagement/README.md#deleteclientgrantedscopes) - Delete Granted Scopes
+* [DeleteGrantedScopes](docs/sdks/clientmanagement/README.md#deletegrantedscopes) - Delete Granted Scopes (by Subject)
+* [GetRequestableScopes](docs/sdks/clientmanagement/README.md#getrequestablescopes) - Get Requestable Scopes
+* [UpdateRequestableScopesByPost](docs/sdks/clientmanagement/README.md#updaterequestablescopesbypost) - Update Requestable Scopes
+* [UpdateRequestableScopes](docs/sdks/clientmanagement/README.md#updaterequestablescopes) - Update Requestable Scopes
+* [DeleteRequestableScopes](docs/sdks/clientmanagement/README.md#deleterequestablescopes) - Delete Requestable Scopes
 
 ### [DeviceFlow](docs/sdks/deviceflow/README.md)
 
@@ -320,7 +322,6 @@ func main() {
 * [Get](docs/sdks/service/README.md#get) - Get Service
 * [List](docs/sdks/service/README.md#list) - List Services
 * [Update](docs/sdks/service/README.md#update) - Update Service
-* [Delete](docs/sdks/service/README.md#delete) - Delete Service ⚡
 * [Create](docs/sdks/service/README.md#create) - Create Service (IDP)
 * [Remove](docs/sdks/service/README.md#remove) - Remove Service (IDP) ⚡
 * [GetConfiguration](docs/sdks/service/README.md#getconfiguration) - Get Service Configuration
@@ -361,6 +362,56 @@ func main() {
 
 </details>
 <!-- End Available Resources and Operations [operations] -->
+
+<!-- Start Global Parameters [global-parameters] -->
+## Global Parameters
+
+A parameter is configured globally. This parameter may be set on the SDK client instance itself during initialization. When configured as an option during SDK initialization, This global value will be used as the default on the operations that use it. When such operations are called, there is a place in each to override the global value, if needed.
+
+For example, you can set `serviceId` to `"<id>"` at SDK initialization and then you do not have to pass the same value on calls to operations like `Get`. But if you want to do so you may, which will locally override the global setting. See the example code below for a demonstration.
+
+
+### Available Globals
+
+The following global parameter is available.
+Global parameters can also be set via environment variable.
+
+| Name      | Type   | Description              | Environment         |
+| --------- | ------ | ------------------------ | ------------------- |
+| ServiceID | string | The ServiceID parameter. | AUTHLETE_SERVICE_ID |
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
+	"log"
+	"os"
+)
+
+func main() {
+	ctx := context.Background()
+
+	s := authlete.New(
+		authlete.WithServiceID("<id>"),
+		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
+	)
+
+	res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	if res.Service != nil {
+		// handle response
+	}
+}
+
+```
+<!-- End Global Parameters [global-parameters] -->
 
 <!-- Start Pagination [pagination] -->
 ## Pagination
@@ -428,6 +479,7 @@ package main
 import (
 	"context"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/authlete/authlete-go-sdk/retry"
 	"log"
 	"models/operations"
@@ -438,10 +490,11 @@ func main() {
 	ctx := context.Background()
 
 	s := authlete.New(
+		authlete.WithServiceID("<id>"),
 		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
 	)
 
-	res, err := s.Service.Get(ctx, "<id>", operations.WithRetries(
+	res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{}, operations.WithRetries(
 		retry.Config{
 			Strategy: "backoff",
 			Backoff: &retry.BackoffStrategy{
@@ -469,6 +522,7 @@ package main
 import (
 	"context"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/authlete/authlete-go-sdk/retry"
 	"log"
 	"os"
@@ -489,10 +543,11 @@ func main() {
 				},
 				RetryConnectionErrors: false,
 			}),
+		authlete.WithServiceID("<id>"),
 		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
 	)
 
-	res, err := s.Service.Get(ctx, "<id>")
+	res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -530,6 +585,7 @@ import (
 	"errors"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/apierrors"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 	"os"
 )
@@ -538,10 +594,11 @@ func main() {
 	ctx := context.Background()
 
 	s := authlete.New(
+		authlete.WithServiceID("<id>"),
 		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
 	)
 
-	res, err := s.Service.Get(ctx, "<id>")
+	res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
 	if err != nil {
 
 		var e *apierrors.ResultError
@@ -595,6 +652,7 @@ package main
 import (
 	"context"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 	"os"
 )
@@ -604,10 +662,11 @@ func main() {
 
 	s := authlete.New(
 		authlete.WithServerIndex(0),
+		authlete.WithServiceID("<id>"),
 		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
 	)
 
-	res, err := s.Service.Get(ctx, "<id>")
+	res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -627,6 +686,7 @@ package main
 import (
 	"context"
 	authlete "github.com/authlete/authlete-go-sdk"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 	"os"
 )
@@ -636,10 +696,11 @@ func main() {
 
 	s := authlete.New(
 		authlete.WithServerURL("https://br.authlete.com"),
+		authlete.WithServiceID("<id>"),
 		authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
 	)
 
-	res, err := s.Service.Get(ctx, "<id>")
+	res, err := s.Service.Get(ctx, operations.ServiceGetAPIRequest{})
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -13,6 +13,7 @@ import (
 
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"github.com/stretchr/testify/require"
 )
 
@@ -64,7 +65,7 @@ func setupOIDCService(
 
 	openidName := "openid"
 	defaultEntry := false
-	_, err := mgmt.Service.Update(ctx, svcID, &components.ServiceInput{
+	_, err := mgmt.Service.Update(ctx, operations.ServiceUpdateAPIRequest{ServiceID: &svcID, Body: &components.ServiceInput{
 		Issuer:                setValue(oidcIssuer),
 		Jwks:                  setValue(jwks),
 		IDTokenSignatureKeyID: setValue(kid),
@@ -73,7 +74,7 @@ func setupOIDCService(
 		SupportedScopes: setValue([]components.Scope{
 			{Name: &openidName, DefaultEntry: &defaultEntry},
 		}),
-	})
+	}})
 	require.NoError(t, err, "OIDC service setup failed")
 }
 

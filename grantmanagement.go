@@ -33,10 +33,9 @@ func newGrantManagement(rootSDK *Authlete, sdkConfig config.SDKConfiguration, ho
 
 // ProcessRequest - Process Grant Management Request
 // The API is for the implementation of the grant management endpoint which is defined in "[Grant Management for OAuth 2.0](https://openid.net/specs/fapi-grant-management.html)".
-func (s *GrantManagement) ProcessRequest(ctx context.Context, serviceID string, body components.GMRequest, opts ...operations.Option) (*operations.GrantMAPIResponse, error) {
-	request := operations.GrantMAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *GrantManagement) ProcessRequest(ctx context.Context, request operations.GrantMAPIRequest, opts ...operations.Option) (*operations.GrantMAPIResponse, error) {
+	globals := operations.GrantMAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *GrantManagement) ProcessRequest(ctx context.Context, serviceID string, 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/gm", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/gm", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

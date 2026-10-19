@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type NativeSsoAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (n *NativeSsoAPIGlobals) GetServiceID() *string {
+	if n == nil {
+		return nil
+	}
+	return n.ServiceID
+}
+
 type NativeSsoAPIRequest struct {
 	// A service ID.
-	ServiceID string                      `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                     `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.NativeSsoRequest `request:"mediaType=application/json"`
 }
 
-func (n *NativeSsoAPIRequest) GetServiceID() string {
+func (n *NativeSsoAPIRequest) GetServiceID() *string {
 	if n == nil {
-		return ""
+		return nil
 	}
 	return n.ServiceID
 }

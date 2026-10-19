@@ -55,6 +55,14 @@ WithSecuritySource configures the SDK to invoke the provided function on each me
 authlete.WithSecuritySource(/* ... */)
 ```
 
+### WithServiceID
+
+WithServiceID allows setting the ServiceID parameter for all supported operations.
+
+```go
+authlete.WithServiceID(/* ... */)
+```
+
 ### WithRetryConfig
 
 WithRetryConfig allows setting the default retry configuration used by the SDK for all supported operations.

@@ -6,17 +6,28 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type AuthTokenDeleteAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (a *AuthTokenDeleteAPIGlobals) GetServiceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ServiceID
+}
+
 type AuthTokenDeleteAPIRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// The identifier of an existing access token. The identifier is the value of the access token or the value of the hash of the access token.
 	//
 	AccessTokenIdentifier string `pathParam:"style=simple,explode=false,name=accessTokenIdentifier"`
 }
 
-func (a *AuthTokenDeleteAPIRequest) GetServiceID() string {
+func (a *AuthTokenDeleteAPIRequest) GetServiceID() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.ServiceID
 }

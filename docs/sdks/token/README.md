@@ -24,6 +24,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -31,13 +32,16 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Token.Process(ctx, "<id>", components.TokenRequest{
-        Parameters: "grant_type=authorization_code&code=Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo&redirect_uri=https%3A%2F%2Fmy-client.example.com%2Fcb1&code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk",
-        ClientID: authlete.Pointer("26478243745571"),
-        ClientSecret: authlete.Pointer("gXz97ISgLs4HuXwOZWch8GEmgL4YMvUJwu3er_kDVVGcA0UOhA9avLPbEmoeZdagi9yC_-tEiT2BdRyH9dbrQQ"),
+    res, err := s.Token.Process(ctx, operations.AuthTokenAPIRequest{
+        Body: components.TokenRequest{
+            Parameters: "grant_type=authorization_code&code=Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo&redirect_uri=https%3A%2F%2Fmy-client.example.com%2Fcb1&code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk",
+            ClientID: authlete.Pointer("26478243745571"),
+            ClientSecret: authlete.Pointer("gXz97ISgLs4HuXwOZWch8GEmgL4YMvUJwu3er_kDVVGcA0UOhA9avLPbEmoeZdagi9yC_-tEiT2BdRyH9dbrQQ"),
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -50,12 +54,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                          | Type                                                               | Required                                                           | Description                                                        |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| `ctx`                                                              | [context.Context](https://pkg.go.dev/context#Context)              | :heavy_check_mark:                                                 | The context to use for the request.                                |
-| `serviceID`                                                        | `string`                                                           | :heavy_check_mark:                                                 | A service ID.                                                      |
-| `body`                                                             | [components.TokenRequest](../../models/components/tokenrequest.md) | :heavy_check_mark:                                                 | N/A                                                                |
-| `opts`                                                             | [][operations.Option](../../models/operations/option.md)           | :heavy_minus_sign:                                                 | The options for this request.                                      |
+| Parameter                                                                        | Type                                                                             | Required                                                                         | Description                                                                      |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `ctx`                                                                            | [context.Context](https://pkg.go.dev/context#Context)                            | :heavy_check_mark:                                                               | The context to use for the request.                                              |
+| `request`                                                                        | [operations.AuthTokenAPIRequest](../../models/operations/authtokenapirequest.md) | :heavy_check_mark:                                                               | The request object to use for the request.                                       |
+| `opts`                                                                           | [][operations.Option](../../models/operations/option.md)                         | :heavy_minus_sign:                                                               | The options for this request.                                                    |
 
 ### Response
 
@@ -86,6 +89,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -93,12 +97,15 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Token.Fail(ctx, "<id>", components.TokenFailRequest{
-        Ticket: "83BNqKIhGMyrkvop_7jQjv2Z1612LNdGSQKkvkrf47c",
-        Reason: components.TokenFailRequestReasonInvalidResourceOwnerCredentials,
+    res, err := s.Token.Fail(ctx, operations.AuthTokenFailAPIRequest{
+        Body: components.TokenFailRequest{
+            Ticket: "83BNqKIhGMyrkvop_7jQjv2Z1612LNdGSQKkvkrf47c",
+            Reason: components.TokenFailRequestReasonInvalidResourceOwnerCredentials,
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -111,12 +118,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                  | Type                                                                       | Required                                                                   | Description                                                                |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `ctx`                                                                      | [context.Context](https://pkg.go.dev/context#Context)                      | :heavy_check_mark:                                                         | The context to use for the request.                                        |
-| `serviceID`                                                                | `string`                                                                   | :heavy_check_mark:                                                         | A service ID.                                                              |
-| `body`                                                                     | [components.TokenFailRequest](../../models/components/tokenfailrequest.md) | :heavy_check_mark:                                                         | N/A                                                                        |
-| `opts`                                                                     | [][operations.Option](../../models/operations/option.md)                   | :heavy_minus_sign:                                                         | The options for this request.                                              |
+| Parameter                                                                                | Type                                                                                     | Required                                                                                 | Description                                                                              |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ctx`                                                                                    | [context.Context](https://pkg.go.dev/context#Context)                                    | :heavy_check_mark:                                                                       | The context to use for the request.                                                      |
+| `request`                                                                                | [operations.AuthTokenFailAPIRequest](../../models/operations/authtokenfailapirequest.md) | :heavy_check_mark:                                                                       | The request object to use for the request.                                               |
+| `opts`                                                                                   | [][operations.Option](../../models/operations/option.md)                                 | :heavy_minus_sign:                                                                       | The options for this request.                                                            |
 
 ### Response
 
@@ -147,6 +153,7 @@ import(
 	"os"
 	authlete "github.com/authlete/authlete-go-sdk"
 	"github.com/authlete/authlete-go-sdk/models/components"
+	"github.com/authlete/authlete-go-sdk/models/operations"
 	"log"
 )
 
@@ -154,12 +161,15 @@ func main() {
     ctx := context.Background()
 
     s := authlete.New(
+        authlete.WithServiceID("<id>"),
         authlete.WithSecurity(os.Getenv("AUTHLETE_BEARER")),
     )
 
-    res, err := s.Token.Issue(ctx, "<id>", components.TokenIssueRequest{
-        Ticket: "p7SXQ9JFjng7KFOZdCMBKcoR3ift7B54l1LGIgQXqEM",
-        Subject: "john",
+    res, err := s.Token.Issue(ctx, operations.AuthTokenIssueAPIRequest{
+        Body: components.TokenIssueRequest{
+            Ticket: "p7SXQ9JFjng7KFOZdCMBKcoR3ift7B54l1LGIgQXqEM",
+            Subject: "john",
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -172,12 +182,11 @@ func main() {
 
 ### Parameters
 
-| Parameter                                                                    | Type                                                                         | Required                                                                     | Description                                                                  |
-| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `ctx`                                                                        | [context.Context](https://pkg.go.dev/context#Context)                        | :heavy_check_mark:                                                           | The context to use for the request.                                          |
-| `serviceID`                                                                  | `string`                                                                     | :heavy_check_mark:                                                           | A service ID.                                                                |
-| `body`                                                                       | [components.TokenIssueRequest](../../models/components/tokenissuerequest.md) | :heavy_check_mark:                                                           | N/A                                                                          |
-| `opts`                                                                       | [][operations.Option](../../models/operations/option.md)                     | :heavy_minus_sign:                                                           | The options for this request.                                                |
+| Parameter                                                                                  | Type                                                                                       | Required                                                                                   | Description                                                                                |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `ctx`                                                                                      | [context.Context](https://pkg.go.dev/context#Context)                                      | :heavy_check_mark:                                                                         | The context to use for the request.                                                        |
+| `request`                                                                                  | [operations.AuthTokenIssueAPIRequest](../../models/operations/authtokenissueapirequest.md) | :heavy_check_mark:                                                                         | The request object to use for the request.                                                 |
+| `opts`                                                                                     | [][operations.Option](../../models/operations/option.md)                                   | :heavy_minus_sign:                                                                         | The options for this request.                                                              |
 
 ### Response
 

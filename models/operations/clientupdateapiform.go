@@ -7,9 +7,20 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type ClientUpdateAPIFormGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (c *ClientUpdateAPIFormGlobals) GetServiceID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.ServiceID
+}
+
 type ClientUpdateAPIFormRequest struct {
 	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 	// A client ID.
 	ClientID string         `pathParam:"style=simple,explode=false,name=clientId"`
 	Body     map[string]any `request:"mediaType=application/x-www-form-urlencoded"`
@@ -26,9 +37,9 @@ func (c *ClientUpdateAPIFormRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *ClientUpdateAPIFormRequest) GetServiceID() string {
+func (c *ClientUpdateAPIFormRequest) GetServiceID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.ServiceID
 }

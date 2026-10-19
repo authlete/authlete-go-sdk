@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
-type HskDeleteAPIRequest struct {
-	// A service ID.
-	ServiceID string `pathParam:"style=simple,explode=false,name=serviceId"`
-	Handle    string `pathParam:"style=simple,explode=false,name=handle"`
+type HskDeleteAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
 }
 
-func (h *HskDeleteAPIRequest) GetServiceID() string {
+func (h *HskDeleteAPIGlobals) GetServiceID() *string {
 	if h == nil {
-		return ""
+		return nil
+	}
+	return h.ServiceID
+}
+
+type HskDeleteAPIRequest struct {
+	// A service ID.
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+	Handle    string  `pathParam:"style=simple,explode=false,name=handle"`
+}
+
+func (h *HskDeleteAPIRequest) GetServiceID() *string {
+	if h == nil {
+		return nil
 	}
 	return h.ServiceID
 }

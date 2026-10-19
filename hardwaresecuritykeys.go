@@ -32,10 +32,9 @@ func newHardwareSecurityKeys(rootSDK *Authlete, sdkConfig config.SDKConfiguratio
 }
 
 // Create Security Key
-func (s *HardwareSecurityKeys) Create(ctx context.Context, serviceID string, body components.HskCreateRequest, opts ...operations.Option) (*operations.HskCreateAPIResponse, error) {
-	request := operations.HskCreateAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *HardwareSecurityKeys) Create(ctx context.Context, request operations.HskCreateAPIRequest, opts ...operations.Option) (*operations.HskCreateAPIResponse, error) {
+	globals := operations.HskCreateAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -56,7 +55,7 @@ func (s *HardwareSecurityKeys) Create(ctx context.Context, serviceID string, bod
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/hsk/create", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/hsk/create", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -341,10 +340,9 @@ func (s *HardwareSecurityKeys) Create(ctx context.Context, serviceID string, bod
 }
 
 // Delete Security Key
-func (s *HardwareSecurityKeys) Delete(ctx context.Context, serviceID string, handle string, opts ...operations.Option) (*operations.HskDeleteAPIResponse, error) {
-	request := operations.HskDeleteAPIRequest{
-		ServiceID: serviceID,
-		Handle:    handle,
+func (s *HardwareSecurityKeys) Delete(ctx context.Context, request operations.HskDeleteAPIRequest, opts ...operations.Option) (*operations.HskDeleteAPIResponse, error) {
+	globals := operations.HskDeleteAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -365,7 +363,7 @@ func (s *HardwareSecurityKeys) Delete(ctx context.Context, serviceID string, han
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/hsk/delete/{handle}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/hsk/delete/{handle}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -643,10 +641,9 @@ func (s *HardwareSecurityKeys) Delete(ctx context.Context, serviceID string, han
 }
 
 // Get Security Key
-func (s *HardwareSecurityKeys) Get(ctx context.Context, serviceID string, handle string, opts ...operations.Option) (*operations.HskGetAPIResponse, error) {
-	request := operations.HskGetAPIRequest{
-		ServiceID: serviceID,
-		Handle:    handle,
+func (s *HardwareSecurityKeys) Get(ctx context.Context, request operations.HskGetAPIRequest, opts ...operations.Option) (*operations.HskGetAPIResponse, error) {
+	globals := operations.HskGetAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -667,7 +664,7 @@ func (s *HardwareSecurityKeys) Get(ctx context.Context, serviceID string, handle
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/hsk/get/{handle}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/hsk/get/{handle}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -945,9 +942,9 @@ func (s *HardwareSecurityKeys) Get(ctx context.Context, serviceID string, handle
 }
 
 // List Security Keys
-func (s *HardwareSecurityKeys) List(ctx context.Context, serviceID string, opts ...operations.Option) (*operations.HskGetListAPIResponse, error) {
-	request := operations.HskGetListAPIRequest{
-		ServiceID: serviceID,
+func (s *HardwareSecurityKeys) List(ctx context.Context, request operations.HskGetListAPIRequest, opts ...operations.Option) (*operations.HskGetListAPIResponse, error) {
+	globals := operations.HskGetListAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -968,7 +965,7 @@ func (s *HardwareSecurityKeys) List(ctx context.Context, serviceID string, opts 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/hsk/get/list", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/hsk/get/list", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

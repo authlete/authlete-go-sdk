@@ -4,6 +4,8 @@ package config
 
 import (
 	"context"
+	"github.com/authlete/authlete-go-sdk/internal/globals"
+	"github.com/authlete/authlete-go-sdk/internal/utils"
 	"github.com/authlete/authlete-go-sdk/retry"
 	"net/http"
 	"time"
@@ -23,6 +25,7 @@ type SDKConfiguration struct {
 	SDKVersion        string
 	GenVersion        string
 	OpenAPIDocVersion string
+	Globals           globals.Globals
 	RetryConfig       *retry.Config
 	Timeout           *time.Duration
 }
@@ -33,4 +36,14 @@ func (c *SDKConfiguration) GetServerDetails() (string, map[string]string) {
 	}
 
 	return c.ServerList[c.ServerIndex], nil
+}
+
+func (c *SDKConfiguration) FillGlobalsFromEnv() {
+	if c.Globals.ServiceID == nil {
+		if val := utils.ValueFromEnvVar("AUTHLETE_SERVICE_ID", c.Globals.ServiceID); val != nil {
+			if typedVal, ok := val.(string); ok {
+				c.Globals.ServiceID = &typedVal
+			}
+		}
+	}
 }

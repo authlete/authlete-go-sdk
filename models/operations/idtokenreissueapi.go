@@ -7,9 +7,20 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type IdtokenReissueAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (i *IdtokenReissueAPIGlobals) GetServiceID() *string {
+	if i == nil {
+		return nil
+	}
+	return i.ServiceID
+}
+
 type IdtokenReissueAPIRequest struct {
 	// A service ID.
-	ServiceID string                            `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                           `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      *components.IdtokenReissueRequest `request:"mediaType=application/json"`
 }
 
@@ -24,9 +35,9 @@ func (i *IdtokenReissueAPIRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (i *IdtokenReissueAPIRequest) GetServiceID() string {
+func (i *IdtokenReissueAPIRequest) GetServiceID() *string {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.ServiceID
 }

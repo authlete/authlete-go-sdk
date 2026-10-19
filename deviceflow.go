@@ -33,10 +33,9 @@ func newDeviceFlow(rootSDK *Authlete, sdkConfig config.SDKConfiguration, hooks *
 
 // Authorization - Process Device Authorization Request
 // This API parses request parameters of a [device authorization request](https://datatracker.ietf.org/doc/html/rfc8628#section-3.1) and returns necessary data for the authorization server implementation to process the device authorization request further.
-func (s *DeviceFlow) Authorization(ctx context.Context, serviceID string, body components.DeviceAuthorizationRequest, opts ...operations.Option) (*operations.DeviceAuthorizationAPIResponse, error) {
-	request := operations.DeviceAuthorizationAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *DeviceFlow) Authorization(ctx context.Context, request operations.DeviceAuthorizationAPIRequest, opts ...operations.Option) (*operations.DeviceAuthorizationAPIResponse, error) {
+	globals := operations.DeviceAuthorizationAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -57,7 +56,7 @@ func (s *DeviceFlow) Authorization(ctx context.Context, serviceID string, body c
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/device/authorization", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/device/authorization", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -343,10 +342,9 @@ func (s *DeviceFlow) Authorization(ctx context.Context, serviceID string, body c
 
 // Verification - Process Device Verification Request
 // The API returns information associated with a user code.
-func (s *DeviceFlow) Verification(ctx context.Context, serviceID string, body components.DeviceVerificationRequest, opts ...operations.Option) (*operations.DeviceVerificationAPIResponse, error) {
-	request := operations.DeviceVerificationAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *DeviceFlow) Verification(ctx context.Context, request operations.DeviceVerificationAPIRequest, opts ...operations.Option) (*operations.DeviceVerificationAPIResponse, error) {
+	globals := operations.DeviceVerificationAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -367,7 +365,7 @@ func (s *DeviceFlow) Verification(ctx context.Context, serviceID string, body co
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/device/verification", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/device/verification", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -653,10 +651,9 @@ func (s *DeviceFlow) Verification(ctx context.Context, serviceID string, body co
 
 // Complete Device Authorization
 // This API returns information about what action the authorization server should take after it receives the result of end-user's decision about whether the end-user has approved or rejected a client application's request.
-func (s *DeviceFlow) Complete(ctx context.Context, serviceID string, body components.DeviceCompleteRequest, opts ...operations.Option) (*operations.DeviceCompleteAPIResponse, error) {
-	request := operations.DeviceCompleteAPIRequest{
-		ServiceID: serviceID,
-		Body:      body,
+func (s *DeviceFlow) Complete(ctx context.Context, request operations.DeviceCompleteAPIRequest, opts ...operations.Option) (*operations.DeviceCompleteAPIResponse, error) {
+	globals := operations.DeviceCompleteAPIGlobals{
+		ServiceID: s.sdkConfiguration.Globals.ServiceID,
 	}
 
 	o := operations.Options{}
@@ -677,7 +674,7 @@ func (s *DeviceFlow) Complete(ctx context.Context, serviceID string, body compon
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/device/complete", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/api/{serviceId}/device/complete", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

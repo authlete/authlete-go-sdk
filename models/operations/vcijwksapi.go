@@ -7,15 +7,26 @@ import (
 	"github.com/authlete/authlete-go-sdk/models/components"
 )
 
+type VciJwksAPIGlobals struct {
+	ServiceID *string `pathParam:"style=simple,explode=false,name=serviceId"`
+}
+
+func (v *VciJwksAPIGlobals) GetServiceID() *string {
+	if v == nil {
+		return nil
+	}
+	return v.ServiceID
+}
+
 type VciJwksAPIRequest struct {
 	// A service ID.
-	ServiceID string                    `pathParam:"style=simple,explode=false,name=serviceId"`
+	ServiceID *string                   `pathParam:"style=simple,explode=false,name=serviceId"`
 	Body      components.VciJwksRequest `request:"mediaType=application/json"`
 }
 
-func (v *VciJwksAPIRequest) GetServiceID() string {
+func (v *VciJwksAPIRequest) GetServiceID() *string {
 	if v == nil {
-		return ""
+		return nil
 	}
 	return v.ServiceID
 }
