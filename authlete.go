@@ -2,7 +2,7 @@
 
 package authlete
 
-// Generated from OpenAPI doc version 3.0.16 and generator version 2.948.4
+// Generated from OpenAPI doc version 3.0.16 and generator version 2.954.8
 
 import (
 	"context"
@@ -235,11 +235,11 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Authlete {
 	sdk := &Authlete{
-		SDKVersion: "0.3.1",
+		SDKVersion: "0.3.2",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.3.1 2.948.4 3.0.16 github.com/authlete/authlete-go-sdk",
-			SDKVersion:        "0.3.1",
-			GenVersion:        "2.948.4",
+			UserAgent:         "speakeasy-sdk/go 0.3.2 2.954.8 3.0.16 github.com/authlete/authlete-go-sdk",
+			SDKVersion:        "0.3.2",
+			GenVersion:        "2.954.8",
 			OpenAPIDocVersion: "3.0.16",
 			Globals:           globals.Globals{},
 			ServerList:        ServerList,
