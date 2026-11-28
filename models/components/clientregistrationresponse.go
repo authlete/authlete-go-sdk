@@ -23,6 +23,19 @@ func (e ClientRegistrationResponseAction) ToPointer() *ClientRegistrationRespons
 	return &e
 }
 
+// ClientRegistrationResponseActionValues returns every known ClientRegistrationResponseAction value in schema order.
+func ClientRegistrationResponseActionValues() []ClientRegistrationResponseAction {
+	return []ClientRegistrationResponseAction{
+		ClientRegistrationResponseActionBadRequest,
+		ClientRegistrationResponseActionCreated,
+		ClientRegistrationResponseActionDeleted,
+		ClientRegistrationResponseActionInternalServerError,
+		ClientRegistrationResponseActionOk,
+		ClientRegistrationResponseActionUnauthorized,
+		ClientRegistrationResponseActionUpdated,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *ClientRegistrationResponseAction) IsExact() bool {
 	if e != nil {

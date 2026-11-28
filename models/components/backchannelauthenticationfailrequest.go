@@ -25,6 +25,21 @@ const (
 func (e BackchannelAuthenticationFailRequestReason) ToPointer() *BackchannelAuthenticationFailRequestReason {
 	return &e
 }
+
+// BackchannelAuthenticationFailRequestReasonValues returns every known BackchannelAuthenticationFailRequestReason value in schema order.
+func BackchannelAuthenticationFailRequestReasonValues() []BackchannelAuthenticationFailRequestReason {
+	return []BackchannelAuthenticationFailRequestReason{
+		BackchannelAuthenticationFailRequestReasonAccessDenied,
+		BackchannelAuthenticationFailRequestReasonExpiredLoginHintToken,
+		BackchannelAuthenticationFailRequestReasonInvalidBindingMessage,
+		BackchannelAuthenticationFailRequestReasonInvalidTarget,
+		BackchannelAuthenticationFailRequestReasonInvalidUserCode,
+		BackchannelAuthenticationFailRequestReasonMissingUserCode,
+		BackchannelAuthenticationFailRequestReasonServerError,
+		BackchannelAuthenticationFailRequestReasonUnauthorizedClient,
+		BackchannelAuthenticationFailRequestReasonUnknownUserID,
+	}
+}
 func (e *BackchannelAuthenticationFailRequestReason) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {

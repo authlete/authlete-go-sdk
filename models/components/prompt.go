@@ -21,6 +21,17 @@ func (e Prompt) ToPointer() *Prompt {
 	return &e
 }
 
+// PromptValues returns every known Prompt value in schema order.
+func PromptValues() []Prompt {
+	return []Prompt{
+		PromptNone,
+		PromptLogin,
+		PromptConsent,
+		PromptSelectAccount,
+		PromptCreate,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *Prompt) IsExact() bool {
 	if e != nil {

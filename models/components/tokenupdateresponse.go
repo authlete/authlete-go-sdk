@@ -21,6 +21,17 @@ func (e TokenUpdateResponseAction) ToPointer() *TokenUpdateResponseAction {
 	return &e
 }
 
+// TokenUpdateResponseActionValues returns every known TokenUpdateResponseAction value in schema order.
+func TokenUpdateResponseActionValues() []TokenUpdateResponseAction {
+	return []TokenUpdateResponseAction{
+		TokenUpdateResponseActionInternalServerError,
+		TokenUpdateResponseActionBadRequest,
+		TokenUpdateResponseActionForbidden,
+		TokenUpdateResponseActionNotFound,
+		TokenUpdateResponseActionOk,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *TokenUpdateResponseAction) IsExact() bool {
 	if e != nil {

@@ -21,6 +21,21 @@ func (e ClientAuthMethod) ToPointer() *ClientAuthMethod {
 	return &e
 }
 
+// ClientAuthMethodValues returns every known ClientAuthMethod value in schema order.
+func ClientAuthMethodValues() []ClientAuthMethod {
+	return []ClientAuthMethod{
+		ClientAuthMethodNone,
+		ClientAuthMethodClientSecretBasic,
+		ClientAuthMethodClientSecretPost,
+		ClientAuthMethodClientSecretJwt,
+		ClientAuthMethodPrivateKeyJwt,
+		ClientAuthMethodTLSClientAuth,
+		ClientAuthMethodSelfSignedTLSClientAuth,
+		ClientAuthMethodAttestJwtClientAuth,
+		ClientAuthMethodSpiffeJwt,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *ClientAuthMethod) IsExact() bool {
 	if e != nil {

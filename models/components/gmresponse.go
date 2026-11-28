@@ -19,6 +19,19 @@ func (e GMResponseAction) ToPointer() *GMResponseAction {
 	return &e
 }
 
+// GMResponseActionValues returns every known GMResponseAction value in schema order.
+func GMResponseActionValues() []GMResponseAction {
+	return []GMResponseAction{
+		GMResponseActionOk,
+		GMResponseActionNoContent,
+		GMResponseActionUnauthorized,
+		GMResponseActionForbidden,
+		GMResponseActionNotFound,
+		GMResponseActionCallerError,
+		GMResponseActionAuthleteError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *GMResponseAction) IsExact() bool {
 	if e != nil {

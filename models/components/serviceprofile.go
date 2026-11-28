@@ -13,6 +13,14 @@ func (e ServiceProfile) ToPointer() *ServiceProfile {
 	return &e
 }
 
+// ServiceProfileValues returns every known ServiceProfile value in schema order.
+func ServiceProfileValues() []ServiceProfile {
+	return []ServiceProfile{
+		ServiceProfileFapi,
+		ServiceProfileOpenBanking,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *ServiceProfile) IsExact() bool {
 	if e != nil {

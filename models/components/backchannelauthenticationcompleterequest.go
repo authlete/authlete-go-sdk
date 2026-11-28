@@ -20,6 +20,15 @@ const (
 func (e BackchannelAuthenticationCompleteRequestResult) ToPointer() *BackchannelAuthenticationCompleteRequestResult {
 	return &e
 }
+
+// BackchannelAuthenticationCompleteRequestResultValues returns every known BackchannelAuthenticationCompleteRequestResult value in schema order.
+func BackchannelAuthenticationCompleteRequestResultValues() []BackchannelAuthenticationCompleteRequestResult {
+	return []BackchannelAuthenticationCompleteRequestResult{
+		BackchannelAuthenticationCompleteRequestResultTransactionFailed,
+		BackchannelAuthenticationCompleteRequestResultAccessDenied,
+		BackchannelAuthenticationCompleteRequestResultAuthorized,
+	}
+}
 func (e *BackchannelAuthenticationCompleteRequestResult) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {

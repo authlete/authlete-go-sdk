@@ -19,6 +19,17 @@ func (e GrantManagementAction) ToPointer() *GrantManagementAction {
 	return &e
 }
 
+// GrantManagementActionValues returns every known GrantManagementAction value in schema order.
+func GrantManagementActionValues() []GrantManagementAction {
+	return []GrantManagementAction{
+		GrantManagementActionCreate,
+		GrantManagementActionQuery,
+		GrantManagementActionReplace,
+		GrantManagementActionRevoke,
+		GrantManagementActionMerge,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *GrantManagementAction) IsExact() bool {
 	if e != nil {

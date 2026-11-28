@@ -23,6 +23,19 @@ const (
 func (e EntityType) ToPointer() *EntityType {
 	return &e
 }
+
+// EntityTypeValues returns every known EntityType value in schema order.
+func EntityTypeValues() []EntityType {
+	return []EntityType{
+		EntityTypeOpenidRelyingParty,
+		EntityTypeOpenidProvider,
+		EntityTypeOauthAuthorizationServer,
+		EntityTypeOauthClient,
+		EntityTypeOauthResource,
+		EntityTypeFederationEntity,
+		EntityTypeOpenidCredentialIssuer,
+	}
+}
 func (e *EntityType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {

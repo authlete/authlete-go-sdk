@@ -16,6 +16,16 @@ func (e StandardIntrospectionResponseAction) ToPointer() *StandardIntrospectionR
 	return &e
 }
 
+// StandardIntrospectionResponseActionValues returns every known StandardIntrospectionResponseAction value in schema order.
+func StandardIntrospectionResponseActionValues() []StandardIntrospectionResponseAction {
+	return []StandardIntrospectionResponseAction{
+		StandardIntrospectionResponseActionInternalServerError,
+		StandardIntrospectionResponseActionBadRequest,
+		StandardIntrospectionResponseActionOk,
+		StandardIntrospectionResponseActionJwt,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *StandardIntrospectionResponseAction) IsExact() bool {
 	if e != nil {

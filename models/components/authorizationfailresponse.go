@@ -16,6 +16,16 @@ func (e AuthorizationFailResponseAction) ToPointer() *AuthorizationFailResponseA
 	return &e
 }
 
+// AuthorizationFailResponseActionValues returns every known AuthorizationFailResponseAction value in schema order.
+func AuthorizationFailResponseActionValues() []AuthorizationFailResponseAction {
+	return []AuthorizationFailResponseAction{
+		AuthorizationFailResponseActionInternalServerError,
+		AuthorizationFailResponseActionBadRequest,
+		AuthorizationFailResponseActionLocation,
+		AuthorizationFailResponseActionForm,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *AuthorizationFailResponseAction) IsExact() bool {
 	if e != nil {

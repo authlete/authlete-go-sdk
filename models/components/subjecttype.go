@@ -16,6 +16,14 @@ func (e SubjectType) ToPointer() *SubjectType {
 	return &e
 }
 
+// SubjectTypeValues returns every known SubjectType value in schema order.
+func SubjectTypeValues() []SubjectType {
+	return []SubjectType{
+		SubjectTypePublic,
+		SubjectTypePairwise,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *SubjectType) IsExact() bool {
 	if e != nil {

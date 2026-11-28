@@ -15,6 +15,15 @@ func (e VciMetadataResponseAction) ToPointer() *VciMetadataResponseAction {
 	return &e
 }
 
+// VciMetadataResponseActionValues returns every known VciMetadataResponseAction value in schema order.
+func VciMetadataResponseActionValues() []VciMetadataResponseAction {
+	return []VciMetadataResponseAction{
+		VciMetadataResponseActionOk,
+		VciMetadataResponseActionNotFound,
+		VciMetadataResponseActionInternalServerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *VciMetadataResponseAction) IsExact() bool {
 	if e != nil {

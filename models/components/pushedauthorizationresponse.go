@@ -18,6 +18,18 @@ func (e PushedAuthorizationResponseAction) ToPointer() *PushedAuthorizationRespo
 	return &e
 }
 
+// PushedAuthorizationResponseActionValues returns every known PushedAuthorizationResponseAction value in schema order.
+func PushedAuthorizationResponseActionValues() []PushedAuthorizationResponseAction {
+	return []PushedAuthorizationResponseAction{
+		PushedAuthorizationResponseActionCreated,
+		PushedAuthorizationResponseActionBadRequest,
+		PushedAuthorizationResponseActionUnauthorized,
+		PushedAuthorizationResponseActionForbidden,
+		PushedAuthorizationResponseActionPayloadTooLarge,
+		PushedAuthorizationResponseActionInternalServerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *PushedAuthorizationResponseAction) IsExact() bool {
 	if e != nil {
@@ -46,6 +58,21 @@ const (
 
 func (e PushedAuthorizationResponseClientAuthMethod) ToPointer() *PushedAuthorizationResponseClientAuthMethod {
 	return &e
+}
+
+// PushedAuthorizationResponseClientAuthMethodValues returns every known PushedAuthorizationResponseClientAuthMethod value in schema order.
+func PushedAuthorizationResponseClientAuthMethodValues() []PushedAuthorizationResponseClientAuthMethod {
+	return []PushedAuthorizationResponseClientAuthMethod{
+		PushedAuthorizationResponseClientAuthMethodNone,
+		PushedAuthorizationResponseClientAuthMethodClientSecretBasic,
+		PushedAuthorizationResponseClientAuthMethodClientSecretPost,
+		PushedAuthorizationResponseClientAuthMethodClientSecretJwt,
+		PushedAuthorizationResponseClientAuthMethodPrivateKeyJwt,
+		PushedAuthorizationResponseClientAuthMethodTLSClientAuth,
+		PushedAuthorizationResponseClientAuthMethodSelfSignedTLSClientAuth,
+		PushedAuthorizationResponseClientAuthMethodAttestJwtClientAuth,
+		PushedAuthorizationResponseClientAuthMethodSpiffeJwt,
+	}
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.

@@ -20,6 +20,16 @@ func (e FederationRegistrationResponseAction) ToPointer() *FederationRegistratio
 	return &e
 }
 
+// FederationRegistrationResponseActionValues returns every known FederationRegistrationResponseAction value in schema order.
+func FederationRegistrationResponseActionValues() []FederationRegistrationResponseAction {
+	return []FederationRegistrationResponseAction{
+		FederationRegistrationResponseActionOk,
+		FederationRegistrationResponseActionBadRequest,
+		FederationRegistrationResponseActionNotFound,
+		FederationRegistrationResponseActionInternalServerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *FederationRegistrationResponseAction) IsExact() bool {
 	if e != nil {

@@ -14,6 +14,14 @@ func (e VerifiedClaimsValidationSchema) ToPointer() *VerifiedClaimsValidationSch
 	return &e
 }
 
+// VerifiedClaimsValidationSchemaValues returns every known VerifiedClaimsValidationSchema value in schema order.
+func VerifiedClaimsValidationSchemaValues() []VerifiedClaimsValidationSchema {
+	return []VerifiedClaimsValidationSchema{
+		VerifiedClaimsValidationSchemaStandard,
+		VerifiedClaimsValidationSchemaStandardPlusIDDocument,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *VerifiedClaimsValidationSchema) IsExact() bool {
 	if e != nil {

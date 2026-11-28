@@ -20,6 +20,15 @@ const (
 func (e DeviceCompleteRequestResult) ToPointer() *DeviceCompleteRequestResult {
 	return &e
 }
+
+// DeviceCompleteRequestResultValues returns every known DeviceCompleteRequestResult value in schema order.
+func DeviceCompleteRequestResultValues() []DeviceCompleteRequestResult {
+	return []DeviceCompleteRequestResult{
+		DeviceCompleteRequestResultTransactionFailed,
+		DeviceCompleteRequestResultAccessDenied,
+		DeviceCompleteRequestResultAuthorized,
+	}
+}
 func (e *DeviceCompleteRequestResult) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {

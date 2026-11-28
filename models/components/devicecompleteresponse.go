@@ -21,6 +21,17 @@ func (e DeviceCompleteResponseAction) ToPointer() *DeviceCompleteResponseAction 
 	return &e
 }
 
+// DeviceCompleteResponseActionValues returns every known DeviceCompleteResponseAction value in schema order.
+func DeviceCompleteResponseActionValues() []DeviceCompleteResponseAction {
+	return []DeviceCompleteResponseAction{
+		DeviceCompleteResponseActionServerError,
+		DeviceCompleteResponseActionUserCodeNotExist,
+		DeviceCompleteResponseActionUserCodeExpired,
+		DeviceCompleteResponseActionInvalidRequest,
+		DeviceCompleteResponseActionSuccess,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *DeviceCompleteResponseAction) IsExact() bool {
 	if e != nil {

@@ -18,6 +18,18 @@ func (e UserinfoIssueResponseAction) ToPointer() *UserinfoIssueResponseAction {
 	return &e
 }
 
+// UserinfoIssueResponseActionValues returns every known UserinfoIssueResponseAction value in schema order.
+func UserinfoIssueResponseActionValues() []UserinfoIssueResponseAction {
+	return []UserinfoIssueResponseAction{
+		UserinfoIssueResponseActionInternalServerError,
+		UserinfoIssueResponseActionBadRequest,
+		UserinfoIssueResponseActionUnauthorized,
+		UserinfoIssueResponseActionForbidden,
+		UserinfoIssueResponseActionJSON,
+		UserinfoIssueResponseActionJwt,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *UserinfoIssueResponseAction) IsExact() bool {
 	if e != nil {
