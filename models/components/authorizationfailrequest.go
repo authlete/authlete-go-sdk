@@ -32,6 +32,28 @@ const (
 func (e AuthorizationFailRequestReason) ToPointer() *AuthorizationFailRequestReason {
 	return &e
 }
+
+// AuthorizationFailRequestReasonValues returns every known AuthorizationFailRequestReason value in schema order.
+func AuthorizationFailRequestReasonValues() []AuthorizationFailRequestReason {
+	return []AuthorizationFailRequestReason{
+		AuthorizationFailRequestReasonUnknown,
+		AuthorizationFailRequestReasonNotLoggedIn,
+		AuthorizationFailRequestReasonMaxAgeNotSupported,
+		AuthorizationFailRequestReasonExceedsMaxAge,
+		AuthorizationFailRequestReasonDifferentSubject,
+		AuthorizationFailRequestReasonAcrNotSatisfied,
+		AuthorizationFailRequestReasonDenied,
+		AuthorizationFailRequestReasonServerError,
+		AuthorizationFailRequestReasonNotAuthenticated,
+		AuthorizationFailRequestReasonAccountSelectionRequired,
+		AuthorizationFailRequestReasonConsentRequired,
+		AuthorizationFailRequestReasonInteractionRequired,
+		AuthorizationFailRequestReasonInvalidTarget,
+		AuthorizationFailRequestReasonTemporarilyUnavailable,
+		AuthorizationFailRequestReasonInvalidScope,
+		AuthorizationFailRequestReasonUnauthorizedClient,
+	}
+}
 func (e *AuthorizationFailRequestReason) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {

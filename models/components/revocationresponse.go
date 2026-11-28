@@ -16,6 +16,16 @@ func (e RevocationResponseAction) ToPointer() *RevocationResponseAction {
 	return &e
 }
 
+// RevocationResponseActionValues returns every known RevocationResponseAction value in schema order.
+func RevocationResponseActionValues() []RevocationResponseAction {
+	return []RevocationResponseAction{
+		RevocationResponseActionInternalServerError,
+		RevocationResponseActionInvalidClient,
+		RevocationResponseActionBadRequest,
+		RevocationResponseActionOk,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *RevocationResponseAction) IsExact() bool {
 	if e != nil {

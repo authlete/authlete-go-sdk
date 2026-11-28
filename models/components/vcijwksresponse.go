@@ -15,6 +15,15 @@ func (e VciJwksResponseAction) ToPointer() *VciJwksResponseAction {
 	return &e
 }
 
+// VciJwksResponseActionValues returns every known VciJwksResponseAction value in schema order.
+func VciJwksResponseActionValues() []VciJwksResponseAction {
+	return []VciJwksResponseAction{
+		VciJwksResponseActionOk,
+		VciJwksResponseActionNotFound,
+		VciJwksResponseActionInternalServerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *VciJwksResponseAction) IsExact() bool {
 	if e != nil {

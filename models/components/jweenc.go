@@ -21,6 +21,18 @@ func (e JweEnc) ToPointer() *JweEnc {
 	return &e
 }
 
+// JweEncValues returns every known JweEnc value in schema order.
+func JweEncValues() []JweEnc {
+	return []JweEnc{
+		JweEncA128CbcHs256,
+		JweEncA192CbcHs384,
+		JweEncA256CbcHs512,
+		JweEncA128Gcm,
+		JweEncA192Gcm,
+		JweEncA256Gcm,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *JweEnc) IsExact() bool {
 	if e != nil {

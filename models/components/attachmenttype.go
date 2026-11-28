@@ -14,6 +14,14 @@ func (e AttachmentType) ToPointer() *AttachmentType {
 	return &e
 }
 
+// AttachmentTypeValues returns every known AttachmentType value in schema order.
+func AttachmentTypeValues() []AttachmentType {
+	return []AttachmentType{
+		AttachmentTypeEmbedded,
+		AttachmentTypeExternal,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *AttachmentType) IsExact() bool {
 	if e != nil {

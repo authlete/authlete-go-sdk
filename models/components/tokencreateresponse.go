@@ -20,6 +20,16 @@ func (e TokenCreateResponseAction) ToPointer() *TokenCreateResponseAction {
 	return &e
 }
 
+// TokenCreateResponseActionValues returns every known TokenCreateResponseAction value in schema order.
+func TokenCreateResponseActionValues() []TokenCreateResponseAction {
+	return []TokenCreateResponseAction{
+		TokenCreateResponseActionInternalServerError,
+		TokenCreateResponseActionBadRequest,
+		TokenCreateResponseActionForbidden,
+		TokenCreateResponseActionOk,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *TokenCreateResponseAction) IsExact() bool {
 	if e != nil {

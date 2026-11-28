@@ -20,6 +20,16 @@ func (e Display) ToPointer() *Display {
 	return &e
 }
 
+// DisplayValues returns every known Display value in schema order.
+func DisplayValues() []Display {
+	return []Display{
+		DisplayPage,
+		DisplayPopup,
+		DisplayTouch,
+		DisplayWap,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *Display) IsExact() bool {
 	if e != nil {

@@ -20,6 +20,16 @@ func (e HskCreateResponseAction) ToPointer() *HskCreateResponseAction {
 	return &e
 }
 
+// HskCreateResponseActionValues returns every known HskCreateResponseAction value in schema order.
+func HskCreateResponseActionValues() []HskCreateResponseAction {
+	return []HskCreateResponseAction{
+		HskCreateResponseActionSuccess,
+		HskCreateResponseActionInvalidRequest,
+		HskCreateResponseActionNotFound,
+		HskCreateResponseActionServerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *HskCreateResponseAction) IsExact() bool {
 	if e != nil {

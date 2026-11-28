@@ -15,6 +15,15 @@ func (e IdtokenReissueResponseAction) ToPointer() *IdtokenReissueResponseAction 
 	return &e
 }
 
+// IdtokenReissueResponseActionValues returns every known IdtokenReissueResponseAction value in schema order.
+func IdtokenReissueResponseActionValues() []IdtokenReissueResponseAction {
+	return []IdtokenReissueResponseAction{
+		IdtokenReissueResponseActionOk,
+		IdtokenReissueResponseActionInternalServerError,
+		IdtokenReissueResponseActionCallerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *IdtokenReissueResponseAction) IsExact() bool {
 	if e != nil {

@@ -14,6 +14,15 @@ func (e ClaimType) ToPointer() *ClaimType {
 	return &e
 }
 
+// ClaimTypeValues returns every known ClaimType value in schema order.
+func ClaimTypeValues() []ClaimType {
+	return []ClaimType{
+		ClaimTypeNormal,
+		ClaimTypeAggregated,
+		ClaimTypeDistributed,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *ClaimType) IsExact() bool {
 	if e != nil {

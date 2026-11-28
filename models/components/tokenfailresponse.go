@@ -14,6 +14,14 @@ func (e TokenFailResponseAction) ToPointer() *TokenFailResponseAction {
 	return &e
 }
 
+// TokenFailResponseActionValues returns every known TokenFailResponseAction value in schema order.
+func TokenFailResponseActionValues() []TokenFailResponseAction {
+	return []TokenFailResponseAction{
+		TokenFailResponseActionInternalServerError,
+		TokenFailResponseActionBadRequest,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *TokenFailResponseAction) IsExact() bool {
 	if e != nil {

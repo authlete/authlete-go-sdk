@@ -22,6 +22,22 @@ func (e GrantType) ToPointer() *GrantType {
 	return &e
 }
 
+// GrantTypeValues returns every known GrantType value in schema order.
+func GrantTypeValues() []GrantType {
+	return []GrantType{
+		GrantTypeAuthorizationCode,
+		GrantTypeImplicit,
+		GrantTypePassword,
+		GrantTypeClientCredentials,
+		GrantTypeRefreshToken,
+		GrantTypeCiba,
+		GrantTypeDeviceCode,
+		GrantTypeTokenExchange,
+		GrantTypeJwtBearer,
+		GrantTypePreAuthorizedCode,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *GrantType) IsExact() bool {
 	if e != nil {

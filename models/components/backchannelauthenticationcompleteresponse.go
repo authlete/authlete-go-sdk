@@ -19,6 +19,15 @@ func (e BackchannelAuthenticationCompleteResponseAction) ToPointer() *Backchanne
 	return &e
 }
 
+// BackchannelAuthenticationCompleteResponseActionValues returns every known BackchannelAuthenticationCompleteResponseAction value in schema order.
+func BackchannelAuthenticationCompleteResponseActionValues() []BackchannelAuthenticationCompleteResponseAction {
+	return []BackchannelAuthenticationCompleteResponseAction{
+		BackchannelAuthenticationCompleteResponseActionServerError,
+		BackchannelAuthenticationCompleteResponseActionNoAction,
+		BackchannelAuthenticationCompleteResponseActionNotification,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *BackchannelAuthenticationCompleteResponseAction) IsExact() bool {
 	if e != nil {

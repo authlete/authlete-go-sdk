@@ -21,6 +21,17 @@ func (e VciSingleParseResponseAction) ToPointer() *VciSingleParseResponseAction 
 	return &e
 }
 
+// VciSingleParseResponseActionValues returns every known VciSingleParseResponseAction value in schema order.
+func VciSingleParseResponseActionValues() []VciSingleParseResponseAction {
+	return []VciSingleParseResponseAction{
+		VciSingleParseResponseActionOk,
+		VciSingleParseResponseActionBadRequest,
+		VciSingleParseResponseActionUnauthorized,
+		VciSingleParseResponseActionForbidden,
+		VciSingleParseResponseActionInternalServerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *VciSingleParseResponseAction) IsExact() bool {
 	if e != nil {

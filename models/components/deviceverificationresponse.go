@@ -20,6 +20,16 @@ func (e DeviceVerificationResponseAction) ToPointer() *DeviceVerificationRespons
 	return &e
 }
 
+// DeviceVerificationResponseActionValues returns every known DeviceVerificationResponseAction value in schema order.
+func DeviceVerificationResponseActionValues() []DeviceVerificationResponseAction {
+	return []DeviceVerificationResponseAction{
+		DeviceVerificationResponseActionInternalServerError,
+		DeviceVerificationResponseActionNotExist,
+		DeviceVerificationResponseActionExpired,
+		DeviceVerificationResponseActionValid,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *DeviceVerificationResponseAction) IsExact() bool {
 	if e != nil {

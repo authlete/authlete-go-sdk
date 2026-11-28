@@ -17,6 +17,18 @@ func (e FapiMode) ToPointer() *FapiMode {
 	return &e
 }
 
+// FapiModeValues returns every known FapiMode value in schema order.
+func FapiModeValues() []FapiMode {
+	return []FapiMode{
+		FapiModeFapi1Advanced,
+		FapiModeFapi1Baseline,
+		FapiModeFapi2MessageSigningAuthReq,
+		FapiModeFapi2MessageSigningAuthRes,
+		FapiModeFapi2MessageSigningIntrospectionRes,
+		FapiModeFapi2Security,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *FapiMode) IsExact() bool {
 	if e != nil {

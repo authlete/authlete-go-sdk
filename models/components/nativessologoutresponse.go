@@ -15,6 +15,15 @@ func (e NativeSsoLogoutResponseAction) ToPointer() *NativeSsoLogoutResponseActio
 	return &e
 }
 
+// NativeSsoLogoutResponseActionValues returns every known NativeSsoLogoutResponseAction value in schema order.
+func NativeSsoLogoutResponseActionValues() []NativeSsoLogoutResponseAction {
+	return []NativeSsoLogoutResponseAction{
+		NativeSsoLogoutResponseActionOk,
+		NativeSsoLogoutResponseActionServerError,
+		NativeSsoLogoutResponseActionCallerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *NativeSsoLogoutResponseAction) IsExact() bool {
 	if e != nil {

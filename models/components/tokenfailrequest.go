@@ -22,6 +22,18 @@ const (
 func (e TokenFailRequestReason) ToPointer() *TokenFailRequestReason {
 	return &e
 }
+
+// TokenFailRequestReasonValues returns every known TokenFailRequestReason value in schema order.
+func TokenFailRequestReasonValues() []TokenFailRequestReason {
+	return []TokenFailRequestReason{
+		TokenFailRequestReasonUnknown,
+		TokenFailRequestReasonInvalidResourceOwnerCredentials,
+		TokenFailRequestReasonInvalidTarget,
+		TokenFailRequestReasonInvalidClient,
+		TokenFailRequestReasonUnauthorizedClient,
+		TokenFailRequestReasonInvalidScope,
+	}
+}
 func (e *TokenFailRequestReason) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {

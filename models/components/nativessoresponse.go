@@ -15,6 +15,15 @@ func (e NativeSsoResponseAction) ToPointer() *NativeSsoResponseAction {
 	return &e
 }
 
+// NativeSsoResponseActionValues returns every known NativeSsoResponseAction value in schema order.
+func NativeSsoResponseActionValues() []NativeSsoResponseAction {
+	return []NativeSsoResponseAction{
+		NativeSsoResponseActionOk,
+		NativeSsoResponseActionInternalServerError,
+		NativeSsoResponseActionCallerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *NativeSsoResponseAction) IsExact() bool {
 	if e != nil {

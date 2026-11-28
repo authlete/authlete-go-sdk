@@ -14,6 +14,14 @@ func (e ClientType) ToPointer() *ClientType {
 	return &e
 }
 
+// ClientTypeValues returns every known ClientType value in schema order.
+func ClientTypeValues() []ClientType {
+	return []ClientType{
+		ClientTypePublic,
+		ClientTypeConfidential,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *ClientType) IsExact() bool {
 	if e != nil {

@@ -19,6 +19,15 @@ func (e HskGetListResponseAction) ToPointer() *HskGetListResponseAction {
 	return &e
 }
 
+// HskGetListResponseActionValues returns every known HskGetListResponseAction value in schema order.
+func HskGetListResponseActionValues() []HskGetListResponseAction {
+	return []HskGetListResponseAction{
+		HskGetListResponseActionSuccess,
+		HskGetListResponseActionInvalidRequest,
+		HskGetListResponseActionServerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *HskGetListResponseAction) IsExact() bool {
 	if e != nil {

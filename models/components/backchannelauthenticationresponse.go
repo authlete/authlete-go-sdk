@@ -20,6 +20,16 @@ func (e BackchannelAuthenticationResponseAction) ToPointer() *BackchannelAuthent
 	return &e
 }
 
+// BackchannelAuthenticationResponseActionValues returns every known BackchannelAuthenticationResponseAction value in schema order.
+func BackchannelAuthenticationResponseActionValues() []BackchannelAuthenticationResponseAction {
+	return []BackchannelAuthenticationResponseAction{
+		BackchannelAuthenticationResponseActionInternalServerError,
+		BackchannelAuthenticationResponseActionBadRequest,
+		BackchannelAuthenticationResponseActionUnauthorized,
+		BackchannelAuthenticationResponseActionUserIdentification,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *BackchannelAuthenticationResponseAction) IsExact() bool {
 	if e != nil {

@@ -14,6 +14,14 @@ func (e ClientRegistrationType) ToPointer() *ClientRegistrationType {
 	return &e
 }
 
+// ClientRegistrationTypeValues returns every known ClientRegistrationType value in schema order.
+func ClientRegistrationTypeValues() []ClientRegistrationType {
+	return []ClientRegistrationType{
+		ClientRegistrationTypeAutomatic,
+		ClientRegistrationTypeExplicit,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *ClientRegistrationType) IsExact() bool {
 	if e != nil {

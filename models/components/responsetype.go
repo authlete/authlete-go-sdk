@@ -19,6 +19,20 @@ func (e ResponseType) ToPointer() *ResponseType {
 	return &e
 }
 
+// ResponseTypeValues returns every known ResponseType value in schema order.
+func ResponseTypeValues() []ResponseType {
+	return []ResponseType{
+		ResponseTypeNone,
+		ResponseTypeCode,
+		ResponseTypeToken,
+		ResponseTypeIDToken,
+		ResponseTypeCodeToken,
+		ResponseTypeCodeIDToken,
+		ResponseTypeIDTokenToken,
+		ResponseTypeCodeIDTokenToken,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *ResponseType) IsExact() bool {
 	if e != nil {

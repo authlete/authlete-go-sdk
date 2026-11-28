@@ -21,6 +21,17 @@ func (e VciOfferInfoResponseAction) ToPointer() *VciOfferInfoResponseAction {
 	return &e
 }
 
+// VciOfferInfoResponseActionValues returns every known VciOfferInfoResponseAction value in schema order.
+func VciOfferInfoResponseActionValues() []VciOfferInfoResponseAction {
+	return []VciOfferInfoResponseAction{
+		VciOfferInfoResponseActionOk,
+		VciOfferInfoResponseActionForbidden,
+		VciOfferInfoResponseActionNotFound,
+		VciOfferInfoResponseActionCallerError,
+		VciOfferInfoResponseActionAuthleteError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *VciOfferInfoResponseAction) IsExact() bool {
 	if e != nil {

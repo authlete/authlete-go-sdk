@@ -20,6 +20,16 @@ func (e AuthorizationTicketInfoResponseAction) ToPointer() *AuthorizationTicketI
 	return &e
 }
 
+// AuthorizationTicketInfoResponseActionValues returns every known AuthorizationTicketInfoResponseAction value in schema order.
+func AuthorizationTicketInfoResponseActionValues() []AuthorizationTicketInfoResponseAction {
+	return []AuthorizationTicketInfoResponseAction{
+		AuthorizationTicketInfoResponseActionOk,
+		AuthorizationTicketInfoResponseActionNotFound,
+		AuthorizationTicketInfoResponseActionCallerError,
+		AuthorizationTicketInfoResponseActionAuthleteError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *AuthorizationTicketInfoResponseAction) IsExact() bool {
 	if e != nil {

@@ -15,6 +15,15 @@ func (e BackchannelLogoutTokenResponseAction) ToPointer() *BackchannelLogoutToke
 	return &e
 }
 
+// BackchannelLogoutTokenResponseActionValues returns every known BackchannelLogoutTokenResponseAction value in schema order.
+func BackchannelLogoutTokenResponseActionValues() []BackchannelLogoutTokenResponseAction {
+	return []BackchannelLogoutTokenResponseAction{
+		BackchannelLogoutTokenResponseActionOk,
+		BackchannelLogoutTokenResponseActionServerError,
+		BackchannelLogoutTokenResponseActionCallerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *BackchannelLogoutTokenResponseAction) IsExact() bool {
 	if e != nil {

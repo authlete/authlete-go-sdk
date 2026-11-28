@@ -34,6 +34,29 @@ func (e JweAlg) ToPointer() *JweAlg {
 	return &e
 }
 
+// JweAlgValues returns every known JweAlg value in schema order.
+func JweAlgValues() []JweAlg {
+	return []JweAlg{
+		JweAlgRsa15,
+		JweAlgRsaOaep,
+		JweAlgRsaOaep256,
+		JweAlgA128Kw,
+		JweAlgA192Kw,
+		JweAlgA256Kw,
+		JweAlgDir,
+		JweAlgEcdhEs,
+		JweAlgEcdhEsA128Kw,
+		JweAlgEcdhEsA192Kw,
+		JweAlgEcdhEsA256Kw,
+		JweAlgA128Gcmkw,
+		JweAlgA192Gcmkw,
+		JweAlgA256Gcmkw,
+		JweAlgPbes2Hs256A128Kw,
+		JweAlgPbes2Hs384A192Kw,
+		JweAlgPbes2Hs512A256Kw,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *JweAlg) IsExact() bool {
 	if e != nil {

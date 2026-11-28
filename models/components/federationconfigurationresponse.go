@@ -15,6 +15,15 @@ func (e FederationConfigurationResponseAction) ToPointer() *FederationConfigurat
 	return &e
 }
 
+// FederationConfigurationResponseActionValues returns every known FederationConfigurationResponseAction value in schema order.
+func FederationConfigurationResponseActionValues() []FederationConfigurationResponseAction {
+	return []FederationConfigurationResponseAction{
+		FederationConfigurationResponseActionOk,
+		FederationConfigurationResponseActionNotFound,
+		FederationConfigurationResponseActionInternalServerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *FederationConfigurationResponseAction) IsExact() bool {
 	if e != nil {

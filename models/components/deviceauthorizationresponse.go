@@ -20,6 +20,16 @@ func (e DeviceAuthorizationResponseAction) ToPointer() *DeviceAuthorizationRespo
 	return &e
 }
 
+// DeviceAuthorizationResponseActionValues returns every known DeviceAuthorizationResponseAction value in schema order.
+func DeviceAuthorizationResponseActionValues() []DeviceAuthorizationResponseAction {
+	return []DeviceAuthorizationResponseAction{
+		DeviceAuthorizationResponseActionInternalServerError,
+		DeviceAuthorizationResponseActionBadRequest,
+		DeviceAuthorizationResponseActionUnauthorized,
+		DeviceAuthorizationResponseActionOk,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *DeviceAuthorizationResponseAction) IsExact() bool {
 	if e != nil {

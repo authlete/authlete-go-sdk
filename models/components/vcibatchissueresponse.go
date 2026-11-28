@@ -17,6 +17,17 @@ func (e VciBatchIssueResponseAction) ToPointer() *VciBatchIssueResponseAction {
 	return &e
 }
 
+// VciBatchIssueResponseActionValues returns every known VciBatchIssueResponseAction value in schema order.
+func VciBatchIssueResponseActionValues() []VciBatchIssueResponseAction {
+	return []VciBatchIssueResponseAction{
+		VciBatchIssueResponseActionOk,
+		VciBatchIssueResponseActionUnauthorized,
+		VciBatchIssueResponseActionForbidden,
+		VciBatchIssueResponseActionInternalServerError,
+		VciBatchIssueResponseActionCallerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *VciBatchIssueResponseAction) IsExact() bool {
 	if e != nil {

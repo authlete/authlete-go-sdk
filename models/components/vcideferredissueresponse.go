@@ -16,6 +16,16 @@ func (e VciDeferredIssueResponseAction) ToPointer() *VciDeferredIssueResponseAct
 	return &e
 }
 
+// VciDeferredIssueResponseActionValues returns every known VciDeferredIssueResponseAction value in schema order.
+func VciDeferredIssueResponseActionValues() []VciDeferredIssueResponseAction {
+	return []VciDeferredIssueResponseAction{
+		VciDeferredIssueResponseActionOk,
+		VciDeferredIssueResponseActionForbidden,
+		VciDeferredIssueResponseActionInternalServerError,
+		VciDeferredIssueResponseActionCallerError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *VciDeferredIssueResponseAction) IsExact() bool {
 	if e != nil {

@@ -22,6 +22,22 @@ func (e TokenType) ToPointer() *TokenType {
 	return &e
 }
 
+// TokenTypeValues returns every known TokenType value in schema order.
+func TokenTypeValues() []TokenType {
+	return []TokenType{
+		TokenTypeJwt,
+		TokenTypeAccessToken,
+		TokenTypeRefreshToken,
+		TokenTypeIDToken,
+		TokenTypeSaml1,
+		TokenTypeSaml2,
+		TokenTypeDeviceSecret,
+		TokenTypeDeviceCode,
+		TokenTypeTokenExchange,
+		TokenTypeJwtBearer,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *TokenType) IsExact() bool {
 	if e != nil {

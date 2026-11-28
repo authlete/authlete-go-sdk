@@ -20,6 +20,16 @@ func (e VciOfferCreateResponseAction) ToPointer() *VciOfferCreateResponseAction 
 	return &e
 }
 
+// VciOfferCreateResponseActionValues returns every known VciOfferCreateResponseAction value in schema order.
+func VciOfferCreateResponseActionValues() []VciOfferCreateResponseAction {
+	return []VciOfferCreateResponseAction{
+		VciOfferCreateResponseActionCreated,
+		VciOfferCreateResponseActionForbidden,
+		VciOfferCreateResponseActionCallerError,
+		VciOfferCreateResponseActionAuthleteError,
+	}
+}
+
 // IsExact returns true if the value matches a known enum value, false otherwise.
 func (e *VciOfferCreateResponseAction) IsExact() bool {
 	if e != nil {
